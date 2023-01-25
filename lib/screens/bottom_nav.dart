@@ -22,7 +22,9 @@ class _BottomNavPageState extends State<BottomNavPage> {
     ),
     MapsPage(),
     BookingsPage(),
-    Settings()
+    Settings(
+      data: data,
+    )
   ];
 
   void onItemTapped(int index) {

@@ -1,6 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:waya_driver/functions/location_functions.dart';
+
+import '../sockets/sockets.dart';
 
 class HomePage extends StatefulWidget {
   dynamic data;
@@ -44,18 +49,25 @@ class _HomePageState extends State<HomePage> {
             double.parse(locationDataSpot.longitude.toString()));
         //mapController.move(myLocationHome, 17);
       });
-    } else {
-      super.dispose();
     }
     print(currentLocation);
   }
 
   dynamic currentLocation;
+  StreamController controller = StreamController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    findLoc();
+    //locationCallbacks();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
     findLoc();
   }
 
