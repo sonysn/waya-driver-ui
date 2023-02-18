@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:waya_driver/screens/bookings.dart';
 import 'package:waya_driver/screens/mapspage.dart';
-import 'package:waya_driver/screens/settings.dart';
+import 'package:waya_driver/screens/setting_tab.dart';
 import '/colorscheme.dart';
 import 'homepage.dart';
 
 class BottomNavPage extends StatefulWidget {
-
-  const BottomNavPage({Key? key}) : super(key: key);
+  dynamic data;
+  BottomNavPage({Key? key, this.data}) : super(key: key);
 
   @override
   State<BottomNavPage> createState() => _BottomNavPageState();
@@ -15,11 +15,16 @@ class BottomNavPage extends StatefulWidget {
 
 class _BottomNavPageState extends State<BottomNavPage> {
   int _currentIndex = 0;
-  static const List<Widget> _childrenPages = <Widget>[
-    HomePage(),
+  dynamic data;
+  late final List<Widget> _childrenPages = <Widget>[
+    HomePage(
+      data: data,
+    ),
     MapsPage(),
     BookingsPage(),
-    Settings()
+    SettingTab(
+      data: data,
+    )
   ];
 
   void onItemTapped(int index) {
@@ -28,6 +33,12 @@ class _BottomNavPageState extends State<BottomNavPage> {
     });
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    data = widget.data;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

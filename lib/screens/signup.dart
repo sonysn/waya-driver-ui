@@ -263,7 +263,7 @@ class _SignUpState extends State<SignUp> {
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (BuildContext context) {
-                        return const BottomNavPage();
+                        return BottomNavPage();
                       }));
                     },
                     style: ElevatedButton.styleFrom(

@@ -1,9 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:waya_driver/functions/location_functions.dart';
+
+import '../sockets/sockets.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  dynamic data;
+
+  HomePage({Key? key, this.data}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -43,18 +50,25 @@ class _HomePageState extends State<HomePage> {
             double.parse(locationDataSpot.longitude.toString()));
         //mapController.move(myLocationHome, 17);
       });
-    } else {
-      super.dispose();
     }
     print(currentLocation);
   }
 
   dynamic currentLocation;
+  StreamController controller = StreamController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    findLoc();
+    //locationCallbacks();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
     findLoc();
   }
 
@@ -87,23 +101,32 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Row(
                     children: [
-                      const CircleAvatar(),
+                      //todo fix this error
+                      widget.data.profilePhoto != null
+                          ? CircleAvatar(
+                        backgroundImage: NetworkImage('${widget.data
+                            .profilePhoto}'),
+                        radius: 30.0,
+                      ) : const CircleAvatar(
+                        backgroundColor: Colors.black,
+                        radius: 30.0,
+                      ),
                       const SizedBox(
-                        width: 20,
+                        width: 5,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Driver Name',
-                            style: TextStyle(fontSize: 20),
+                          Text(
+                            '${widget.data.firstName} ${widget.data.lastName}',
+                            style: const TextStyle(fontSize: 20),
                           ),
                           Row(
-                            children: const [
-                              Icon(Icons.star),
+                            children: [
+                              const Icon(Icons.star),
                               Text(
-                                '4.7',
-                                style: TextStyle(fontSize: 20),
+                                widget.data.rating.toString(),
+                                style: const TextStyle(fontSize: 20),
                               )
                             ],
                           )
@@ -112,13 +135,17 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   SizedBox(
-                    height: 130,
-                    width: MediaQuery.of(context).size.width / 1.1,
+                    height: 150,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 1.1,
                     child: Card(
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

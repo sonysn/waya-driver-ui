@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waya_driver/api/auth.dart';
 import '/screens/bottom_nav.dart';
 import '../colorscheme.dart';
 
@@ -10,9 +11,37 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
+  dynamic _serverResponse() async{
+    try {
+      final response = await signIn(emailOrPhoneTextController.text, passwordTextController.text);
+      //print(res.email);
+      setState(() {
+        _futureData = response;
+      });
+      _nav();
+    } catch(e){
+      print(e);
+    }
+  }
+
+  void _nav() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context) {
+          return BottomNavPage(data: _futureData,);
+        }));
+  }
+
+  TextEditingController emailOrPhoneTextController = TextEditingController();
+  TextEditingController passwordTextController = TextEditingController();
   bool val = false;
+  dynamic _futureData;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,21 +68,19 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     //TextField for name
                     TextField(
-                      controller: email,
+                      controller: emailOrPhoneTextController,
                       cursorColor: customPurple,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
-                          hintText: 'Email',
+                          hintText: 'Email or Phone',
                           contentPadding: EdgeInsets.all(15),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(15)),
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
                             borderSide: BorderSide(color: Colors.black),
                           ),
                           filled: true,
                           focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(15)),
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
                             borderSide: BorderSide(color: Colors.yellow),
                           )),
                     ),
@@ -65,21 +92,19 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     //TextField for name
                     TextField(
-                      controller: password,
+                      controller: passwordTextController,
                       cursorColor: customPurple,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
                           hintText: 'Password',
                           contentPadding: EdgeInsets.all(15),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(15)),
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
                             borderSide: BorderSide(color: Colors.black),
                           ),
                           filled: true,
                           focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(15)),
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
                             borderSide: BorderSide(color: Colors.yellow),
                           )),
                     ),
@@ -88,10 +113,13 @@ class _LoginPageState extends State<LoginPage> {
             Center(
               child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (BuildContext context) {
-                          return const BottomNavPage();
-                        }));
+                    //print(signIn(emailOrPhoneTextController.text, passwordTextController.text));
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (BuildContext context) {
+                    //   return const BottomNavPage();
+                    // }));
+                    _serverResponse();
+                    print(_futureData);
                   },
                   style: ElevatedButton.styleFrom(
                       primary: customPurple,
@@ -104,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: const SizedBox(
                     width: 260,
                     height: 50,
-                    child: Center(child: Text('Sign Up')),
+                    child: Center(child: Text('Sign In')),
                   )),
             ),
           ],

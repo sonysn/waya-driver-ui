@@ -64,6 +64,7 @@ class _MapsPageState extends State<MapsPage> {
     super.initState();
     findLoc();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
