@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:waya_driver/screens/bookings.dart';
 import 'package:waya_driver/screens/mapspage.dart';
-import 'package:waya_driver/screens/settings.dart';
+import 'package:waya_driver/screens/setting_tab.dart';
 import '/colorscheme.dart';
 import 'homepage.dart';
 
@@ -22,7 +22,7 @@ class _BottomNavPageState extends State<BottomNavPage> {
     ),
     MapsPage(),
     BookingsPage(),
-    Settings(
+    SettingTab(
       data: data,
     )
   ];

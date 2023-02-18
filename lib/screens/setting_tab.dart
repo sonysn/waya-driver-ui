@@ -1,20 +1,22 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/functions/location_functions.dart';
+import 'package:waya_driver/screens/settingspage.dart';
 import 'package:waya_driver/sockets/sockets.dart';
 
-class Settings extends StatefulWidget {
+class SettingTab extends StatefulWidget {
   dynamic data;
-  Settings({Key? key, this.data}) : super(key: key);
+  SettingTab({Key? key, this.data}) : super(key: key);
 
   @override
-  State<Settings> createState() => _SettingsState();
+  State<SettingTab> createState() => _SettingTabState();
 }
 
 bool onlineStatus = false;
 
-class _SettingsState extends State<Settings> {
+class _SettingTabState extends State<SettingTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,25 +65,35 @@ class _SettingsState extends State<Settings> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Card(
-                      color: Colors.white70,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(15),
-                          bottom: Radius.circular(15),
+                    GestureDetector(
+                      child: Card(
+                        color: Colors.white70,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(15),
+                            bottom: Radius.circular(15),
+                          ),
+                        ),
+                        child: SizedBox(
+                          height: 80,
+                          width: 90,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(Icons.settings),
+                              Text('Settings')
+                            ],
+                          ),
                         ),
                       ),
-                      child: SizedBox(
-                        height: 80,
-                        width: 90,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.settings),
-                            Text('Settings')
-                          ],
-                        ),
-                      ),
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (BuildContext context) {
+                              return SettingsPage(
+                                data: widget.data
+                              );
+                            }));
+                      },
                     ),
                     Card(
                       color: Colors.white70,
@@ -130,11 +142,13 @@ class _SettingsState extends State<Settings> {
                         onChanged: (value) {
                           setState(() => onlineStatus = value);
                           if(onlineStatus == false){
-                            cancelLocationCallbacks();
-                            ConnectToServer().disconnect();
+                            // cancelLocationCallbacks();
+                            // ConnectToServer().disconnect();
+                            // updateAvailability(0, widget.data.id);
                           } else {
-                            ConnectToServer().connect();
-                            locationCallbacks();
+                            // ConnectToServer().connect(widget.data.id);
+                            // locationCallbacks(widget.data.id);
+                            // updateAvailability(1, widget.data.id);
                           }
                         }),
                     const Text('online')

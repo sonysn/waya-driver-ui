@@ -9,6 +9,7 @@ import '../sockets/sockets.dart';
 
 class HomePage extends StatefulWidget {
   dynamic data;
+
   HomePage({Key? key, this.data}) : super(key: key);
 
   @override
@@ -102,8 +103,9 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       //todo fix this error
                       widget.data.profilePhoto != null
-                      ? CircleAvatar(
-                        backgroundImage: NetworkImage('${widget.data.profilePhoto}'),
+                          ? CircleAvatar(
+                        backgroundImage: NetworkImage('${widget.data
+                            .profilePhoto}'),
                         radius: 30.0,
                       ) : const CircleAvatar(
                         backgroundColor: Colors.black,
@@ -133,13 +135,17 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   SizedBox(
-                    height: 130,
-                    width: MediaQuery.of(context).size.width / 1.1,
+                    height: 150,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 1.1,
                     child: Card(
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
