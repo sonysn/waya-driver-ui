@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:waya_driver/api/auth.dart';
 import '/screens/bottom_nav.dart';
 import '../colorscheme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -11,41 +13,66 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  dynamic _serverResponse() async{
+  dynamic _serverResponse() async {
     try {
-      final response = await signIn(emailOrPhoneTextController.text, passwordTextController.text);
-      //print(res.email);
+      final response = await signIn(
+          emailOrPhoneTextController.text, passwordTextController.text
+      );
       setState(() {
         _futureData = response;
       });
-      _nav();
-    } catch(e){
+      if (_futureData != null) {
+        _nav();
+      }
+    } catch (e) {
       print(e);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
+
   void _nav() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (BuildContext context) {
-          return BottomNavPage(data: _futureData,);
-        }));
+    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+      return BottomNavPage(
+        data: _futureData,
+      );
+    }));
   }
 
   TextEditingController emailOrPhoneTextController = TextEditingController();
   TextEditingController passwordTextController = TextEditingController();
   bool val = false;
+  bool _passwordVisible = false;
+  bool _rememberMe = false;
+  bool _isLoading = false;
   dynamic _futureData;
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
+  void initState() {
+    super.initState();
+    _loadCredentials();
+  }
+
+  void _loadCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? emailOrPhone = prefs.getString('emailOrPhone');
+    String? password = prefs.getString('password');
+    if (emailOrPhone != null && password != null) {
+      emailOrPhoneTextController.text = emailOrPhone;
+      passwordTextController.text = password;
+      setState(() {
+        _rememberMe = true;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: _isLoading ? const Center(child: CircularProgressIndicator()) :  Container(
         padding: const EdgeInsets.only(top: 10),
         margin: const EdgeInsets.symmetric(horizontal: 7),
         child: Column(
@@ -71,54 +98,94 @@ class _LoginPageState extends State<LoginPage> {
                       controller: emailOrPhoneTextController,
                       cursorColor: customPurple,
                       keyboardType: TextInputType.text,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.deny(RegExp(r'\s')),
+                        // Disallow whitespace
+                      ],
                       decoration: const InputDecoration(
-                          hintText: 'Email or Phone',
-                          contentPadding: EdgeInsets.all(15),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          filled: true,
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            borderSide: BorderSide(color: Colors.yellow),
-                          )),
+                        hintText: 'Email or Phone',
+                        contentPadding: EdgeInsets.all(15),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          borderSide: BorderSide(color: Colors.black),
+                        ),
+                        filled: true,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          borderSide: BorderSide(color: Colors.yellow),
+                        ),
+                      ),
                     ),
                   ],
                 )),
             Container(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  children: [
-                    //TextField for name
-                    TextField(
-                      controller: passwordTextController,
-                      cursorColor: customPurple,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                          hintText: 'Password',
-                          contentPadding: EdgeInsets.all(15),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          filled: true,
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            borderSide: BorderSide(color: Colors.yellow),
-                          )),
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                children: [
+                  //TextField for name
+                  TextFormField(
+                    controller: passwordTextController,
+                    cursorColor: customPurple,
+                    keyboardType: TextInputType.text,
+                    obscureText: !_passwordVisible,
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                      contentPadding: const EdgeInsets.all(15),
+                      enabledBorder: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                      filled: true,
+                      focusedBorder: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(color: Colors.yellow),
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _passwordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.black,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _passwordVisible = !_passwordVisible;
+                          });
+                        },
+                      ),
                     ),
-                  ],
-                )),
+                  ),
+                ],
+              ),
+            ),
+            CheckboxListTile(
+              title: const Text('Remember me'),
+              activeColor: Colors.black,
+              value: _rememberMe,
+              onChanged: (bool? value) {
+                setState(() {
+                  _rememberMe = value!;
+                });
+              },
+            ),
             Center(
               child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     //print(signIn(emailOrPhoneTextController.text, passwordTextController.text));
                     // Navigator.push(context,
                     //     MaterialPageRoute(builder: (BuildContext context) {
                     //   return const BottomNavPage();
                     // }));
                     _serverResponse();
+                    if (_rememberMe) {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setString(
+                          'emailOrPhone', emailOrPhoneTextController.text);
+                      await prefs.setString(
+                          'password', passwordTextController.text);
+                    }
+
                     print(_futureData);
                   },
                   style: ElevatedButton.styleFrom(
