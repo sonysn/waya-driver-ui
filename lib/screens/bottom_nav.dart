@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:waya_driver/screens/bookings.dart';
 import 'package:waya_driver/screens/mapspage.dart';
 import 'package:waya_driver/screens/setting_tab.dart';
+import 'package:waya_driver/screens/walletpage.dart';
 import '/colorscheme.dart';
 import 'homepage.dart';
 
 class BottomNavPage extends StatefulWidget {
   dynamic data;
+
   BottomNavPage({Key? key, this.data}) : super(key: key);
 
   @override
@@ -21,7 +23,9 @@ class _BottomNavPageState extends State<BottomNavPage> {
       data: data,
     ),
     MapsPage(),
-    BookingsPage(),
+    WalletPage(
+      data: data,
+    ),
     SettingTab(
       data: data,
     )
@@ -39,6 +43,7 @@ class _BottomNavPageState extends State<BottomNavPage> {
     super.initState();
     data = widget.data;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,9 +62,7 @@ class _BottomNavPageState extends State<BottomNavPage> {
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.map_sharp),
-              label: 'Maps'),
+          BottomNavigationBarItem(icon: Icon(Icons.map_sharp), label: 'Maps'),
           BottomNavigationBarItem(
               icon: Icon(Icons.auto_graph), label: 'Earnings'),
           BottomNavigationBarItem(

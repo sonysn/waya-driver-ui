@@ -6,8 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:waya_driver/constants/api_constants.dart';
 
 //todo base uri value here
-//var baseUri = 'http://192.168.100.43:3000';
-var baseUri = 'https://waya-api.onrender.com';
+var baseUri = 'http://192.168.100.43:3000';
+//var baseUri = 'https://waya-api.onrender.com';
 
 //availability is a bool returns 1 or 0
 Future updateAvailability(availability, id) async{

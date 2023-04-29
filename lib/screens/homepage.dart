@@ -3,20 +3,24 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:waya_driver/colorscheme.dart';
 import 'package:waya_driver/functions/location_functions.dart';
+import 'package:waya_driver/screens/setting_tab.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../api/actions.dart';
 import '../sockets/sockets.dart';
 
 class HomePage extends StatefulWidget {
-  dynamic data;
+  final dynamic data;
 
-  HomePage({Key? key, this.data}) : super(key: key);
+  const HomePage({Key? key, this.data}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePage> createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   void findLoc() async {
     Location location = Location();
 
@@ -59,17 +63,27 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    // Retrieve the stored value of the switch
+    getSwitchValue();
     findLoc();
-    //locationCallbacks();
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    findLoc();
+  Future<void> getSwitchValue() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isOnline = prefs.getBool('isOnline') ?? false;
+    setState(() {
+      onlineStatus = isOnline;
+    });
+    if (onlineStatus == false) {
+      cancelLocationCallbacks();
+      ConnectToServer().disconnect();
+      updateAvailability(0, widget.data.id);
+    } else {
+      ConnectToServer().connect(widget.data.id, context);
+      locationCallbacks(widget.data.id);
+      updateAvailability(1, widget.data.id);
+    }
   }
 
   @override
@@ -82,7 +96,7 @@ class _HomePageState extends State<HomePage> {
               //color: Colors.yellow,
               height: 120,
               decoration: const BoxDecoration(
-                  color: Colors.yellow,
+                  color: customPurple,
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(30),
                       bottomRight: Radius.circular(30))),
@@ -94,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   const Text(
                     'Profile',
-                    style: TextStyle(fontSize: 25),
+                    style: TextStyle(fontSize: 25, color: Colors.white),
                   ),
                   const SizedBox(
                     height: 10,
@@ -102,15 +116,25 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     children: [
                       //todo fix this error
-                      widget.data.profilePhoto != null
-                          ? CircleAvatar(
-                        backgroundImage: NetworkImage('${widget.data
-                            .profilePhoto}'),
+                      CircleAvatar(
                         radius: 30.0,
-                      ) : const CircleAvatar(
-                        backgroundColor: Colors.black,
-                        radius: 30.0,
+                        backgroundColor: Colors.white,
+                        child: widget.data.profilePhoto != "null"
+                            ? ClipOval(
+                                child: Image.network(
+                                  '${widget.data.profilePhoto}',
+                                  fit: BoxFit.cover,
+                                  width: 60.0,
+                                  height: 60.0,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.account_circle,
+                                size: 60.0,
+                                color: Colors.black,
+                              ),
                       ),
+
                       const SizedBox(
                         width: 5,
                       ),
@@ -119,14 +143,19 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           Text(
                             '${widget.data.firstName} ${widget.data.lastName}',
-                            style: const TextStyle(fontSize: 20),
+                            style: const TextStyle(
+                                fontSize: 20, color: Colors.white),
                           ),
                           Row(
                             children: [
-                              const Icon(Icons.star),
+                              const Icon(
+                                Icons.star,
+                                color: Colors.yellow,
+                              ),
                               Text(
                                 widget.data.rating.toString(),
-                                style: const TextStyle(fontSize: 20),
+                                style: const TextStyle(
+                                    fontSize: 20, color: Colors.white),
                               )
                             ],
                           )
@@ -136,10 +165,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SizedBox(
                     height: 150,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width / 1.1,
+                    width: MediaQuery.of(context).size.width / 1.1,
                     child: Card(
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),

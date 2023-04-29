@@ -72,7 +72,9 @@ class _VerificationPageState extends State<VerificationPage> {
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (BuildContext context) {
-                                return const SignUp();
+                                return SignUp(
+                                  phoneNumber: widget.phoneNumber
+                                );
                               }));
                         },
                         style: ElevatedButton.styleFrom(

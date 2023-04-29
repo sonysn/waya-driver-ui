@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:waya_driver/api/auth.dart';
 import '/colorscheme.dart';
 import '/screens/bottom_nav.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path;
+import 'package:intl/intl.dart';
 
 class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
+  String phoneNumber;
+  SignUp({Key? key, required  this.phoneNumber}) : super(key: key);
 
   @override
   State<SignUp> createState() => _SignUpState();
@@ -18,11 +21,23 @@ class _SignUpState extends State<SignUp> {
   //Todo Text editing controller holds the user input for program execution, the names are self explanatory of what they do or hold
   TextEditingController firstname = TextEditingController();
   TextEditingController lastname = TextEditingController();
-  TextEditingController phoneNumber = TextEditingController(text: 'phone');
+  TextEditingController phoneNumber = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController homeAddress = TextEditingController();
+  TextEditingController _dateController = TextEditingController();
 
+  @override
+  void dispose() {
+    firstname.dispose();
+    lastname.dispose();
+    phoneNumber.dispose();
+    password.dispose();
+    email.dispose();
+    homeAddress.dispose();
+    _dateController.dispose();
+    super.dispose();
+  }
 
   //PICK PROFILE IMAGE
   File? _image;
@@ -162,6 +177,20 @@ class _SignUpState extends State<SignUp> {
   //   );
   // }
 
+  //PICK DATE
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now());
+    if (picked != null) {
+      setState(() {
+        _dateController.text = DateFormat('yyyy-MM-dd').format(picked);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -198,6 +227,7 @@ class _SignUpState extends State<SignUp> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     CircleAvatar(
+                      backgroundColor: Colors.black,
                       radius: 30,
                       backgroundImage:
                           _image != null ? FileImage(_image!) : null,
@@ -205,6 +235,7 @@ class _SignUpState extends State<SignUp> {
                           ? const Icon(
                               Icons.person,
                               size: 30,
+                              color: Colors.white,
                             )
                           : null,
                     ),
@@ -351,16 +382,16 @@ class _SignUpState extends State<SignUp> {
                         readOnly: true,
                         cursorColor: customPurple,
                         keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                            hintText: 'hint: Phone Number',
-                            contentPadding: EdgeInsets.all(15),
-                            enabledBorder: OutlineInputBorder(
+                        decoration: InputDecoration(
+                            hintText: widget.phoneNumber,
+                            contentPadding: const EdgeInsets.all(15),
+                            enabledBorder: const OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15)),
                               borderSide: BorderSide(color: Colors.black),
                             ),
                             filled: true,
-                            focusedBorder: OutlineInputBorder(
+                            focusedBorder: const OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15)),
                               borderSide: BorderSide(color: Colors.yellow),
@@ -388,7 +419,7 @@ class _SignUpState extends State<SignUp> {
                         cursorColor: customPurple,
                         keyboardType: TextInputType.text,
                         decoration: const InputDecoration(
-                            hintText: 'Enter your First Name',
+                            hintText: 'Enter your Email',
                             contentPadding: EdgeInsets.all(15),
                             enabledBorder: OutlineInputBorder(
                               borderRadius:
@@ -407,6 +438,43 @@ class _SignUpState extends State<SignUp> {
               const Padding(
                 padding: EdgeInsets.only(left: 12),
                 child: Text(
+                  'DOB',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.black),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(12),
+                child: TextField(
+                  cursorColor: Colors.black,
+                  controller: _dateController,
+                  onTap: () {
+                    _selectDate(context);
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Select Date',
+                    suffixIcon: const Icon(Icons.calendar_today, color: Colors.black,),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.black,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    filled: true,
+                    focusedBorder: const OutlineInputBorder(
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(15)),
+                      borderSide: BorderSide(color: Colors.yellow),
+                    ),
+                  ),
+                )
+
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 12),
+                child: Text(
                   'Address',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -420,7 +488,7 @@ class _SignUpState extends State<SignUp> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.black),
                       ),
                       child: TextFormField(
@@ -508,10 +576,11 @@ class _SignUpState extends State<SignUp> {
               Center(
                 child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return BottomNavPage();
-                      }));
+                      // Navigator.push(context,
+                      //     MaterialPageRoute(builder: (BuildContext context) {
+                      //   return BottomNavPage();
+                      // }));
+                      signUp(firstname.text, lastname.text, password.text, widget.phoneNumber, email.text, homeAddress.text, "12/12/1994", _image, _licenseFile, _permitFile);
                     },
                     style: ElevatedButton.styleFrom(
                         primary: customPurple,

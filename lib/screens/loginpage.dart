@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
 
 
   void _nav() {
-    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) {
       return BottomNavPage(
         data: _futureData,
       );
@@ -54,6 +54,13 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _loadCredentials();
+  }
+
+  @override
+  void dispose() {
+    emailOrPhoneTextController.dispose();
+    passwordTextController.dispose();
+    super.dispose();
   }
 
   void _loadCredentials() async {
