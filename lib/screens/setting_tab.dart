@@ -1,19 +1,21 @@
 import 'dart:io';
-
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:waya_driver/api/actions.dart';
+import 'package:waya_driver/api/auth.dart';
 import 'package:waya_driver/functions/location_functions.dart';
 import 'package:waya_driver/screens/bookings.dart';
 import 'package:waya_driver/screens/settingspage.dart';
+import 'package:waya_driver/screens/welcomepage.dart';
 import 'package:waya_driver/sockets/sockets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'loginpage.dart';
 
 class SettingTab extends StatefulWidget {
-  dynamic data;
+  final dynamic data;
 
-  SettingTab({Key? key, this.data}) : super(key: key);
+  const SettingTab({Key? key, this.data}) : super(key: key);
 
   @override
   State<SettingTab> createState() => _SettingTabState();
@@ -22,7 +24,6 @@ class SettingTab extends StatefulWidget {
 bool onlineStatus = false;
 
 class _SettingTabState extends State<SettingTab> {
-
   Future<void> setSwitchValue(bool value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isOnline', value);
@@ -118,13 +119,16 @@ class _SettingTabState extends State<SettingTab> {
                           width: 90,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [Icon(Icons.history), Text('Trips')],
+                            children: const [
+                              Icon(Icons.history),
+                              Text('Trips')
+                            ],
                           ),
                         ),
                       ),
-                      onTap: (){
+                      onTap: () {
                         Navigator.push(context,
-                        MaterialPageRoute(builder: (BuildContext context){
+                            MaterialPageRoute(builder: (BuildContext context) {
                           return const BookingsPage();
                         }));
                       },
@@ -156,7 +160,7 @@ class _SettingTabState extends State<SettingTab> {
                         activeTrackColor: Colors.yellow,
                         activeColor: Colors.white,
                         value: onlineStatus,
-                        onChanged: (value) async{
+                        onChanged: (value) async {
                           setState(() => onlineStatus = value);
                           // Store the value of the switch
                           await setSwitchValue(value);
@@ -203,12 +207,48 @@ class _SettingTabState extends State<SettingTab> {
                   title: Text("Legal"),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginPage()),
-                    );
+                  onTap: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+
+                    //define functions
+                    void nav(){
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const WelcomePage()),
+                      );
+                    }
+
+                    void showSnackBar(String message) {
+                      final snackBar = SnackBar(
+                        content: Text(message),
+                        duration: const Duration(seconds: 3),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                    logout() async{
+                      try {
+                        final response = await logOut(widget.data.id);
+                        if (response == 'logout success'){
+                          // Remove the content of emailOrPhone and password
+                          prefs.remove('emailOrPhone');
+                          prefs.remove('password');
+                          prefs.remove('deviceID');
+                          ConnectToServer().disconnect();
+                          nav();
+                        }
+                      } on SocketException catch (e) {
+                        print(e);
+                        showSnackBar('Logout failed. Please check your internet connection.');
+                      } on TimeoutException catch (e) {
+                        print(e);
+                        showSnackBar('Request timed out. Please try again later.');
+                      } catch (e) {
+                        print(e);
+                      }
+                    }
+                    logout();
                   },
                   child: const ListTile(
                     leading: Icon(

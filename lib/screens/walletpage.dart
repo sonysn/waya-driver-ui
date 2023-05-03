@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/screens/cash_deposit_page.dart';
+import 'package:waya_driver/screens/transfers.dart';
 import '../../../colorscheme.dart';
 import 'package:waya_driver/screens/widgets/earning_card.dart';
 import 'package:waya_driver/screens/widgets/transaction_card.dart';
@@ -16,11 +20,34 @@ class WalletPage extends StatefulWidget {
 }
 
 class _WalletPageState extends State<WalletPage> {
+  final _streamController = StreamController<String>.broadcast();
+
+  Stream<String> get stream => _streamController.stream;
+
+  Future _getAccountBalance() async{
+    final response = await getBalance(widget.data.id, widget.data.phoneNumber);
+    print(response);
+    _streamController.add(response);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getAccountBalance();
+  }
+
+  @override
+  void dispose() {
+    _streamController.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
+      body: RefreshIndicator(onRefresh: _getAccountBalance, child: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -44,6 +71,7 @@ class _WalletPageState extends State<WalletPage> {
                     itemBuilder: (context, index) {
                       return MyCard(
                         data: widget.data,
+                        stream: stream
                       );
                     }),
               ),
@@ -59,7 +87,9 @@ class _WalletPageState extends State<WalletPage> {
                         // navigate to withdrawal page or function
                         Navigator.push(context,
                             MaterialPageRoute(builder: (BuildContext context) {
-                              return CashDepositPage();
+                              return CashDepositPage(
+                                  email: widget.data.email
+                              );
                             }));
                       },
                       child: Column(
@@ -89,6 +119,12 @@ class _WalletPageState extends State<WalletPage> {
                     child: InkWell(
                       onTap: () {
                         // navigate to withdrawal page or function
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (BuildContext context) {
+                              return TransferPage(
+                                  phoneNumber: widget.data.phoneNumber
+                              );
+                            }));
                       },
                       child: Column(
                         children: const [
@@ -110,18 +146,18 @@ class _WalletPageState extends State<WalletPage> {
                   const Text("Recent Earnings"),
                   Flexible(
                       child: Container(
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      onTap: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return EarningHistory(
-                          data: widget.data,
-                        );
-                      })),
-                      child: const Text("View all",
-                          style: TextStyle(color: customPurple)),
-                    ),
-                  )),
+                        alignment: Alignment.centerRight,
+                        child: InkWell(
+                          onTap: () => Navigator.push(context,
+                              MaterialPageRoute(builder: (BuildContext context) {
+                                return EarningHistory(
+                                  data: widget.data,
+                                );
+                              })),
+                          child: const Text("View all",
+                              style: TextStyle(color: customPurple)),
+                        ),
+                      )),
                 ],
               ),
               SizedBox(
@@ -150,18 +186,18 @@ class _WalletPageState extends State<WalletPage> {
                   const Text("Recent Transactions"),
                   Flexible(
                       child: Container(
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      onTap: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return TransactionHistory(
-                          data: widget.data
-                        );
-                      })),
-                      child: const Text("View all",
-                          style: TextStyle(color: customPurple)),
-                    ),
-                  )),
+                        alignment: Alignment.centerRight,
+                        child: InkWell(
+                          onTap: () => Navigator.push(context,
+                              MaterialPageRoute(builder: (BuildContext context) {
+                                return TransactionHistory(
+                                    data: widget.data
+                                );
+                              })),
+                          child: const Text("View all",
+                              style: TextStyle(color: customPurple)),
+                        ),
+                      )),
                 ],
               ),
               const SizedBox(
@@ -184,7 +220,7 @@ class _WalletPageState extends State<WalletPage> {
             ],
           ),
         ),
-      ),
+      ),),
     );
   }
 }

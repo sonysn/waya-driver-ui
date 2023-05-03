@@ -5,19 +5,20 @@ import 'package:waya_driver/models/auth.dart';
 import 'package:path/path.dart' as path;
 
 //todo base uri value here
-var baseUri = 'http://192.168.100.43:3000';
-//var baseUri = 'https://waya-api.onrender.com';
+//var baseUri = 'http://192.168.100.43:3000';
+var baseUri = 'https://waya-api.onrender.com';
+//var baseUri = 'https://e7b6-102-216-201-31.ngrok-free.app';
 
 Future paystackDeposit({required String email, required int amount}) async {
   try {
     final http.Response response = await http.post(
       Uri.parse('$baseUri/charge'),
       headers: {'Content-Type': 'application/json'},
-      body: {
+      body: jsonEncode({
         'email': email,
         'amount': amount,
         'reference': 'ref_${DateTime.now().millisecondsSinceEpoch}',
-      },
+      }),
     );
 
     if (response.statusCode == 200) {

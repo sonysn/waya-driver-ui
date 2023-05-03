@@ -1,21 +1,71 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:waya_driver/api/payments.dart';
+import 'package:waya_driver/screens/paystack_deposit_webview.dart';
 
 class CashDepositPage extends StatefulWidget {
-  const CashDepositPage({Key? key}) : super(key: key);
+  final String email;
+  const CashDepositPage({Key? key, required this.email}) : super(key: key);
 
   @override
-  _CashDepositPageState createState() => _CashDepositPageState();
+  State<CashDepositPage> createState() => _CashDepositPageState();
 }
 
 class _CashDepositPageState extends State<CashDepositPage> {
   final TextEditingController _cashDepositController = TextEditingController();
+  bool _isLoading = false;
+  String? _authorizationUrl;
 
   @override
   void dispose() {
     _cashDepositController.dispose();
     super.dispose();
   }
+
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  void _navigateToDepositWebView(authorizationUrl) {
+    navigatorKey.currentState?.push(MaterialPageRoute(
+      builder: (context) => DepositWebView(authorizationUrl: authorizationUrl),
+    ));
+  }
+
+
+  Future<void> _handleDeposit() async {
+    final email = widget.email;
+    final amount = _cashDepositController.text;
+    setState(() {
+      _isLoading = true;
+    });
+    //paystack code eg 200 naira is 20000
+    try {
+      final response = await paystackDeposit(email: email, amount: int.parse('${_removeComma(amount)}00'));
+        setState(() {
+          _authorizationUrl = response['authorization_url'];
+          _isLoading = false;
+        });
+        // Open the authorization URL in a webview to complete the payment
+        //_navigateToDepositWebView(_authorizationUrl);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DepositWebView(
+            authorizationUrl: _authorizationUrl,
+          ),
+        ),
+      );
+    } catch (e) {
+      print(e);
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('An error occurred while processing your payment.')),
+      );
+    }
+  }
+
 
   void _deleteLastCharacter() {
     final text = _cashDepositController.text;
@@ -89,18 +139,22 @@ class _CashDepositPageState extends State<CashDepositPage> {
                 const SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: _deleteLastCharacter,
-                  child: const Icon(Icons.backspace),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.black,
-                    shape: const CircleBorder(),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(60.0)),
+                    ),
                   ),
+                  child: const Icon(Icons.backspace),
                 ),
               ],
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
-                String cashDeposit = _cashDepositController.text;
+                //String cashDeposit = _cashDepositController.text;
+                _handleDeposit();
+                //print(_removeComma(_cashDepositController.text) + '00');
                 // handle cash deposit button press with the cashDeposit amount
               },
               style: ElevatedButton.styleFrom(

@@ -4,6 +4,9 @@ class ApiConstants {
   static const port = 3000;
   static String signInEndpoint = '/driversignin';
   static String signUpEndpoint = '/driversignup';
+  static String logoutEndpoint = '/logout';
   static String updateAvailabilityEndpoint = '/availability';
   static String getDriverCars = '/getdrivercars';
+  static String getBalanceEndpoint = '/getbalance';
+  static String transferToOtherDrivers = '/tranfertodriver';
 }

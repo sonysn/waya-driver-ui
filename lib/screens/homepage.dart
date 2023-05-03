@@ -5,8 +5,11 @@ import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:waya_driver/colorscheme.dart';
 import 'package:waya_driver/functions/location_functions.dart';
+import 'package:waya_driver/functions/notification_service.dart';
 import 'package:waya_driver/screens/setting_tab.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 
 import '../api/actions.dart';
 import '../sockets/sockets.dart';
@@ -60,6 +63,7 @@ class HomePageState extends State<HomePage> {
 
   dynamic currentLocation;
   StreamController controller = StreamController();
+  DateTime? _lastPressedAt; // for tracking the time of the last back button press
 
   @override
   void initState() {
@@ -67,6 +71,15 @@ class HomePageState extends State<HomePage> {
     // Retrieve the stored value of the switch
     getSwitchValue();
     findLoc();
+
+    // Request permission for receiving push notifications (only for iOS)
+    FirebaseMessaging.instance.requestPermission();
+
+    // Configure Firebase Messaging & Show Notification
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Received message: ${message.notification?.title}');
+      NotificationService().showNotification('${message.notification?.title}');
+    });
   }
 
   Future<void> getSwitchValue() async {
@@ -86,9 +99,36 @@ class HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> getSwitchValueWhileOff() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isOnline = prefs.getBool('isOnline') ?? false;
+    if (isOnline == false) {
+      cancelLocationCallbacks();
+      ConnectToServer().disconnect();
+      updateAvailability(0, widget.data.id);
+    } else {
+      ConnectToServer().connect(widget.data.id, context);
+      locationCallbacks(widget.data.id);
+      updateAvailability(1, widget.data.id);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(onWillPop: () async{
+      if (_lastPressedAt == null ||
+          DateTime.now().difference(_lastPressedAt!) > const Duration(seconds: 2)) {
+        // show a toast or snackbar to inform the user to press back again to exit
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Press back again to exit'),
+          duration: Duration(seconds: 2),
+        ));
+        _lastPressedAt = DateTime.now();
+        return false; // prevent the app from closing
+      }
+      return true; // allow the app to close
+    },
+    child: Scaffold(
       body: ListView(
         children: [
           Stack(children: [
@@ -121,18 +161,18 @@ class HomePageState extends State<HomePage> {
                         backgroundColor: Colors.white,
                         child: widget.data.profilePhoto != "null"
                             ? ClipOval(
-                                child: Image.network(
-                                  '${widget.data.profilePhoto}',
-                                  fit: BoxFit.cover,
-                                  width: 60.0,
-                                  height: 60.0,
-                                ),
-                              )
+                          child: Image.network(
+                            '${widget.data.profilePhoto}',
+                            fit: BoxFit.cover,
+                            width: 60.0,
+                            height: 60.0,
+                          ),
+                        )
                             : const Icon(
-                                Icons.account_circle,
-                                size: 60.0,
-                                color: Colors.black,
-                              ),
+                          Icons.account_circle,
+                          size: 60.0,
+                          color: Colors.black,
+                        ),
                       ),
 
                       const SizedBox(
@@ -232,9 +272,16 @@ class HomePageState extends State<HomePage> {
                 ],
               ),
             )
-          ])
+          ]),
+          const RideRequestCard(
+            name: 'John Doe',
+            pickupLocation: '123 Main St.xxxxxxxxxxxxxxx',
+            dropoffLocation: '456 Oak Aveeeeeeeeeeeeeeeeeeee.',
+            fare: 25.00,
+          )
         ],
       ),
+    ),
     );
   }
 }

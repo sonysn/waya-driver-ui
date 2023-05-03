@@ -8,7 +8,8 @@ class Data {
   final String address;
   final String? profilePhoto;
   final double rating;
-  final String workAddress;
+  //final String workAddress;
+  final double accountBalance;
 
   Data({
     required this.token,
@@ -20,7 +21,8 @@ class Data {
     required this.address,
     required this.profilePhoto,
     required this.rating,
-    required this.workAddress,
+    //required this.workAddress,
+    required this.accountBalance
   });
 
   factory Data.fromJson(Map<String, dynamic> json) {
@@ -34,8 +36,8 @@ class Data {
       address: json['result'][0]['EMAIL'],
       profilePhoto: json['result'][0]['PROFILE_PHOTO'],
       rating: double.parse(json['result'][0]['RATING'].toString()),
-      workAddress: json['result'][0]['WORK_ADDRESS'],
-
+      //workAddress: json['result'][0]['WORK_ADDRESS'],
+      accountBalance: double.parse(json['result'][0]['ACCOUNT_BALANCE'].toString())
     );
   }
 }

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:waya_driver/api/auth.dart';
+import 'package:waya_driver/screens/bottom_nav.dart';
 import '../colorscheme.dart';
 import '/screens/loginpage.dart';
 import '/screens/verificationpage.dart';
+
+import 'loginpage.dart';
+
+import 'homepage.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -17,17 +23,31 @@ class _WelcomePageState extends State<WelcomePage> {
   var items = ['+234', '+233', '+235'];
 
   @override
+  void initState() {
+    super.initState();
+    //_checkLoginStatus();
+  }
+
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        //backgroundColor: Colors.orange,
+        backgroundColor: Colors.white,
         body: ListView(
       children: [
         Center(
           child: Container(
             //margin: const EdgeInsets.only(top: 350),
-            margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 1.7),
+            margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 5),
             child: Column(
               children: [
+                const Center(
+                    child: Image(
+                      image: AssetImage("assets/icons/logo.png"),
+                      width: 200.0,
+                      height: 200.0,
+                    )),
                 const Text(
                   "Welcome to Waya Driver",
                   style: TextStyle(fontSize: 30, color: customPurple),

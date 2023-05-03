@@ -4,7 +4,7 @@ import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:waya_driver/sockets/sockets.dart';
 
-StreamSubscription? _subscription;
+StreamSubscription<LocationData>? _subscription;
 
 locationCallbacks(id) async{
   Location location = Location();

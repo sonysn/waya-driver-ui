@@ -42,7 +42,7 @@ class NotificationService {
       iOS: iosPlatformChannelSpecifics,
     );
     await flutterLocalNotificationsPlugin.show(
-        0, 'New Ride received', data, platformChannelSpecifics,
+        0, 'New Ride Received', data, platformChannelSpecifics,
         payload: 'new_notification');
   }
 }

@@ -1,9 +1,14 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:waya_driver/api/auth.dart';
 import '/screens/bottom_nav.dart';
 import '../colorscheme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -14,24 +19,45 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   dynamic _serverResponse() async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
+
       final response = await signIn(
-          emailOrPhoneTextController.text, passwordTextController.text
+          emailOrPhoneTextController.text, passwordTextController.text, token
       );
       setState(() {
         _futureData = response;
       });
       if (_futureData != null) {
+        setState(() {
+          _isLoading = false;
+        });
         _nav();
       }
+    } on SocketException catch (e) {
+      print(e);
+      _showSnackBar('Connection failed. Please check your internet connection.');
+    } on TimeoutException catch (e) {
+      print(e);
+      _showSnackBar('Request timed out. Please try again later.');
     } catch (e) {
       print(e);
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+
     }
   }
+
+  void _showSnackBar(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      duration: const Duration(seconds: 3),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+
 
 
   void _nav() {
@@ -44,9 +70,11 @@ class _LoginPageState extends State<LoginPage> {
 
   TextEditingController emailOrPhoneTextController = TextEditingController();
   TextEditingController passwordTextController = TextEditingController();
+  late FirebaseMessaging _firebaseDeviceToken;
+  String? token;
   bool val = false;
   bool _passwordVisible = false;
-  bool _rememberMe = false;
+  bool _rememberMe = true;
   bool _isLoading = false;
   dynamic _futureData;
 
@@ -54,6 +82,11 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _loadCredentials();
+    FirebaseMessaging.instance.getToken().then((devToken) {
+      setState(() {
+        token = devToken;
+      });
+    });
   }
 
   @override
@@ -79,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _isLoading ? const Center(child: CircularProgressIndicator()) :  Container(
+      body: _isLoading ? const Center(child: CircularProgressIndicator(color: Colors.black,)) :  Container(
         padding: const EdgeInsets.only(top: 10),
         margin: const EdgeInsets.symmetric(horizontal: 7),
         child: Column(
@@ -165,16 +198,16 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            CheckboxListTile(
-              title: const Text('Remember me'),
-              activeColor: Colors.black,
-              value: _rememberMe,
-              onChanged: (bool? value) {
-                setState(() {
-                  _rememberMe = value!;
-                });
-              },
-            ),
+            // CheckboxListTile(
+            //   title: const Text('Remember me'),
+            //   activeColor: Colors.black,
+            //   value: _rememberMe,
+            //   onChanged: (bool? value) {
+            //     setState(() {
+            //       _rememberMe = value!;
+            //     });
+            //   },
+            // ),
             Center(
               child: ElevatedButton(
                   onPressed: () async {
@@ -183,17 +216,22 @@ class _LoginPageState extends State<LoginPage> {
                     //     MaterialPageRoute(builder: (BuildContext context) {
                     //   return const BottomNavPage();
                     // }));
-                    _serverResponse();
-                    if (_rememberMe) {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      await prefs.setString(
-                          'emailOrPhone', emailOrPhoneTextController.text);
-                      await prefs.setString(
-                          'password', passwordTextController.text);
+                    if (emailOrPhoneTextController.text != '' && passwordTextController.text != ''){
+                      _serverResponse();
+                      if (_rememberMe) {
+                        SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                        await prefs.setString(
+                            'emailOrPhone', emailOrPhoneTextController.text);
+                        await prefs.setString(
+                            'password', passwordTextController.text);
+                        await prefs.setString('deviceID', token!);
+                      }
+                      print(_futureData);
                     }
 
-                    print(_futureData);
+
+
                   },
                   style: ElevatedButton.styleFrom(
                       primary: customPurple,

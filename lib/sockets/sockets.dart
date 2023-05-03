@@ -12,6 +12,7 @@ class ConnectToServer {
 
   ConnectToServer({this.id});
 
+  //TODO CHECK IF THIS CODE DOES SOMETHING
   final socketResponse = StreamController();
 
   void get addResponse => socketResponse.sink.add;
@@ -45,28 +46,28 @@ class ConnectToServer {
     void myFunction(BuildContext context) {
       socket.on("ridenotifications", (data) {
         print(data);
-        print(data['dropoffLocation']);
-        NotificationService().showNotification(data['dropoffLocation']);
+        if (data != null) {
+          //NotificationService().showNotification("Hi, John Doe is requesting a ride at ${data['dropoffLocation']}");
 
-        showModalBottomSheet<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return SizedBox(
-              height: 200,
-              child: Card(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(data['pickupLocation']),
-                    Text(data['dropoffLocation']),
-                  ],
-                ),
-              ),
+          try {
+            showModalBottomSheet<void>(
+              context: context,
+              builder: (BuildContext context) {
+                return const RideRequestCard(
+                  name: 'John Doe',
+                  pickupLocation: '123 Main St.',
+                  dropoffLocation: '456 Oak Ave.',
+                  fare: 25.00,
+                );
+              },
             );
-          },
-        );
+          } catch (e) {
+            print('Error showing bottom sheet: $e');
+          }
+        }
       });
     }
+
     myFunction(context);
 
 
@@ -98,3 +99,124 @@ class ConnectToServer {
 //     });
 //   }
  }
+
+class RideRequestCard extends StatelessWidget {
+  final String name;
+  final String pickupLocation;
+  final String dropoffLocation;
+  final double fare;
+
+  const RideRequestCard({
+    Key? key,
+    required this.name,
+    required this.pickupLocation,
+    required this.dropoffLocation,
+    required this.fare,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 220,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Card(
+                  elevation: 0,
+                  color: Colors.black,
+                  child: SizedBox(
+                    height: 7,
+                    width: MediaQuery.of(context).size.width / 2.5,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Hello, $name is requesting a ride',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      'From: $pickupLocation',
+                      overflow: TextOverflow.visible,
+                    ),
+                  ),
+                  Flexible(
+                    child: Text(
+                      'To: $dropoffLocation',
+                      overflow: TextOverflow.visible,
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Fare: ₦${fare.toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.black,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 10,
+                          ),
+                        ),
+                        child: const Text(
+                          'Cancel',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 10,
+                          ),
+                        ),
+                        child: const Text(
+                          'Accept',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
