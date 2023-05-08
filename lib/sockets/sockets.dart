@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/constants/api_constants.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:waya_driver/functions/notification_service.dart';
@@ -27,7 +28,7 @@ class ConnectToServer {
   Socket socket = io(
       //api link here
       ApiConstants.baseUrl,
-      OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
+      OptionBuilder().setTransports(['websocket']).disableAutoConnect() // for Flutter or Dart VM
           .build());
 
 //connect to websockets
@@ -53,11 +54,12 @@ class ConnectToServer {
             showModalBottomSheet<void>(
               context: context,
               builder: (BuildContext context) {
-                return const RideRequestCard(
+                return RideRequestCard(
+                  riderId: data['userId'],
                   name: 'John Doe',
                   pickupLocation: '123 Main St.',
                   dropoffLocation: '456 Oak Ave.',
-                  fare: 25.00,
+                  fare: 25.00
                 );
               },
             );
@@ -80,7 +82,7 @@ class ConnectToServer {
 
 //disconnect from websockets
   disconnect() {
-    socket.disconnect();
+    socket.dispose();
   }
 
   void sendDriverLocation(data, id) {
@@ -101,6 +103,7 @@ class ConnectToServer {
  }
 
 class RideRequestCard extends StatelessWidget {
+  final int riderId;
   final String name;
   final String pickupLocation;
   final String dropoffLocation;
@@ -108,6 +111,7 @@ class RideRequestCard extends StatelessWidget {
 
   const RideRequestCard({
     Key? key,
+    required this.riderId,
     required this.name,
     required this.pickupLocation,
     required this.dropoffLocation,
@@ -175,7 +179,9 @@ class RideRequestCard extends StatelessWidget {
                   Row(
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.black,
                           padding: const EdgeInsets.symmetric(
@@ -193,7 +199,9 @@ class RideRequestCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 10),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          acceptRide(riderId: riderId);
+                        },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.green,
                           padding: const EdgeInsets.symmetric(
