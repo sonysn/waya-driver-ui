@@ -9,12 +9,14 @@ import 'package:path/path.dart' as path;
 var baseUri = 'https://waya-api.onrender.com';
 //var baseUri = 'https://e7b6-102-216-201-31.ngrok-free.app';
 
-Future paystackDeposit({required String email, required int amount}) async {
+Future paystackDeposit({required int id,required dynamic phone,required String email, required int amount}) async {
   try {
     final http.Response response = await http.post(
-      Uri.parse('$baseUri/charge'),
+      Uri.parse('$baseUri${ApiConstants.chargeEndpoint}'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
+        'driverID': id,
+        'phone': phone,
         'email': email,
         'amount': amount,
         'reference': 'ref_${DateTime.now().millisecondsSinceEpoch}',

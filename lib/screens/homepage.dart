@@ -23,6 +23,12 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => HomePageState();
 }
 
+String? vehicleName;
+String? vehiclePlateNumber;
+String? vehicleColour;
+String? driverPhone;
+String? driverPhoto;
+
 class HomePageState extends State<HomePage> {
   void findLoc() async {
     Location location = Location();
@@ -61,6 +67,18 @@ class HomePageState extends State<HomePage> {
     print(currentLocation);
   }
 
+  Future getCar() async {
+    final res = await getDriverCars(widget.data.id, widget.data.token);
+    setState(() {
+      vehicleName = "${res['result'][0]['MODEL']}, ${res['result'][0]['MAKE']}";
+      vehiclePlateNumber = res['result'][0]['PLATE_NUMBER'];
+      vehicleColour = res['result'][0]['COLOUR'];
+      driverPhone = widget.data.phoneNumber;
+      driverPhoto = widget.data.profilePhoto;
+    });
+    print(vehicleName);
+  }
+
   dynamic currentLocation;
   StreamController controller = StreamController();
   DateTime? _lastPressedAt; // for tracking the time of the last back button press
@@ -71,6 +89,7 @@ class HomePageState extends State<HomePage> {
     // Retrieve the stored value of the switch
     getSwitchValue();
     findLoc();
+    getCar();
 
     // Request permission for receiving push notifications (only for iOS)
     FirebaseMessaging.instance.requestPermission();
@@ -273,12 +292,12 @@ class HomePageState extends State<HomePage> {
               ),
             )
           ]),
-          const RideRequestCard(
-            name: 'John Doe',
-            pickupLocation: '123 Main St.xxxxxxxxxxxxxxx',
-            dropoffLocation: '456 Oak Aveeeeeeeeeeeeeeeeeeee.',
-            fare: 25.00,
-          )
+          // const RideRequestCard(
+          //   name: 'John Doe',
+          //   pickupLocation: '123 Main St.xxxxxxxxxxxxxxx',
+          //   dropoffLocation: '456 Oak Aveeeeeeeeeeeeeeeeeeee.',
+          //   fare: 25.00,
+          // )
         ],
       ),
     ),

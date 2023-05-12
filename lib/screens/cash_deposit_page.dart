@@ -5,8 +5,10 @@ import 'package:waya_driver/api/payments.dart';
 import 'package:waya_driver/screens/paystack_deposit_webview.dart';
 
 class CashDepositPage extends StatefulWidget {
+  final int id;
+  final dynamic phone;
   final String email;
-  const CashDepositPage({Key? key, required this.email}) : super(key: key);
+  const CashDepositPage({Key? key, required this.email, required this.id, this.phone}) : super(key: key);
 
   @override
   State<CashDepositPage> createState() => _CashDepositPageState();
@@ -34,13 +36,15 @@ class _CashDepositPageState extends State<CashDepositPage> {
 
   Future<void> _handleDeposit() async {
     final email = widget.email;
+    final phone = widget.phone;
+    final driverId = widget.id;
     final amount = _cashDepositController.text;
     setState(() {
       _isLoading = true;
     });
     //paystack code eg 200 naira is 20000
     try {
-      final response = await paystackDeposit(email: email, amount: int.parse('${_removeComma(amount)}00'));
+      final response = await paystackDeposit(email: email, amount: int.parse('${_removeComma(amount)}00'), id: driverId, phone: phone);
         setState(() {
           _authorizationUrl = response['authorization_url'];
           _isLoading = false;

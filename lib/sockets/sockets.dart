@@ -7,6 +7,7 @@ import 'package:waya_driver/constants/api_constants.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:waya_driver/functions/notification_service.dart';
 import 'package:waya_driver/main.dart';
+import 'package:waya_driver/screens/homepage.dart';
 
 class ConnectToServer {
   final int? id;
@@ -54,12 +55,13 @@ class ConnectToServer {
             showModalBottomSheet<void>(
               context: context,
               builder: (BuildContext context) {
+                //TODO PUT GEOCODING TO REVERSE THE DROP OFF LOCATION
                 return RideRequestCard(
                   riderId: data['userId'],
                   name: 'John Doe',
-                  pickupLocation: '123 Main St.',
-                  dropoffLocation: '456 Oak Ave.',
-                  fare: 25.00
+                  pickupLocation: data['pickupLocation'],
+                  dropoffLocation: data['dropoffLocation'],
+                  fare: data['estFare']
                 );
               },
             );
@@ -107,7 +109,7 @@ class RideRequestCard extends StatelessWidget {
   final String name;
   final String pickupLocation;
   final String dropoffLocation;
-  final double fare;
+  final int fare;
 
   const RideRequestCard({
     Key? key,
@@ -200,7 +202,7 @@ class RideRequestCard extends StatelessWidget {
                       const SizedBox(width: 10),
                       ElevatedButton(
                         onPressed: () {
-                          acceptRide(riderId: riderId);
+                          acceptRide(riderId: riderId, driverPhoto: driverPhoto, driverPhone: driverPhone, vehicleName: vehicleName, vehiclePlateNumber: vehiclePlateNumber, vehicleColour: vehicleColour);
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.green,

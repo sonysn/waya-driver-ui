@@ -46,9 +46,9 @@ Future getBalance(id, phone) async {
   return d;
 }
 
-Future transfer(amount, receivingNum, sendingNum) async{
-  final http.Response response =
-  await http.post(Uri.parse('$baseUri${ApiConstants.transferToOtherDrivers}'),
+Future transfer(amount, receivingNum, sendingNum) async {
+  final http.Response response = await http.post(
+      Uri.parse('$baseUri${ApiConstants.transferToOtherDrivers}'),
       headers: {
         "Content-Type": "application/json",
       },
@@ -60,4 +60,26 @@ Future transfer(amount, receivingNum, sendingNum) async{
   final data = json.decode(response.body);
   final d = data['message'].toString();
   return d;
+}
+
+Future acceptRide(
+    {required int riderId,
+    required String? driverPhoto,
+    required String? driverPhone,
+    required String? vehicleName,
+    required String? vehiclePlateNumber,
+    required String? vehicleColour}) async {
+  final http.Response response = await http.post(
+      Uri.parse('$baseUri${ApiConstants.driverAcceptRideEndpoint}'),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: json.encode({
+        'riderID': riderId,
+        'driverPhoto': driverPhoto,
+        'vehicleName': vehicleName,
+        'vehiclePlateNumber': vehiclePlateNumber,
+        'vehicleColour': vehicleColour,
+        'driverPhone': driverPhone
+      }));
 }
