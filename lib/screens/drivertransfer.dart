@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import '../colorscheme.dart';
 
-class HelpCenter extends StatefulWidget {
-  const HelpCenter ({Key? key}) : super(key: key);
+class DriverTransfer extends StatefulWidget {
+  const DriverTransfer ({Key? key}) : super(key: key);
 
   @override
-  _HelpCenterState createState() => _HelpCenterState();
+  _DriverTransferState createState() => _DriverTransferState();
 }
 
-class _HelpCenterState extends State<HelpCenter> {
+class _DriverTransferState extends State<DriverTransfer> {
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _recipientController = TextEditingController();
 
