@@ -90,7 +90,7 @@ class _CashDepositPageState extends State<CashDepositPage> {
           children: [
             const SizedBox(height: 16.0),
             SizedBox(
-              width: 300.0,
+              width: 300.0,  //GITHUB TEST//
               child: TextField(
                 controller: _cashDepositController,
                 keyboardType: TextInputType.number,
