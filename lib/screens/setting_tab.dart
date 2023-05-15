@@ -25,10 +25,10 @@ class SettingTab extends StatefulWidget {
 bool onlineStatus = false;
 
 class _SettingTabState extends State<SettingTab> {
-  Future<void> setSwitchValue(bool value) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isOnline', value);
-  }
+  // Future<void> setSwitchValue(bool value) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   await prefs.setBool('isOnline', value);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -134,46 +134,44 @@ class _SettingTabState extends State<SettingTab> {
                         }));
                       },
                     ),
-
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('offline'),
-                    Switch.adaptive(
-                        activeTrackColor: Colors.yellow,
-                        activeColor: Colors.white,
-                        value: onlineStatus,
-                        onChanged: (value) async {
-                          setState(() => onlineStatus = value);
-                          // Store the value of the switch
-                          await setSwitchValue(value);
-                          if (onlineStatus == false) {
-                            cancelLocationCallbacks();
-                            ConnectToServer().disconnect();
-                            updateAvailability(0, widget.data.id);
-                          } else {
-                            ConnectToServer().connect(widget.data.id, context);
-                            locationCallbacks(widget.data.id);
-                            updateAvailability(1, widget.data.id);
-                          }
-                        }),
-                    const Text('online')
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     const Text('offline'),
+                //     Switch.adaptive(
+                //         activeTrackColor: Colors.yellow,
+                //         activeColor: Colors.white,
+                //         value: onlineStatus,
+                //         onChanged: (value) async {
+                //           setState(() => onlineStatus = value);
+                //           // Store the value of the switch
+                //           await setSwitchValue(value);
+                //           if (onlineStatus == false) {
+                //             cancelLocationCallbacks();
+                //             ConnectToServer().disconnect();
+                //             updateAvailability(0, widget.data.id);
+                //           } else {
+                //             ConnectToServer().connect(widget.data.id, context);
+                //             locationCallbacks(widget.data.id);
+                //             updateAvailability(1, widget.data.id);
+                //           }
+                //         }),
+                //     const Text('online')
+                //   ],
+                // ),
                 GestureDetector(
                   onTap: () {
-                     Navigator.push(context,
-                         MaterialPageRoute(builder: (BuildContext context) {
-                        return const MessagesPage();
-                        }));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (BuildContext context) {
+                      return const MessagesPage();
+                    }));
                   },
                   child: const ListTile(
                     leading: Icon(
                       Icons.mail_outline,
                       color: Colors.black,
-
                     ),
                     title: Text("Messages"),
                   ),
@@ -198,7 +196,7 @@ class _SettingTabState extends State<SettingTab> {
                         await SharedPreferences.getInstance();
 
                     //define functions
-                    void nav(){
+                    void nav() {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
@@ -213,10 +211,11 @@ class _SettingTabState extends State<SettingTab> {
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
-                    logout() async{
+
+                    logout() async {
                       try {
                         final response = await logOut(widget.data.id);
-                        if (response == 'logout success'){
+                        if (response == 'logout success') {
                           // Remove the content of emailOrPhone and password
                           prefs.remove('emailOrPhone');
                           prefs.remove('password');
@@ -226,14 +225,17 @@ class _SettingTabState extends State<SettingTab> {
                         }
                       } on SocketException catch (e) {
                         print(e);
-                        showSnackBar('Logout failed. Please check your internet connection.');
+                        showSnackBar(
+                            'Logout failed. Please check your internet connection.');
                       } on TimeoutException catch (e) {
                         print(e);
-                        showSnackBar('Request timed out. Please try again later.');
+                        showSnackBar(
+                            'Request timed out. Please try again later.');
                       } catch (e) {
                         print(e);
                       }
                     }
+
                     logout();
                   },
                   child: const ListTile(
