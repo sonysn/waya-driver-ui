@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/api/payments.dart';
 import 'package:waya_driver/screens/paystack_deposit_webview.dart';
+import '../colorscheme.dart';
 
 class TransferPage extends StatefulWidget {
   final dynamic phoneNumber;
@@ -45,117 +46,108 @@ class _TransferPageState extends State<TransferPage> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Container(
-          padding: const EdgeInsets.only(top: 30),
-          margin: const EdgeInsets.symmetric(horizontal: 7),
-          child: ListView(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 300.0,
-                    child: TextField(
-                      controller: _driverRecipentController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        hintText: 'Enter Driver Phone',
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  SizedBox(
-                    width: 300.0,
-                    child: TextField(
-                      controller: _cashTransferController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        hintText: 'Enter cash transfer amount',
-                      ),
-                      enabled: false,
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildNumberButton('1'),
-                      const SizedBox(width: 10),
-                      _buildNumberButton('2'),
-                      const SizedBox(width: 10),
-                      _buildNumberButton('3')
-                    ],
-                  ),
-                  const SizedBox(height: 16.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildNumberButton('4'),
-                      const SizedBox(width: 10),
-                      _buildNumberButton('5'),
-                      const SizedBox(width: 10),
-                      _buildNumberButton('6'),
-                    ],
-                  ),
-                  const SizedBox(height: 16.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildNumberButton('7'),
-                      const SizedBox(width: 10),
-                      _buildNumberButton('8'),
-                      const SizedBox(width: 10),
-                      _buildNumberButton('9'),
-                    ],
-                  ),
-                  const SizedBox(height: 16.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildNumberButton('00'),
-                      const SizedBox(width: 10),
-                      _buildNumberButton('0'),
-                      const SizedBox(width: 10),
-                      ElevatedButton(
-                        onPressed: _deleteLastCharacter,
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.black,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(60.0)),
-                          ),
-                        ),
-                        child: const Icon(Icons.backspace),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      //String cashDeposit = _cashDepositController.text;
-                      //_handleDeposit();
-                      _transfer();
-                      //print(_removeComma(_cashDepositController.text) + '00');
-                      // handle cash deposit button press with the cashDeposit amount
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.black,
-                      textStyle: const TextStyle(fontSize: 20.0),
-                      padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
-                    ),
-                    child: const Text('Cash Deposit'),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+  return Scaffold(
+  backgroundColor: Colors.grey[200],
+  appBar: AppBar(
+  backgroundColor: Colors.white,
+  elevation: 0,
+  leading: IconButton(
+  icon: Icon(
+  Icons.arrow_back_ios_rounded,
+  color: Colors.black,
+  ),
+  onPressed: () {
+  Navigator.of(context).pop();
+  },
+  ),
+  title: Text(
+  'Transfer to Driver',
+  style: TextStyle(
+  color: Colors.black,
+  fontWeight: FontWeight.bold,
+  ),
+  ),
+  ),
+    body: SingleChildScrollView( // Wrap the Column with SingleChildScrollView
+    child: Padding(
+    padding: EdgeInsets.symmetric(horizontal: 16.0),
+  child: Column(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+  SizedBox(height: 16.0),
+  Text(
+  'Transfer Amount',
+  style: TextStyle(
+  fontWeight: FontWeight.bold,
+  ),
+  ),
+  SizedBox(height: 8.0),
+  TextField(
+  controller: _cashTransferController,
+  keyboardType: TextInputType.number,
+  decoration: InputDecoration(
+  filled: true,
+  fillColor: Colors.white,
+  hintText: 'Enter transfer amount',
+  border: OutlineInputBorder(
+  borderSide: BorderSide.none,
+  borderRadius: BorderRadius.circular(8.0),
+  ),
+  ),
+  ),
+  SizedBox(height: 16.0),
+  Text(
+  'Recipient Driver',
+  style: TextStyle(
+  fontWeight: FontWeight.bold,
+  ),
+  ),
+  SizedBox(height: 8.0),
+  TextField(
+  controller: _driverRecipentController,
+  decoration: InputDecoration(
+  filled: true,
+  fillColor: Colors.white,
+  hintText: 'Enter recipient driver phone number',
+  border: OutlineInputBorder(
+  borderSide: BorderSide.none,
+  borderRadius: BorderRadius.circular(8.0),
+  ),
+  ),
+  ),
+  SizedBox(height: 32.0),
+  Center(
+  child: ElevatedButton(
+    onPressed: () {
+      _transfer();
+      // Handle deposit button press
+
+    },
+  child: Padding(
+  padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+  child: Text(
+  'Transfer Funds',
+  style: TextStyle(
+  fontWeight: FontWeight.bold,
+  fontSize: 18.0,
+  ),
+  ),
+  ),
+  style: ElevatedButton.styleFrom(
+  backgroundColor: customPurple,
+  shape: RoundedRectangleBorder(
+  borderRadius: BorderRadius.circular(32.0),
+  ),
+  ),
+  ),
+  ),
+  ],
+  ),
+  ),
+  ));
   }
 
   Widget _buildNumberButton(String label) {

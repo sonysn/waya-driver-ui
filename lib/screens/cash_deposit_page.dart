@@ -4,27 +4,27 @@ import 'package:intl/intl.dart';
 import 'package:waya_driver/api/payments.dart';
 import 'package:waya_driver/screens/paystack_deposit_webview.dart';
 
+
+
 class CashDepositPage extends StatefulWidget {
-  final int id;
-  final dynamic phone;
   final String email;
-  const CashDepositPage({Key? key, required this.email, required this.id, this.phone}) : super(key: key);
+  const CashDepositPage({Key? key, required this.email}) : super(key: key);
 
   @override
   State<CashDepositPage> createState() => _CashDepositPageState();
 }
 
 class _CashDepositPageState extends State<CashDepositPage> {
-  final TextEditingController _cashDepositController = TextEditingController();
   bool _isLoading = false;
   String? _authorizationUrl;
+
+  final TextEditingController _cashDepositController = TextEditingController();
 
   @override
   void dispose() {
     _cashDepositController.dispose();
-    super.dispose();
+  super.dispose();
   }
-
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   void _navigateToDepositWebView(authorizationUrl) {
@@ -36,21 +36,19 @@ class _CashDepositPageState extends State<CashDepositPage> {
 
   Future<void> _handleDeposit() async {
     final email = widget.email;
-    final phone = widget.phone;
-    final driverId = widget.id;
     final amount = _cashDepositController.text;
     setState(() {
       _isLoading = true;
     });
     //paystack code eg 200 naira is 20000
     try {
-      final response = await paystackDeposit(email: email, amount: int.parse('${_removeComma(amount)}00'), id: driverId, phone: phone);
-        setState(() {
-          _authorizationUrl = response['authorization_url'];
-          _isLoading = false;
-        });
-        // Open the authorization URL in a webview to complete the payment
-        //_navigateToDepositWebView(_authorizationUrl);
+      final response = await paystackDeposit(email: email, amount: int.parse('${_removeComma(amount)}00'));
+      setState(() {
+        _authorizationUrl = response['authorization_url'];
+        _isLoading = false;
+      });
+      // Open the authorization URL in a webview to complete the payment
+      //_navigateToDepositWebView(_authorizationUrl);
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -82,96 +80,57 @@ class _CashDepositPageState extends State<CashDepositPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 16.0),
-            SizedBox(
-              width: 300.0,  //GITHUB TEST//
-              child: TextField(
-                controller: _cashDepositController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  hintText: 'Enter cash deposit amount',
-                ),
-                enabled: false,
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildNumberButton('1'),
-                const SizedBox(width: 10),
-                _buildNumberButton('2'),
-                const SizedBox(width: 10),
-                _buildNumberButton('3')
-              ],
-            ),
-            const SizedBox(height: 16.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildNumberButton('4'),
-                const SizedBox(width: 10),
-                _buildNumberButton('5'),
-                const SizedBox(width: 10),
-                _buildNumberButton('6'),
-              ],
-            ),
-            const SizedBox(height: 16.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildNumberButton('7'),
-                const SizedBox(width: 10),
-                _buildNumberButton('8'),
-                const SizedBox(width: 10),
-                _buildNumberButton('9'),
-              ],
-            ),
-            const SizedBox(height: 16.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildNumberButton('00'),
-                const SizedBox(width: 10),
-                _buildNumberButton('0'),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: _deleteLastCharacter,
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.black,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(60.0)),
-                    ),
-                  ),
-                  child: const Icon(Icons.backspace),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () {
-                //String cashDeposit = _cashDepositController.text;
-                _handleDeposit();
-                //print(_removeComma(_cashDepositController.text) + '00');
-                // handle cash deposit button press with the cashDeposit amount
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Colors.black,
-                textStyle: const TextStyle(fontSize: 20.0),
-                padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
-              ),
-              child: const Text('Cash Deposit'),
-            ),
-          ],
-        ),
-      ),
-    );
+  return Scaffold(
+  appBar: AppBar(
+  backgroundColor: Colors.black, // Set the background color to black
+  title: const Text('Deposit'),
+  ),
+  body: Padding(
+  padding: const EdgeInsets.all(16.0),
+  child: Column(
+  crossAxisAlignment: CrossAxisAlignment.stretch,
+  children: [
+  const SizedBox(height: 16.0),
+//GIT TEST//
+  TextFormField(
+  controller: _cashDepositController,
+  keyboardType: TextInputType.number,
+    style: TextStyle(color: Colors.black),
+  decoration: const InputDecoration(
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.black), // Set border color when focused
+    ),
+  labelText: 'Deposit Amount',
+
+  ),
+  validator: (value) {
+  if (value!.isEmpty) {
+  return 'Please enter an amount';
+  }
+  return null;
+  },
+  ),
+  const SizedBox(height: 16.0),
+  ElevatedButton(
+  onPressed: () {
+    _handleDeposit();
+  // Handle deposit button press
+
+  },
+  style: ElevatedButton.styleFrom(
+  primary: Colors.black,
+  textStyle: const TextStyle(fontSize: 20.0),
+  padding: const EdgeInsets.symmetric(vertical: 16.0),
+  shape: RoundedRectangleBorder(
+  borderRadius: BorderRadius.circular(30.0),
+  ),
+  ),
+  child: const Text('Deposit'),
+  ),
+  ],
+  ),
+  ),
+  );
   }
 
   Widget _buildNumberButton(String label) {

@@ -88,8 +88,6 @@ class _WalletPageState extends State<WalletPage> {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (BuildContext context) {
                               return CashDepositPage(
-                                  id: widget.data.id,
-                                  phone: widget.data.phoneNumber,
                                   email: widget.data.email
                               );
                             }));

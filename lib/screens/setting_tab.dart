@@ -6,6 +6,7 @@ import 'package:waya_driver/api/auth.dart';
 import 'package:waya_driver/functions/location_functions.dart';
 import 'package:waya_driver/screens/bookings.dart';
 import 'package:waya_driver/screens/settingspage.dart';
+import 'package:waya_driver/screens/messages.dart';
 import 'package:waya_driver/screens/welcomepage.dart';
 import 'package:waya_driver/sockets/sockets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -133,23 +134,7 @@ class _SettingTabState extends State<SettingTab> {
                         }));
                       },
                     ),
-                    Card(
-                      color: Colors.white70,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(15),
-                          bottom: Radius.circular(15),
-                        ),
-                      ),
-                      child: SizedBox(
-                        height: 80,
-                        width: 90,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [Icon(Icons.wallet), Text('Wallet')],
-                        ),
-                      ),
-                    )
+
                   ],
                 ),
                 Row(
@@ -179,15 +164,16 @@ class _SettingTabState extends State<SettingTab> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Navigator.push(context,
-                    //     MaterialPageRoute(builder: (BuildContext context) {
-                    //       return const MessagesNotificationPage();
-                    //     }));
+                     Navigator.push(context,
+                         MaterialPageRoute(builder: (BuildContext context) {
+                        return const MessagesPage();
+                        }));
                   },
                   child: const ListTile(
                     leading: Icon(
                       Icons.mail_outline,
                       color: Colors.black,
+
                     ),
                     title: Text("Messages"),
                   ),
