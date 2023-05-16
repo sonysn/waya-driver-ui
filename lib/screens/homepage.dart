@@ -4,6 +4,8 @@ import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:waya_driver/functions/location_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:waya_driver/functions/notification_service.dart';
 
 import '../api/actions.dart';
 import '../sockets/sockets.dart';
@@ -62,6 +64,18 @@ class _HomePageState extends State<HomePage> {
     print(currentLocation);
   }
 
+  Future getCar() async {
+    final res = await getDriverCars(widget.data.id, widget.data.token);
+    setState(() {
+      vehicleName = "${res['result'][0]['MODEL']}, ${res['result'][0]['MAKE']}";
+      vehiclePlateNumber = res['result'][0]['PLATE_NUMBER'];
+      vehicleColour = res['result'][0]['COLOUR'];
+      driverPhone = widget.data.phoneNumber;
+      driverPhoto = widget.data.profilePhoto;
+    });
+    print(vehicleName);
+  }
+
   Future<void> setSwitchValue(bool value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isOnline', value);
@@ -83,6 +97,8 @@ class _HomePageState extends State<HomePage> {
   dynamic currentLocation;
   StreamController controller = StreamController();
   bool onlineStatus = false;
+  DateTime?
+      _lastPressedAt; // for tracking the time of the last back button press
 
   @override
   void initState() {
@@ -90,6 +106,16 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     findLoc();
     getSwitchValue();
+    getCar();
+
+    // Request permission for receiving push notifications (only for iOS)
+    FirebaseMessaging.instance.requestPermission();
+
+    // Configure Firebase Messaging & Show Notification
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Received message: ${message.notification?.title}');
+      NotificationService().showNotification('${message.notification?.title}');
+    });
   }
 
   @override
@@ -101,337 +127,338 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        double width = MediaQuery.of(context).size.width;
-        double height = MediaQuery.of(context).size.height;
-        double padding = width > 600 ? 40 : 20;
-
-        return Scaffold(
-          body: ListView(
-            children: [
-              Container(
-                padding: const EdgeInsets.only(top: 15),
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        //todo fix this error
-                        widget.data.profilePhoto != null
-                            ? CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage('${widget.data.profilePhoto}'),
-                                radius: 30.0,
-                              )
-                            : const CircleAvatar(
-                                backgroundColor: Colors.black,
-                                radius: 30.0,
-                              ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${widget.data.firstName} ${widget.data.lastName}',
-                              style: const TextStyle(fontSize: 20),
+    return WillPopScope(
+      onWillPop: () async {
+        if (_lastPressedAt == null ||
+            DateTime.now().difference(_lastPressedAt!) >
+                const Duration(seconds: 2)) {
+          // show a toast or snackbar to inform the user to press back again to exit
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Press back again to exit'),
+            duration: Duration(seconds: 2),
+          ));
+          _lastPressedAt = DateTime.now();
+          return false; // prevent the app from closing
+        }
+        return true; // allow the app to close
+      },
+      child: Scaffold(
+        body: ListView(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(top: 15),
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      //todo fix this error
+                      widget.data.profilePhoto != null
+                          ? CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage('${widget.data.profilePhoto}'),
+                              radius: 30.0,
+                            )
+                          : const CircleAvatar(
+                              backgroundColor: Colors.black,
+                              radius: 30.0,
                             ),
-                            Row(
-                              children: [
-                                const Icon(Icons.star),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${widget.data.firstName} ${widget.data.lastName}',
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                          Row(
+                            children: [
+                              const Icon(Icons.star),
+                              Text(
+                                widget.data.rating.toString(),
+                                style: const TextStyle(fontSize: 20),
+                              )
+                            ],
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+
+                  const SizedBox(
+                    height: 30,
+                  ),
+
+                  GestureDetector(
+                    onTap: () async {
+                      setState(() {
+                        onlineStatus = !onlineStatus;
+                      });
+
+                      if (onlineStatus) {
+                        ConnectToServer().connect(widget.data.id, context);
+                        locationCallbacks(widget.data.id);
+                        updateAvailability(1, widget.data.id);
+                        await setSwitchValue(onlineStatus);
+                      } else {
+                        cancelLocationCallbacks();
+                        ConnectToServer().disconnect();
+                        updateAvailability(0, widget.data.id);
+                        await setSwitchValue(onlineStatus);
+                      }
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 60.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30.0),
+                        gradient: LinearGradient(
+                          colors: onlineStatus
+                              ? [
+                                  const Color(0xFF1BE611),
+                                  const Color(0xFF21E672)
+                                ]
+                              : [
+                                  const Color(0xFFE62121),
+                                  const Color(0xFFE66565)
+                                ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                      ),
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 16.0),
+                              child: Icon(
+                                onlineStatus
+                                    ? Icons.check_circle
+                                    : Icons.cancel,
+                                color: Colors.white,
+                                size: 32.0,
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 16.0),
+                              child: Icon(
+                                onlineStatus
+                                    ? Icons.toggle_on
+                                    : Icons.toggle_off,
+                                color: Colors.white,
+                                size: 32.0,
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: Text(
+                              onlineStatus ? 'Online' : 'Offline',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  GestureDetector(
+                    onTap: () {
+                      // Navigator.push(context,
+                      //     MaterialPageRoute(builder: (BuildContext context) {
+                      //       return const MessagesNotificationPage();
+                      //     }));
+                    },
+                    child: const SizedBox(
+                      height: 30,
+                      //width: 20,
+                    ),
+                  ),
+                  //todo put picture as asset image, J do the next card.
+
+                  //TODO PLEASE READ TODOS THANKS!
+                  // TODO try not to use fitted box unnecessarily, especially with things with no solid dimensions. ALSO ask when that issue with overflowing screen arises
+                  SizedBox(
+                    height: 150,
+                    width: MediaQuery.of(context).size.width / 1.1,
+                    child: Card(
+                      elevation: 5,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(15),
+                          bottom: Radius.circular(15),
+                        ),
+                        //      side: BorderSide(color: Colors.yellow, width: 1),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
                                 Text(
-                                  widget.data.rating.toString(),
-                                  style: const TextStyle(fontSize: 20),
+                                  'Trips Summary',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25),
+                                )
+                              ],
+                            ),
+                            const Divider(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: const [
+                                    Text('Total Trips'),
+                                    Text(
+                                      '15',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: const [
+                                    Text('Time Online'),
+                                    Text(
+                                      '15h 30m',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: const [
+                                    Text('Total Distance'),
+                                    Text(
+                                      '45 km',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
                                 )
                               ],
                             )
                           ],
-                        )
-                      ],
+                        ),
+                      ),
                     ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
 
-                    const SizedBox(
-                      height: 30,
-                    ),
-
-                    GestureDetector(
-                      onTap: () async {
-                        setState(() {
-                          onlineStatus = !onlineStatus;
-                        });
-
-                        if (onlineStatus) {
-                          ConnectToServer().connect(widget.data.id, context);
-                          locationCallbacks(widget.data.id);
-                          updateAvailability(1, widget.data.id);
-                          await setSwitchValue(onlineStatus);
-                        } else {
-                          cancelLocationCallbacks();
-                          ConnectToServer().disconnect();
-                          updateAvailability(0, widget.data.id);
-                          await setSwitchValue(onlineStatus);
-                        }
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        height: 60.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30.0),
-                          gradient: LinearGradient(
-                            colors: onlineStatus
-                                ? [
-                                    const Color(0xFF1BE611),
-                                    const Color(0xFF21E672)
-                                  ]
-                                : [
-                                    const Color(0xFFE62121),
-                                    const Color(0xFFE66565)
+                  FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: SizedBox(
+                        height: 80,
+                        width: MediaQuery.of(context).size.width,
+                        child: Card(
+                          color: Colors.white,
+                          elevation: 5,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(15),
+                              bottom: Radius.circular(15),
+                            ),
+                            //      side: BorderSide(color: Colors.yellow, width: 1),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Row(
+                              children: [
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                const Icon(Icons.wallet),
+                                const SizedBox(
+                                  width: 75,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: const [
+                                    Text(
+                                      'Your Balance',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                    Text(
+                                      "₦10,000.00",
+                                      style: TextStyle(fontSize: 15),
+                                    ),
                                   ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
-                        ),
-                        child: Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 16.0),
-                                child: Icon(
-                                  onlineStatus
-                                      ? Icons.check_circle
-                                      : Icons.cancel,
-                                  color: Colors.white,
-                                  size: 32.0,
-                                ),
-                              ),
+                                )
+                              ],
                             ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 16.0),
-                                child: Icon(
-                                  onlineStatus
-                                      ? Icons.toggle_on
-                                      : Icons.toggle_off,
-                                  color: Colors.white,
-                                  size: 32.0,
-                                ),
-                              ),
-                            ),
-                            Center(
-                              child: Text(
-                                onlineStatus ? 'Online' : 'Offline',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20.0,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    GestureDetector(
-                      onTap: () {
-                        // Navigator.push(context,
-                        //     MaterialPageRoute(builder: (BuildContext context) {
-                        //       return const MessagesNotificationPage();
-                        //     }));
-                      },
-                      child: const SizedBox(
-                        height: 30,
-                        //width: 20,
-                      ),
-                    ),
-                    //todo put picture as asset image, J do the next card.
-
-                    //TODO PLEASE READ TODOS THANKS!
-                    // TODO try not to use fitted box unnecessarily, especially with things with no solid dimensions. ALSO ask when that issue with overflowing screen arises
-                    SizedBox(
-                      height: 150,
-                      width: MediaQuery.of(context).size.width / 1.1,
-                      child: Card(
-                        elevation: 5,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(15),
-                            bottom: Radius.circular(15),
                           ),
-                          //      side: BorderSide(color: Colors.yellow, width: 1),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    'Trips Summary',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 25),
-                                  )
-                                ],
-                              ),
-                              const Divider(),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: const [
-                                      Text('Total Trips'),
-                                      Text(
-                                        '15',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: const [
-                                      Text('Time Online'),
-                                      Text(
-                                        '15h 30m',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: const [
-                                      Text('Total Distance'),
-                                      Text(
-                                        '45 km',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-
-                    FittedBox(
+                        )),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: FittedBox(
                       fit: BoxFit.fitWidth,
-                      child: SizedBox(
-                          height: 80,
-                          width: width,
-                          child: Card(
-                            color: Colors.white,
-                            elevation: 5,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(15),
-                                bottom: Radius.circular(15),
-                              ),
-                              //      side: BorderSide(color: Colors.yellow, width: 1),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width - 20,
+                        child: Card(
+                          color: Colors.white,
+                          elevation: 5,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(15),
+                              bottom: Radius.circular(15),
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  const Icon(Icons.wallet),
-                                  const SizedBox(
-                                    width: 75,
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: const [
-                                      Text(
-                                        'Your Balance',
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                      Text(
-                                        "₦10,000.00",
-                                        style: TextStyle(fontSize: 15),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          )),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: FittedBox(
-                        fit: BoxFit.fitWidth,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width - 20,
-                          child: Card(
-                            color: Colors.white,
-                            elevation: 5,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(15),
-                                bottom: Radius.circular(15),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(1.0),
-                              child: Row(
-                                children: [
-                                  const SizedBox(width: 5),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Image.network(
-                                        'https://www.sygic.com/blog/2019/we-have-android-smartphone-in-dash-connectivity-but-not-for-android-auto/web-blog.jpg',
-                                        fit: BoxFit.fill,
-                                        height: 120,
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                40,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(1.0),
+                            child: Row(
+                              children: [
+                                const SizedBox(width: 5),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Image.network(
+                                      'https://www.sygic.com/blog/2019/we-have-android-smartphone-in-dash-connectivity-but-not-for-android-auto/web-blog.jpg',
+                                      fit: BoxFit.fill,
+                                      height: 120,
+                                      width: MediaQuery.of(context).size.width -
+                                          40,
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        );
-      },
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
