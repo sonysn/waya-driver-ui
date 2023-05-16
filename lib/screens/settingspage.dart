@@ -10,47 +10,83 @@ class SettingsPage extends StatefulWidget {
   @override
   State<SettingsPage> createState() => _SettingsPageState();
 }
-
 class _SettingsPageState extends State<SettingsPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        elevation: 0,
+        title: Text(
+          'Settings',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       body: ListView(
         children: [
-          Container(
-            padding: const EdgeInsets.only(top: 10),
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Settings',
-                  style:
-                  TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          GestureDetector(
+            child: const ListTile(
+                leading: Icon(
+                  Icons.key_outlined,
+
                 ),
-                GestureDetector(
-                  child: const ListTile(
-                      leading: Icon(
-                        Icons.key_outlined,
-                        color: Colors.black,
-                      ),
-                      title: Text("Vehicles")
-                  ),
-                  onTap: (){
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (BuildContext context) {
-                          return Vehicle(
-                            data: widget.data
-                          );
-                        }));
-                  },
-                ),
-              ],
+                title: Text("Vehicles")
             ),
-          )
+            onTap: (){
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                    return Vehicle(
+                        data: widget.data
+                    );
+                  }));
+            },
+          ),
+
+          ListTile(
+            leading: Icon(Icons.notifications),
+            title: Text('Notification Settings'),
+            onTap: () {
+              // Navigate to the Notification Settings screen
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.security),
+            title: Text('Privacy & Security'),
+            onTap: () {
+              // Navigate to the Privacy & Security screen
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.language),
+            title: Text('Language'),
+            onTap: () {
+              // Navigate to the Language selection screen
+            },
+          ),
+
+          ListTile(
+            leading: Icon(Icons.info),
+            title: Text('About'),
+            onTap: () {
+              // Navigate to the About screen
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.web),
+            title: Text('Website'),
+            onTap: () {
+              // Open the website link
+              // Example: launch('https://www.example.com');
+            },
+          ),
         ],
       ),
     );
   }
 }
+
+
+

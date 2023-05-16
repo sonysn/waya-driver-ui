@@ -8,6 +8,7 @@ import 'package:waya_driver/screens/bookings.dart';
 import 'package:waya_driver/screens/settingspage.dart';
 import 'package:waya_driver/screens/messages.dart';
 import 'package:waya_driver/screens/welcomepage.dart';
+import 'package:waya_driver/screens/help.dart';
 import 'package:waya_driver/sockets/sockets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -130,7 +131,7 @@ class _SettingTabState extends State<SettingTab> {
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (BuildContext context) {
-                          return const BookingsPage();
+                          return const BookingPage();
                         }));
                       },
                     ),
@@ -176,12 +177,20 @@ class _SettingTabState extends State<SettingTab> {
                     title: Text("Messages"),
                   ),
                 ),
-                const ListTile(
-                  leading: Icon(
-                    Icons.help_outline,
-                    color: Colors.black,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (BuildContext context) {
+                          return const HelpPage();
+                        }));
+                  },
+                  child: const ListTile(
+                    leading: Icon(
+                      Icons.mail_outline,
+                      color: Colors.black,
+                    ),
+                    title: Text("Help"),
                   ),
-                  title: Text("Help"),
                 ),
                 const ListTile(
                   leading: Icon(
