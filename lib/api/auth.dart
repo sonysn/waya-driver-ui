@@ -8,17 +8,18 @@ import 'package:path/path.dart' as path;
 //var baseUri = 'http://192.168.100.43:3000';
 var baseUri = 'https://waya-api.onrender.com';
 
+//TODO LOOKS AT RETURN TO MANAGE WRONG PASSWORDS AND NO PASSWORDS
 Future signIn(emailOrPhone, password, deviceID) async {
-  final http.Response response = await http.post(
-      Uri.parse('$baseUri${ApiConstants.signInEndpoint}'),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        "password": password,
-        "phoneNumber": emailOrPhone,
-        "email": emailOrPhone,
-        "deviceID": deviceID
-      }));
-  if(response.statusCode == 200){
+  final http.Response response =
+      await http.post(Uri.parse('$baseUri${ApiConstants.signInEndpoint}'),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode({
+            "password": password,
+            "phoneNumber": emailOrPhone,
+            "email": emailOrPhone,
+            "deviceID": deviceID
+          }));
+  if (response.statusCode == 200) {
     //print(Data.fromJson(json.decode(response.body)).email);
     return Data.fromJson(json.decode(response.body));
     //return json.decode(response.body);
@@ -27,8 +28,10 @@ Future signIn(emailOrPhone, password, deviceID) async {
   }
 }
 
-Future signUp(firstname, lastname, password, phoneNumber, email, address, dob, profilePhoto, driversLicense, vehicleInsurance) async {
-  var formData = http.MultipartRequest('POST', Uri.parse('$baseUri/driversignup'));
+Future signUp(firstname, lastname, password, phoneNumber, email, address, dob,
+    profilePhoto, driversLicense, vehicleInsurance) async {
+  var formData =
+      http.MultipartRequest('POST', Uri.parse('$baseUri/driversignup'));
 
   formData.fields['firstname'] = firstname;
   formData.fields['lastname'] = lastname;
@@ -40,19 +43,22 @@ Future signUp(firstname, lastname, password, phoneNumber, email, address, dob, p
 
   // Add profilePhoto as a file
   if (profilePhoto != null) {
-    var profilePhotoFile = await http.MultipartFile.fromPath('profilePhoto', profilePhoto.path);
+    var profilePhotoFile =
+        await http.MultipartFile.fromPath('profilePhoto', profilePhoto.path);
     formData.files.add(profilePhotoFile);
   }
 
   // Add driversLicense as a file
   if (driversLicense != null) {
-    var driversLicenseFile = await http.MultipartFile.fromPath('driversLicense', driversLicense.path);
+    var driversLicenseFile = await http.MultipartFile.fromPath(
+        'driversLicense', driversLicense.path);
     formData.files.add(driversLicenseFile);
   }
 
   // Add vehicleInsurance as a file
   if (vehicleInsurance != null) {
-    var vehicleInsuranceFile = await http.MultipartFile.fromPath('vehicleInsurance', vehicleInsurance.path);
+    var vehicleInsuranceFile = await http.MultipartFile.fromPath(
+        'vehicleInsurance', vehicleInsurance.path);
     formData.files.add(vehicleInsuranceFile);
   }
 
@@ -66,15 +72,12 @@ Future signUp(firstname, lastname, password, phoneNumber, email, address, dob, p
   }
 }
 
-Future logOut(id) async{
+Future logOut(id) async {
   final http.Response response = await http.post(
       Uri.parse('$baseUri${ApiConstants.logoutEndpoint}'),
       headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        "id": id
-      })
-  );
-  if(response.statusCode == 200){
+      body: jsonEncode({"id": id}));
+  if (response.statusCode == 200) {
     return 'logout success';
   } else {
     return 'logout failed';

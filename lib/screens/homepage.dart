@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> {
 
                       if (onlineStatus) {
                         ConnectToServer().connect(widget.data.id, context);
-                        locationCallbacks(widget.data.id);
+                        locationCallbacks(widget.data.id, widget.data.verified);
                         updateAvailability(1, widget.data.id);
                         await setSwitchValue(onlineStatus);
                       } else {

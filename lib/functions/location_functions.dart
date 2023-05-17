@@ -6,17 +6,33 @@ import 'package:waya_driver/sockets/sockets.dart';
 
 StreamSubscription<LocationData>? _subscription;
 
-locationCallbacks(id) async{
+locationCallbacks(id, verificationStatus) async {
   Location location = Location();
   location.enableBackgroundMode(enable: true);
-  _subscription = location.onLocationChanged.listen((LocationData currentLocation) {
-    ConnectToServer().sendDriverLocation(LatLng(
-        double.parse(currentLocation.latitude.toString()),
-        double.parse(currentLocation.longitude.toString())
-    ), id);
-  });
+
+  if (verificationStatus == 1) {
+    bool verificationStatus = true;
+    _subscription =
+        location.onLocationChanged.listen((LocationData currentLocation) {
+      ConnectToServer().sendDriverLocation(
+          LatLng(double.parse(currentLocation.latitude.toString()),
+              double.parse(currentLocation.longitude.toString())),
+          id,
+          verificationStatus);
+    });
+  } else {
+    bool verificationStatus = false;
+    _subscription =
+        location.onLocationChanged.listen((LocationData currentLocation) {
+      ConnectToServer().sendDriverLocation(
+          LatLng(double.parse(currentLocation.latitude.toString()),
+              double.parse(currentLocation.longitude.toString())),
+          id,
+          verificationStatus);
+    });
+  }
 }
 
-cancelLocationCallbacks(){
+cancelLocationCallbacks() {
   _subscription?.cancel();
 }

@@ -29,7 +29,9 @@ class ConnectToServer {
   Socket socket = io(
       //api link here
       ApiConstants.baseUrl,
-      OptionBuilder().setTransports(['websocket']).disableAutoConnect() // for Flutter or Dart VM
+      OptionBuilder()
+          .setTransports(['websocket'])
+          .disableAutoConnect() // for Flutter or Dart VM
           .build());
 
 //connect to websockets
@@ -57,12 +59,11 @@ class ConnectToServer {
               builder: (BuildContext context) {
                 //TODO PUT GEOCODING TO REVERSE THE DROP OFF LOCATION
                 return RideRequestCard(
-                  riderId: data['userId'],
-                  name: 'John Doe',
-                  pickupLocation: data['pickupLocation'],
-                  dropoffLocation: data['dropoffLocation'],
-                  fare: data['estFare']
-                );
+                    riderId: data['userId'],
+                    name: 'John Doe',
+                    pickupLocation: data['pickupLocation'],
+                    dropoffLocation: data['dropoffLocation'],
+                    fare: data['estFare']);
               },
             );
           } catch (e) {
@@ -73,7 +74,6 @@ class ConnectToServer {
     }
 
     myFunction(context);
-
 
     //socket.on("ridenotification", (data) => print(data));
 
@@ -87,8 +87,8 @@ class ConnectToServer {
     socket.dispose();
   }
 
-  void sendDriverLocation(data, id) {
-    socket.emit("driverLocationUpdates", {data, id});
+  void sendDriverLocation(data, id, verificationStatus) {
+    socket.emit("driverLocationUpdates", {data, id, verificationStatus});
   }
 
 //   Stream getRideNotifications() async* {
@@ -102,7 +102,7 @@ class ConnectToServer {
 //       print(event);
 //     });
 //   }
- }
+}
 
 class RideRequestCard extends StatelessWidget {
   final int riderId;
@@ -166,7 +166,6 @@ class RideRequestCard extends StatelessWidget {
                   ),
                 ],
               ),
-
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -202,7 +201,13 @@ class RideRequestCard extends StatelessWidget {
                       const SizedBox(width: 10),
                       ElevatedButton(
                         onPressed: () {
-                          acceptRide(riderId: riderId, driverPhoto: driverPhoto, driverPhone: driverPhone, vehicleName: vehicleName, vehiclePlateNumber: vehiclePlateNumber, vehicleColour: vehicleColour);
+                          acceptRide(
+                              riderId: riderId,
+                              driverPhoto: driverPhoto,
+                              driverPhone: driverPhone,
+                              vehicleName: vehicleName,
+                              vehiclePlateNumber: vehiclePlateNumber,
+                              vehicleColour: vehicleColour);
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.green,
