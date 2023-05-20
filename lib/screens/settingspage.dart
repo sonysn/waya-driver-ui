@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:waya_driver/screens/vehicle.dart';
-
+import 'package:waya_driver/screens/notification.dart';
+import 'package:waya_driver/screens/language.dart';
 import '../main.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -31,6 +32,7 @@ class _SettingsPageState extends State<SettingsPage> {
             child: const ListTile(
                 leading: Icon(
                   Icons.key_outlined,
+                  color: Colors.black,
 
                 ),
                 title: Text("Vehicles")
@@ -45,12 +47,20 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
 
-          ListTile(
-            leading: Icon(Icons.notifications),
-            title: Text('Notification Settings'),
+          GestureDetector(
             onTap: () {
-              // Navigate to the Notification Settings screen
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                    return const NotificationSettingsPage();
+                  }));
             },
+            child: const ListTile(
+              leading: Icon(
+                Icons.mail_outline,
+                color: Colors.black,
+              ),
+              title: Text("Notification Setings"),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.security),
@@ -59,12 +69,20 @@ class _SettingsPageState extends State<SettingsPage> {
               // Navigate to the Privacy & Security screen
             },
           ),
-          ListTile(
-            leading: Icon(Icons.language),
-            title: Text('Language'),
+          GestureDetector(
             onTap: () {
-              // Navigate to the Language selection screen
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                    return  LanguageSelectionPage();
+                  }));
             },
+            child: const ListTile(
+              leading: Icon(
+                Icons.mail_outline,
+                color: Colors.black,
+              ),
+              title: Text("Language"),
+            ),
           ),
 
           ListTile(
