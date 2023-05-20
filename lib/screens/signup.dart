@@ -12,6 +12,9 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:intl/intl.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 class SignUp extends StatefulWidget {
   String phoneNumber;
@@ -35,7 +38,7 @@ class _SignUpState extends State<SignUp> {
           widget.phoneNumber,
           email.text,
           homeAddress.text,
-          _dateController.text,
+          dateController.text,
           _image,
           _licenseFile,
           _permitFile);
@@ -72,6 +75,56 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
+  Future getVehicleData() async {
+    final http.Response response =
+        await http.get(Uri.parse('https://car-makers.onrender.com'));
+    final data = await jsonDecode(response.body);
+    //print(data[0]['MAKE']);
+    print(data[0]['MODELS'][0]);
+    for (int i = 0; i < data.length; i++) {
+      print(data[i]['MAKE']);
+      setState(() {
+        vehicleMakeItemList.add(data[i]['MAKE']);
+        //vehicleModelItemListAllFromServer.addAll(data[i]['MODELS']);
+      });
+    }
+  }
+
+  Color getColorFromName(String colorName) {
+    switch (colorName) {
+      case 'Red':
+        return Colors.red;
+      case 'Blue':
+        return Colors.blue;
+      case 'Green':
+        return Colors.green;
+      case 'Yellow':
+        return Colors.yellow;
+      case 'Orange':
+        return Colors.orange;
+      case 'Purple':
+        return Colors.purple;
+      case 'Pink':
+        return Colors.pink;
+      case 'Black':
+        return Colors.black;
+      case 'White':
+        return Colors.white;
+      case 'Gray':
+        return Colors.grey;
+      case 'Brown':
+        return Colors.brown;
+      case 'Lime':
+        return Colors.lime;
+      case 'Teal':
+        return Colors.teal;
+      case 'Cyan':
+        return Colors.cyan;
+      default:
+        return Colors.black;
+    }
+  }
+
   //Todo Text editing controller holds the user input for program execution, the names are self explanatory of what they do or hold
   TextEditingController firstname = TextEditingController();
   TextEditingController lastname = TextEditingController();
@@ -79,9 +132,53 @@ class _SignUpState extends State<SignUp> {
   TextEditingController password = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController homeAddress = TextEditingController();
-  TextEditingController _dateController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController vehicleYear = TextEditingController();
+  TextEditingController vehiclePlateNumber = TextEditingController();
   bool _isLoading = false;
   String _errorMessage = '';
+  String? selectedModel;
+  String? selectedMake;
+  String? selectedColor;
+  String? selectedBodyType;
+  List<String> vehicleMakeItemList = [];
+  int? vehicleMakePositioninListArray;
+  List<String> vehicleModelItemListAllFromServer = [];
+  //List<String> vehicleModelItemList = [];
+  List<String> vehicleColorList = [
+    'Red',
+    'Blue',
+    'Green',
+    'Yellow',
+    'Orange',
+    'Purple',
+    'Pink',
+    'Black',
+    'White',
+    'Gray',
+    'Brown',
+    'Lime',
+    'Teal',
+    'Cyan',
+  ];
+  List<String> vehicleBodyTypes = [
+    "Sedan",
+    "Coupe",
+    "SUV",
+    "Hatchback",
+    "Convertible",
+    "Wagon",
+    "Minivan",
+    "Pickup Truck",
+    "Van"
+  ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getVehicleData();
+  }
 
   @override
   void dispose() {
@@ -91,7 +188,9 @@ class _SignUpState extends State<SignUp> {
     password.dispose();
     email.dispose();
     homeAddress.dispose();
-    _dateController.dispose();
+    dateController.dispose();
+    vehicleYear.dispose();
+    vehiclePlateNumber.dispose();
     super.dispose();
   }
 
@@ -247,7 +346,7 @@ class _SignUpState extends State<SignUp> {
         lastDate: DateTime.now());
     if (picked != null) {
       setState(() {
-        _dateController.text = DateFormat('yyyy-MM-dd').format(picked);
+        dateController.text = DateFormat('yyyy-MM-dd').format(picked);
       });
     }
   }
@@ -255,7 +354,7 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+        backgroundColor: Colors.white,
         body: _isLoading
             ? Center(
                 child: Column(
@@ -263,14 +362,23 @@ class _SignUpState extends State<SignUp> {
                   children: [
                     const Center(
                         child: Image(
-                          image: AssetImage("assets/icons/logo.png"),
-                          width: 200.0,
-                          height: 200.0,
-                        )),
-                    const SizedBox(height: 20,),
-                    const Text('We\'re Setting Up Your Profile...', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
-                    const SizedBox(height: 10,),
-                    LoadingAnimationWidget.waveDots(color: Colors.black, size: 70)
+                      image: AssetImage("assets/icons/logo.png"),
+                      width: 200.0,
+                      height: 200.0,
+                    )),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text(
+                      'We\'re Setting Up Your Profile...',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    LoadingAnimationWidget.waveDots(
+                        color: Colors.black, size: 70)
                   ],
                 ),
               )
@@ -354,7 +462,9 @@ class _SignUpState extends State<SignUp> {
                                   cursorColor: customPurple,
                                   keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
-                                      errorText: _errorMessage.isNotEmpty ? _errorMessage : null,
+                                      errorText: _errorMessage.isNotEmpty
+                                          ? _errorMessage
+                                          : null,
                                       hintText: 'Enter your First Name',
                                       contentPadding: const EdgeInsets.all(15),
                                       enabledBorder: const OutlineInputBorder(
@@ -393,7 +503,9 @@ class _SignUpState extends State<SignUp> {
                                   cursorColor: customPurple,
                                   keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
-                                      errorText: _errorMessage.isNotEmpty ? _errorMessage : null,
+                                      errorText: _errorMessage.isNotEmpty
+                                          ? _errorMessage
+                                          : null,
                                       hintText: 'Enter your First Name',
                                       contentPadding: const EdgeInsets.all(15),
                                       enabledBorder: const OutlineInputBorder(
@@ -432,7 +544,9 @@ class _SignUpState extends State<SignUp> {
                                   cursorColor: customPurple,
                                   keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
-                                      errorText: _errorMessage.isNotEmpty ? _errorMessage : null,
+                                      errorText: _errorMessage.isNotEmpty
+                                          ? _errorMessage
+                                          : null,
                                       hintText: 'Enter your First Name',
                                       contentPadding: const EdgeInsets.all(15),
                                       enabledBorder: const OutlineInputBorder(
@@ -510,7 +624,9 @@ class _SignUpState extends State<SignUp> {
                                   cursorColor: customPurple,
                                   keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
-                                      errorText: _errorMessage.isNotEmpty ? _errorMessage : null,
+                                      errorText: _errorMessage.isNotEmpty
+                                          ? _errorMessage
+                                          : null,
                                       hintText: 'Enter your Email',
                                       contentPadding: const EdgeInsets.all(15),
                                       enabledBorder: const OutlineInputBorder(
@@ -543,12 +659,14 @@ class _SignUpState extends State<SignUp> {
                             padding: const EdgeInsets.all(12),
                             child: TextField(
                               cursorColor: Colors.black,
-                              controller: _dateController,
+                              controller: dateController,
                               onTap: () {
                                 _selectDate(context);
                               },
                               decoration: InputDecoration(
-                                errorText: _errorMessage.isNotEmpty ? _errorMessage : null,
+                                errorText: _errorMessage.isNotEmpty
+                                    ? _errorMessage
+                                    : null,
                                 hintText: 'Select Date',
                                 suffixIcon: const Icon(
                                   Icons.calendar_today,
@@ -594,7 +712,9 @@ class _SignUpState extends State<SignUp> {
                                   maxLines: 3,
                                   // set maxLines to 2 for a double-line input
                                   decoration: InputDecoration(
-                                    errorText: _errorMessage.isNotEmpty ? _errorMessage : null,
+                                    errorText: _errorMessage.isNotEmpty
+                                        ? _errorMessage
+                                        : null,
                                     hintText: 'Enter your Address',
                                     filled: true,
                                     contentPadding: const EdgeInsets.all(15),
@@ -612,6 +732,363 @@ class _SignUpState extends State<SignUp> {
                           ),
                         ),
 
+                        const SizedBox(height: 10),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 12),
+                          child: Text(
+                            'Vehicle Make',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Container(
+                            //padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Stack(
+                              children: [
+                                IgnorePointer(
+                                  ignoring: true,
+                                  child: TextFormField(
+                                    controller: TextEditingController(
+                                        text: selectedMake),
+                                    decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Vehicle make',
+                                        filled: true),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      borderRadius: BorderRadius.circular(10),
+                                      icon: const Icon(Icons.arrow_drop_down),
+                                      onChanged: (newValue) {
+                                        // Handle dropdown value change here
+                                        setState(() {
+                                          selectedMake = newValue;
+                                          vehicleMakePositioninListArray =
+                                              vehicleMakeItemList
+                                                  .indexOf(newValue!);
+                                        });
+                                        print(vehicleMakeItemList
+                                            .indexOf(newValue!));
+
+                                        Future getVehicleData2() async {
+                                          final http.Response response =
+                                              await http.get(Uri.parse(
+                                                  'https://car-makers.onrender.com'));
+                                          final data =
+                                              await jsonDecode(response.body);
+                                          //print(data[0]['MAKE']);
+                                          print(data[0]['MODELS'][0]);
+                                          vehicleModelItemListAllFromServer
+                                              .clear();
+                                          for (int i = 0;
+                                              i <
+                                                  data[vehicleMakePositioninListArray]
+                                                          ['MODELS']
+                                                      .length;
+                                              i++) {
+                                            setState(() {
+                                              vehicleModelItemListAllFromServer
+                                                  .add(data[
+                                                          vehicleMakePositioninListArray]
+                                                      ['MODELS'][i]);
+                                            });
+                                          }
+                                        }
+
+                                        getVehicleData2();
+                                      },
+                                      items: vehicleMakeItemList
+                                          .map((String item) {
+                                        return DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(item),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 10),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 12),
+                          child: Text(
+                            'Vehicle model',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Container(
+                            //padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Stack(
+                              children: [
+                                IgnorePointer(
+                                  ignoring: true,
+                                  child: TextFormField(
+                                    controller: TextEditingController(
+                                        text: selectedModel),
+                                    decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Vehicle model',
+                                        filled: true),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      borderRadius: BorderRadius.circular(10),
+                                      icon: const Icon(Icons.arrow_drop_down),
+                                      onChanged: (newValue) {
+                                        // Handle dropdown value change here
+                                        setState(() {
+                                          selectedModel = newValue;
+                                        });
+                                      },
+                                      items: vehicleModelItemListAllFromServer
+                                          .map((String item) {
+                                        return DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(item),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 12),
+                          child: Text(
+                            'Vehicle color',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Stack(
+                              children: [
+                                IgnorePointer(
+                                  ignoring: true,
+                                  child: TextFormField(
+                                    controller: TextEditingController(
+                                        text: selectedColor),
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'Vehicle color',
+                                      filled: true,
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      borderRadius: BorderRadius.circular(10),
+                                      icon: const Icon(Icons.arrow_drop_down),
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          selectedColor = newValue;
+                                        });
+                                      },
+                                      items: vehicleColorList
+                                          .map<DropdownMenuItem<String>>(
+                                              (String item) {
+                                        return DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                width: 20,
+                                                height: 20,
+                                                color: getColorFromName(item),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Text(item),
+                                            ],
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 12),
+                          child: Text(
+                            'Vehicle Body Type',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Container(
+                            //padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Stack(
+                              children: [
+                                IgnorePointer(
+                                  ignoring: true,
+                                  child: TextFormField(
+                                    controller: TextEditingController(
+                                        text: selectedBodyType),
+                                    decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Vehicle Body Type',
+                                        filled: true),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      borderRadius: BorderRadius.circular(10),
+                                      icon: const Icon(Icons.arrow_drop_down),
+                                      onChanged: (newValue) {
+                                        // Handle dropdown value change here
+                                        setState(() {
+                                          selectedBodyType = newValue;
+                                        });
+                                      },
+                                      items:
+                                          vehicleBodyTypes.map((String item) {
+                                        return DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(item),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 12),
+                          child: Text(
+                            'Vehicle Year',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.black),
+                          ),
+                        ),
+                        Container(
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              children: [
+                                //TextField for name
+                                TextField(
+                                  controller: vehicleYear,
+                                  cursorColor: customPurple,
+                                  keyboardType: TextInputType.number,
+                                  decoration: const InputDecoration(
+                                      hintText: '2015',
+                                      contentPadding: EdgeInsets.all(15),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15)),
+                                        borderSide:
+                                            BorderSide(color: Colors.black),
+                                      ),
+                                      filled: true,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15)),
+                                        borderSide:
+                                            BorderSide(color: Colors.yellow),
+                                      )),
+                                ),
+                              ],
+                            )),
+                        const SizedBox(height: 10),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 12),
+                          child: Text(
+                            'Vehicle Plate Number',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.black),
+                          ),
+                        ),
+                        Container(
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              children: [
+                                //TextField for name
+                                TextField(
+                                  controller: vehiclePlateNumber,
+                                  cursorColor: customPurple,
+                                  keyboardType: TextInputType.text,
+                                  decoration: const InputDecoration(
+                                      hintText: 'YYY-YYY-YYY',
+                                      contentPadding: EdgeInsets.all(15),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15)),
+                                        borderSide:
+                                            BorderSide(color: Colors.black),
+                                      ),
+                                      filled: true,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15)),
+                                        borderSide:
+                                            BorderSide(color: Colors.yellow),
+                                      )),
+                                ),
+                              ],
+                            )),
                         const SizedBox(height: 10),
                         const Padding(
                           padding: EdgeInsets.only(left: 12),
@@ -682,8 +1159,15 @@ class _SignUpState extends State<SignUp> {
                                 //     MaterialPageRoute(builder: (BuildContext context) {
                                 //   return BottomNavPage();
                                 // }));
-                                if (firstname.text != '' && lastname.text != '' && password.text != '' && email.text != '' && homeAddress.text != '' && _dateController.text != ''
-                                    && _image != null && _permitFile != null && _licenseFile != null ){
+                                if (firstname.text != '' &&
+                                    lastname.text != '' &&
+                                    password.text != '' &&
+                                    email.text != '' &&
+                                    homeAddress.text != '' &&
+                                    dateController.text != '' &&
+                                    _image != null &&
+                                    _permitFile != null &&
+                                    _licenseFile != null) {
                                   setState(() {
                                     _errorMessage = '';
                                   });
@@ -693,7 +1177,7 @@ class _SignUpState extends State<SignUp> {
                                     _errorMessage = 'This field is required';
                                   });
                                 }
-                                // signUp(firstname.text, lastname.text, password.text, widget.phoneNumber, email.text, homeAddress.text, _dateController.text, _image, _licenseFile, _permitFile);
+                                // signUp(firstname.text, lastname.text, password.text, widget.phoneNumber, email.text, homeAddress.text, dateController.text, _image, _licenseFile, _permitFile);
                               },
                               style: ElevatedButton.styleFrom(
                                   primary: customPurple,
