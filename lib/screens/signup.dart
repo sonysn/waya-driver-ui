@@ -761,7 +761,7 @@ class _SignUpState extends State<SignUp> {
                                         text: selectedMake),
                                     decoration: const InputDecoration(
                                         border: InputBorder.none,
-                                        hintText: 'Vehicle make',
+                                        hintText: 'Vehicle Make',
                                         filled: true),
                                   ),
                                 ),
@@ -828,7 +828,7 @@ class _SignUpState extends State<SignUp> {
                         const Padding(
                           padding: EdgeInsets.only(left: 12),
                           child: Text(
-                            'Vehicle model',
+                            'Vehicle Model',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
@@ -853,7 +853,7 @@ class _SignUpState extends State<SignUp> {
                                         text: selectedModel),
                                     decoration: const InputDecoration(
                                         border: InputBorder.none,
-                                        hintText: 'Vehicle model',
+                                        hintText: 'Vehicle Model',
                                         filled: true),
                                   ),
                                 ),
@@ -887,7 +887,7 @@ class _SignUpState extends State<SignUp> {
                         const Padding(
                           padding: EdgeInsets.only(left: 12),
                           child: Text(
-                            'Vehicle color',
+                            'Vehicle Colour',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
@@ -911,7 +911,7 @@ class _SignUpState extends State<SignUp> {
                                         text: selectedColor),
                                     decoration: const InputDecoration(
                                       border: InputBorder.none,
-                                      hintText: 'Vehicle color',
+                                      hintText: 'Vehicle Colour',
                                       filled: true,
                                     ),
                                   ),
