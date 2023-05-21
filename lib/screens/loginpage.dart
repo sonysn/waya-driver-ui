@@ -9,7 +9,6 @@ import '../colorscheme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -23,10 +22,8 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true;
     });
     try {
-
       final response = await signIn(
-          emailOrPhoneTextController.text, passwordTextController.text, token
-      );
+          emailOrPhoneTextController.text, passwordTextController.text, token);
       setState(() {
         _futureData = response;
       });
@@ -34,19 +31,20 @@ class _LoginPageState extends State<LoginPage> {
         setState(() {
           _isLoading = false;
         });
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setInt('driverID', _futureData.id);
         _nav();
       }
     } on SocketException catch (e) {
       print(e);
-      _showSnackBar('Connection failed. Please check your internet connection.');
+      _showSnackBar(
+          'Connection failed. Please check your internet connection.');
     } on TimeoutException catch (e) {
       print(e);
       _showSnackBar('Request timed out. Please try again later.');
     } catch (e) {
       print(e);
-    } finally {
-
-    }
+    } finally {}
   }
 
   void _showSnackBar(String message) {
@@ -57,11 +55,9 @@ class _LoginPageState extends State<LoginPage> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-
-
-
   void _nav() {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) {
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (BuildContext context) {
       return BottomNavPage(
         data: _futureData,
       );
@@ -112,144 +108,151 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _isLoading ? const Center(child: CircularProgressIndicator(color: Colors.black,)) :  Container(
-        padding: const EdgeInsets.only(top: 10),
-        margin: const EdgeInsets.symmetric(horizontal: 7),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 12, bottom: 10),
-              child: Text(
-                'Login to your account',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 27,
-                    color: Colors.black),
-              ),
-            ),
-            Container(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  children: [
-                    //TextField for name
-                    TextField(
-                      controller: emailOrPhoneTextController,
-                      cursorColor: customPurple,
-                      keyboardType: TextInputType.text,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.deny(RegExp(r'\s')),
-                        // Disallow whitespace
-                      ],
-                      decoration: const InputDecoration(
-                        hintText: 'Email or Phone',
-                        contentPadding: EdgeInsets.all(15),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                          borderSide: BorderSide(color: Colors.black),
-                        ),
-                        filled: true,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                          borderSide: BorderSide(color: Colors.yellow),
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
-            Container(
-              padding: const EdgeInsets.all(12),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(
+              color: Colors.black,
+            ))
+          : Container(
+              padding: const EdgeInsets.only(top: 10),
+              margin: const EdgeInsets.symmetric(horizontal: 7),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //TextField for name
-                  TextFormField(
-                    controller: passwordTextController,
-                    cursorColor: customPurple,
-                    keyboardType: TextInputType.text,
-                    obscureText: !_passwordVisible,
-                    decoration: InputDecoration(
-                      hintText: 'Password',
-                      contentPadding: const EdgeInsets.all(15),
-                      enabledBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(color: Colors.black),
-                      ),
-                      filled: true,
-                      focusedBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(color: Colors.yellow),
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _passwordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          color: Colors.black,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _passwordVisible = !_passwordVisible;
-                          });
-                        },
-                      ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 12, bottom: 10),
+                    child: Text(
+                      'Login to your account',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 27,
+                          color: Colors.black),
                     ),
+                  ),
+                  Container(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        children: [
+                          //TextField for name
+                          TextField(
+                            controller: emailOrPhoneTextController,
+                            cursorColor: customPurple,
+                            keyboardType: TextInputType.text,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.deny(RegExp(r'\s')),
+                              // Disallow whitespace
+                            ],
+                            decoration: const InputDecoration(
+                              hintText: 'Email or Phone',
+                              contentPadding: EdgeInsets.all(15),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15)),
+                                borderSide: BorderSide(color: Colors.black),
+                              ),
+                              filled: true,
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15)),
+                                borderSide: BorderSide(color: Colors.yellow),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      children: [
+                        //TextField for name
+                        TextFormField(
+                          controller: passwordTextController,
+                          cursorColor: customPurple,
+                          keyboardType: TextInputType.text,
+                          obscureText: !_passwordVisible,
+                          decoration: InputDecoration(
+                            hintText: 'Password',
+                            contentPadding: const EdgeInsets.all(15),
+                            enabledBorder: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                              borderSide: BorderSide(color: Colors.black),
+                            ),
+                            filled: true,
+                            focusedBorder: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                              borderSide: BorderSide(color: Colors.yellow),
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _passwordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Colors.black,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _passwordVisible = !_passwordVisible;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // CheckboxListTile(
+                  //   title: const Text('Remember me'),
+                  //   activeColor: Colors.black,
+                  //   value: _rememberMe,
+                  //   onChanged: (bool? value) {
+                  //     setState(() {
+                  //       _rememberMe = value!;
+                  //     });
+                  //   },
+                  // ),
+                  Center(
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          //print(signIn(emailOrPhoneTextController.text, passwordTextController.text));
+                          // Navigator.push(context,
+                          //     MaterialPageRoute(builder: (BuildContext context) {
+                          //   return const BottomNavPage();
+                          // }));
+                          if (emailOrPhoneTextController.text != '' &&
+                              passwordTextController.text != '') {
+                            _serverResponse();
+                            if (_rememberMe) {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              await prefs.setString('emailOrPhone',
+                                  emailOrPhoneTextController.text);
+                              await prefs.setString(
+                                  'password', passwordTextController.text);
+                              await prefs.setString('deviceID', token!);
+                            }
+                            print(_futureData);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                            primary: customPurple,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
+                                bottom: Radius.circular(20),
+                              ),
+                            )),
+                        child: const SizedBox(
+                          width: 260,
+                          height: 50,
+                          child: Center(child: Text('Sign In')),
+                        )),
                   ),
                 ],
               ),
             ),
-            // CheckboxListTile(
-            //   title: const Text('Remember me'),
-            //   activeColor: Colors.black,
-            //   value: _rememberMe,
-            //   onChanged: (bool? value) {
-            //     setState(() {
-            //       _rememberMe = value!;
-            //     });
-            //   },
-            // ),
-            Center(
-              child: ElevatedButton(
-                  onPressed: () async {
-                    //print(signIn(emailOrPhoneTextController.text, passwordTextController.text));
-                    // Navigator.push(context,
-                    //     MaterialPageRoute(builder: (BuildContext context) {
-                    //   return const BottomNavPage();
-                    // }));
-                    if (emailOrPhoneTextController.text != '' && passwordTextController.text != ''){
-                      _serverResponse();
-                      if (_rememberMe) {
-                        SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                        await prefs.setString(
-                            'emailOrPhone', emailOrPhoneTextController.text);
-                        await prefs.setString(
-                            'password', passwordTextController.text);
-                        await prefs.setString('deviceID', token!);
-                      }
-                      print(_futureData);
-                    }
-
-
-
-                  },
-                  style: ElevatedButton.styleFrom(
-                      primary: customPurple,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                          bottom: Radius.circular(20),
-                        ),
-                      )),
-                  child: const SizedBox(
-                    width: 260,
-                    height: 50,
-                    child: Center(child: Text('Sign In')),
-                  )),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -53,12 +53,12 @@ class _VehicleState extends State<Vehicle> {
                       );
                       return ListTile(
                         title: Text(
-                            '${itemList['result'][index]['MODEL']}, ${itemList['result'][index]['MAKE']}'),
+                            '${itemList['result'][index]['VEHICLE_MAKE']}, ${itemList['result'][index]['VEHICLE_MODEL']}'),
                         subtitle: Text(
-                          itemList['result'][index]['PLATE_NUMBER'],
+                          itemList['result'][index]['VEHICLE_PLATE_NUMBER'],
                         ),
                         trailing: Text(
-                          itemList['result'][index]['COLOUR'],
+                          itemList['result'][index]['VEHICLE_COLOUR'],
                         ),
                       );
                     }),
