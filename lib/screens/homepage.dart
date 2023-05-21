@@ -23,6 +23,7 @@ class HomePage extends StatefulWidget {
 String? vehicleName;
 String? vehiclePlateNumber;
 String? vehicleColour;
+String? vehicleBodyType;
 String? driverPhone;
 String? driverPhoto;
 
@@ -67,13 +68,16 @@ class _HomePageState extends State<HomePage> {
   Future getCar() async {
     final res = await getDriverCars(widget.data.id, widget.data.token);
     setState(() {
-      vehicleName = "${res['result'][0]['MODEL']}, ${res['result'][0]['MAKE']}";
-      vehiclePlateNumber = res['result'][0]['PLATE_NUMBER'];
-      vehicleColour = res['result'][0]['COLOUR'];
+      vehicleName =
+          "${res['result'][0]['VEHICLE_MAKE']}, ${res['result'][0]['VEHICLE_MODEL']}";
+      vehiclePlateNumber = res['result'][0]['VEHICLE_PLATE_NUMBER'];
+      vehicleColour = res['result'][0]['VEHICLE_COLOUR'];
+      vehicleBodyType = res['result'][0]['VEHICLE_BODY_TYPE'];
       driverPhone = widget.data.phoneNumber;
       driverPhoto = widget.data.profilePhoto;
     });
     print(vehicleName);
+    print(vehicleBodyType);
   }
 
   Future<void> setSwitchValue(bool value) async {
@@ -94,6 +98,19 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future locationPingServer() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? id = prefs.getInt('driverID');
+    print(id);
+    Location location = Location();
+    LocationData locationDataSpot;
+    locationDataSpot = await location.getLocation();
+    location.enableBackgroundMode(enable: true);
+    LatLng data = LatLng(double.parse(locationDataSpot.latitude.toString()),
+        double.parse(locationDataSpot.longitude.toString()));
+    locationPing(driverID: widget.data.id, locationPoint: data);
+  }
+
   dynamic currentLocation;
   StreamController controller = StreamController();
   bool onlineStatus = false;
@@ -107,6 +124,7 @@ class _HomePageState extends State<HomePage> {
     findLoc();
     getSwitchValue();
     getCar();
+    locationPingServer();
 
     // Request permission for receiving push notifications (only for iOS)
     FirebaseMessaging.instance.requestPermission();

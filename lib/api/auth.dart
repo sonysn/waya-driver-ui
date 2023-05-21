@@ -28,8 +28,23 @@ Future signIn(emailOrPhone, password, deviceID) async {
   }
 }
 
-Future signUp(firstname, lastname, password, phoneNumber, email, address, dob,
-    profilePhoto, driversLicense, vehicleInsurance) async {
+Future signUp(
+    {required firstname,
+    required lastname,
+    required password,
+    required phoneNumber,
+    required email,
+    required address,
+    required dob,
+    required vehicleMake,
+    required vehicleModel,
+    required vehicleColour,
+    required vehicleBodytype,
+    required vehicleYear,
+    required vehiclePlateNumber,
+    required profilePhoto,
+    required driversLicense,
+    required vehicleInsurance}) async {
   var formData =
       http.MultipartRequest('POST', Uri.parse('$baseUri/driversignup'));
 
@@ -40,6 +55,12 @@ Future signUp(firstname, lastname, password, phoneNumber, email, address, dob,
   formData.fields['email'] = email;
   formData.fields['address'] = address;
   formData.fields['dob'] = dob;
+  formData.fields['vehicleMake'] = vehicleMake;
+  formData.fields['vehicleModel'] = vehicleModel;
+  formData.fields['vehicleColour'] = vehicleColour;
+  formData.fields['vehicleBodytype'] = vehicleBodytype;
+  formData.fields['vehicleYear'] = vehicleYear;
+  formData.fields['vehiclePlateNumber'] = vehiclePlateNumber;
 
   // Add profilePhoto as a file
   if (profilePhoto != null) {

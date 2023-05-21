@@ -32,16 +32,22 @@ class _SignUpState extends State<SignUp> {
     });
     try {
       final response = await signUp(
-          firstname.text,
-          lastname.text,
-          password.text,
-          widget.phoneNumber,
-          email.text,
-          homeAddress.text,
-          dateController.text,
-          _image,
-          _licenseFile,
-          _permitFile);
+          firstname: firstname.text,
+          lastname: lastname.text,
+          password: password.text,
+          phoneNumber: widget.phoneNumber,
+          email: email.text,
+          address: homeAddress.text,
+          dob: dateController.text,
+          vehicleMake: selectedMake,
+          vehicleModel: selectedModel,
+          vehicleColour: selectedColor,
+          vehicleBodytype: selectedBodyType,
+          vehicleYear: vehicleYear.text,
+          vehiclePlateNumber: vehiclePlateNumber.text.toUpperCase(),
+          profilePhoto: _image,
+          driversLicense: _licenseFile,
+          vehicleInsurance: _permitFile);
       if (response == 200) {
         setState(() {
           _isLoading = false;
@@ -199,7 +205,7 @@ class _SignUpState extends State<SignUp> {
   final picker = ImagePicker();
 
   Future getImageFromCamera() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
     setState(() {
       if (pickedFile != null) {
