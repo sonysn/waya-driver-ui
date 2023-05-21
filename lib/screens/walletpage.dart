@@ -82,9 +82,9 @@ class _WalletPageState extends State<WalletPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: InkWell(
+                      child: GestureDetector(
                         onTap: () {
-                          // Navigate to deposit page or function
+                          // navigate to deposit page or function
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -100,15 +100,15 @@ class _WalletPageState extends State<WalletPage> {
                         },
                         child: Column(
                           children: const [
-                            Icon(Icons.money, size: 40),
+                            Icon(Icons.account_balance_wallet, size: 40),
                             SizedBox(height: 10),
-                            Text("Deposit"),
+                            Text("Deposit", style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
                     ),
                     Expanded(
-                      child: InkWell(
+                      child: GestureDetector(
                         onTap: () {
                           // Navigate to withdrawal page or function
                           Navigator.push(
@@ -126,39 +126,39 @@ class _WalletPageState extends State<WalletPage> {
                         },
                         child: Column(
                           children: const [
-                            Icon(Icons.card_membership_sharp, size: 40),
+                            Icon(Icons.credit_card, size: 40),
                             SizedBox(height: 10),
-                            Text("Withdraw"),
+                            Text("Withdraw", style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
                     ),
                     Expanded(
-                      child: InkWell(
+                      child: GestureDetector(
                         onTap: () {
-                          // Navigate to share page or function
+                          // navigate to transfer page or function
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (BuildContext context) {
-                                return TransferPage(
-                                  phoneNumber: widget.data.phoneNumber,
-                                );
+                                return TransferPage(phoneNumber: widget.data.phoneNumber);
                               },
                             ),
                           );
                         },
                         child: Column(
                           children: const [
-                            Icon(Icons.exit_to_app, size: 40),
+                            Icon(Icons.send, size: 40),
                             SizedBox(height: 10),
-                            Text("Share"),
+                            Text("Transfer", style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
                     ),
                   ],
                 ),
+
+
 
                 const SizedBox(
                   height: 30,
