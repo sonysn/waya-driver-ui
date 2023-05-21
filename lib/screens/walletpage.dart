@@ -10,6 +10,7 @@ import 'package:waya_driver/screens/widgets/transaction_card.dart';
 import 'package:waya_driver/screens/transactionhistory.dart';
 import 'package:waya_driver/screens/widgets/my_card.dart';
 import 'package:waya_driver/screens/earninghistorypage.dart';
+import 'package:waya_driver/screens/withdrawal.dart';
 
 class WalletPage extends StatefulWidget {
   final dynamic data;
@@ -83,14 +84,19 @@ class _WalletPageState extends State<WalletPage> {
                     Expanded(
                       child: InkWell(
                         onTap: () {
-                          // navigate to withdrawal page or function
-                          Navigator.push(context, MaterialPageRoute(
+                          // Navigate to deposit page or function
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
                               builder: (BuildContext context) {
-                            return CashDepositPage(
-                                id: widget.data.id,
-                                phone: widget.data.phoneNumber,
-                                email: widget.data.email);
-                          }));
+                                return CashDepositPage(
+                                  id: widget.data.id,
+                                  phone: widget.data.phoneNumber,
+                                  email: widget.data.email,
+                                );
+                              },
+                            ),
+                          );
                         },
                         child: Column(
                           children: const [
@@ -104,7 +110,19 @@ class _WalletPageState extends State<WalletPage> {
                     Expanded(
                       child: InkWell(
                         onTap: () {
-                          // navigate to withdrawal page or function
+                          // Navigate to withdrawal page or function
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return CashWithdrawalPage(
+                                  id: widget.data.id,
+                                  phone: widget.data.phoneNumber,
+                                  email: widget.data.email,
+                                );
+                              },
+                            ),
+                          );
                         },
                         child: Column(
                           children: const [
@@ -118,12 +136,17 @@ class _WalletPageState extends State<WalletPage> {
                     Expanded(
                       child: InkWell(
                         onTap: () {
-                          // navigate to withdrawal page or function
-                          Navigator.push(context, MaterialPageRoute(
+                          // Navigate to share page or function
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
                               builder: (BuildContext context) {
-                            return TransferPage(
-                                phoneNumber: widget.data.phoneNumber);
-                          }));
+                                return TransferPage(
+                                  phoneNumber: widget.data.phoneNumber,
+                                );
+                              },
+                            ),
+                          );
                         },
                         child: Column(
                           children: const [
@@ -136,6 +159,7 @@ class _WalletPageState extends State<WalletPage> {
                     ),
                   ],
                 ),
+
                 const SizedBox(
                   height: 30,
                 ),
