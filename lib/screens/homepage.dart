@@ -400,14 +400,14 @@ class _HomePageState extends State<HomePage> {
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
-                                    Text(
+                                  children: [
+                                    const Text(
                                       'Your Balance',
                                       style: TextStyle(fontSize: 18),
                                     ),
                                     Text(
-                                      "₦10,000.00",
-                                      style: TextStyle(fontSize: 15),
+                                      "₦${widget.data.accountBalance}",
+                                      style: const TextStyle(fontSize: 15),
                                     ),
                                   ],
                                 )
