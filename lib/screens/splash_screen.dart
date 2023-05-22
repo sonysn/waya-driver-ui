@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
         // if email/phone and password exist, sign in and navigate to BottomNavPage after a 3 second delay
         final response = await signIn(emailOrPhone, password, deviceID);
         Timer(const Duration(seconds: 3), () {
-          if (response != null) {
+          if (response.data != null) {
             Navigator.pushReplacement(
               context,
               PageRouteBuilder(
@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 pageBuilder: (context, animation, secondaryAnimation) =>
                     FadeTransition(
                   opacity: animation,
-                  child: BottomNavPage(data: response),
+                  child: BottomNavPage(data: response.data),
                 ),
               ),
             );

@@ -3,14 +3,25 @@ import 'package:waya_driver/screens/widgets/earning_card.dart';
 
 class EarningHistory extends StatefulWidget {
   final dynamic data;
-
-  const EarningHistory({Key? key, this.data}) : super(key: key);
+  final List credits;
+  const EarningHistory({Key? key, this.data, required this.credits})
+      : super(key: key);
 
   @override
   State<EarningHistory> createState() => _EarningHistoryState();
 }
 
 class _EarningHistoryState extends State<EarningHistory> {
+  List reversedTransactions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      reversedTransactions = widget.credits.reversed.toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,38 +37,55 @@ class _EarningHistoryState extends State<EarningHistory> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back,
                 size: 25,
                 color: Colors.black,
               ),
             ),
-            Text(
+            const Text(
               'Earning History',
               style: TextStyle(fontSize: 30),
             ),
           ],
         ),
-        Container(
-          padding: const EdgeInsets.only(top: 40),
-          margin: const EdgeInsets.symmetric(horizontal: 10),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            ListView.separated(
-                itemCount: 12,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) {
-                  return SizedBox(
-                    height: 10,
-                  );
-                },
-                itemBuilder: (context, index) {
-                  return EarningCard(data: widget.data);
-                })
-          ]),
-        ),
-        SizedBox(
+        widget.credits != []
+            ? Container(
+                padding: const EdgeInsets.only(top: 40),
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListView.separated(
+                          itemCount: widget.credits.length,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(
+                              height: 10,
+                            );
+                          },
+                          itemBuilder: (context, index) {
+                            return EarningCard(
+                              data: widget.data,
+                              amountTransferred: reversedTransactions[index]
+                                  ['amountTransferred'],
+                              dateTransferred: reversedTransactions[index]
+                                  ['datePaid'],
+                            );
+                          })
+                    ]),
+              )
+            : Center(
+                child: Container(
+                  margin: const EdgeInsets.all(45),
+                  child: const Text(
+                    'No Earnings Yet',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+              ),
+        const SizedBox(
           height: 10,
         ),
       ],

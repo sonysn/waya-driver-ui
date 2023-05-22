@@ -1,6 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:waya_driver/models/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:waya_driver/api/auth.dart';
@@ -17,6 +18,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool hasGetter(dynamic object, String getterName) {
+    try {
+      // Try to access the getter and check if it throws an exception
+      object.noSuchMethod(Invocation.getter(Symbol(getterName)));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   dynamic _serverResponse() async {
     setState(() {
       _isLoading = true;
@@ -24,16 +35,26 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final response = await signIn(
           emailOrPhoneTextController.text, passwordTextController.text, token);
-      setState(() {
-        _futureData = response;
-      });
-      if (_futureData != null) {
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _futureData = response.data;
+        });
+        if (_futureData != null) {
+          setState(() {
+            _isLoading = false;
+          });
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setInt('driverID', _futureData.id);
+          _nav();
+        }
+      } else {
+        var msg = response.body;
+        //print(msg['message']);
+        _showSnackBar(msg['message']);
         setState(() {
           _isLoading = false;
         });
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setInt('driverID', _futureData.id);
-        _nav();
       }
     } on SocketException catch (e) {
       print(e);
@@ -221,6 +242,10 @@ class _LoginPageState extends State<LoginPage> {
                           //     MaterialPageRoute(builder: (BuildContext context) {
                           //   return const BottomNavPage();
                           // }));
+                          if (emailOrPhoneTextController.text == '' ||
+                              passwordTextController.text == '') {
+                            _showSnackBar("Input your Login Details");
+                          }
                           if (emailOrPhoneTextController.text != '' &&
                               passwordTextController.text != '') {
                             _serverResponse();
@@ -233,7 +258,7 @@ class _LoginPageState extends State<LoginPage> {
                                   'password', passwordTextController.text);
                               await prefs.setString('deviceID', token!);
                             }
-                            print(_futureData);
+                            //print(_futureData);
                           }
                         },
                         style: ElevatedButton.styleFrom(

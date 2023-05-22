@@ -8,7 +8,14 @@ import 'package:path/path.dart' as path;
 //var baseUri = 'http://192.168.100.43:3000';
 var baseUri = 'https://waya-api.onrender.com';
 
-//TODO LOOKS AT RETURN TO MANAGE WRONG PASSWORDS AND NO PASSWORDS
+class SignInResponse {
+  final Data? data;
+  final int statusCode;
+  final dynamic body;
+
+  SignInResponse(this.data, this.statusCode, this.body);
+}
+
 Future signIn(emailOrPhone, password, deviceID) async {
   final http.Response response =
       await http.post(Uri.parse('$baseUri${ApiConstants.signInEndpoint}'),
@@ -20,11 +27,11 @@ Future signIn(emailOrPhone, password, deviceID) async {
             "deviceID": deviceID
           }));
   if (response.statusCode == 200) {
-    //print(Data.fromJson(json.decode(response.body)).email);
-    return Data.fromJson(json.decode(response.body));
-    //return json.decode(response.body);
+    final data = Data.fromJson(json.decode(response.body));
+    return SignInResponse(data, response.statusCode, null);
   } else {
-    throw Exception('Login Failed');
+    return SignInResponse(null, response.statusCode, jsonDecode(response.body));
+    //throw Exception('Login Failed');
   }
 }
 

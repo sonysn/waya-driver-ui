@@ -58,7 +58,7 @@ class _TransferPageState extends State<TransferPage> {
           backgroundColor: Colors.white,
           elevation: 0,
           leading: IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back_ios_rounded,
               color: Colors.black,
             ),
@@ -66,7 +66,7 @@ class _TransferPageState extends State<TransferPage> {
               Navigator.of(context).pop();
             },
           ),
-          title: Text(
+          title: const Text(
             'Transfer to Driver',
             style: TextStyle(
               color: Colors.black,
@@ -77,18 +77,18 @@ class _TransferPageState extends State<TransferPage> {
         body: SingleChildScrollView(
           // Wrap the Column with SingleChildScrollView
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 16.0),
-                Text(
+                const SizedBox(height: 16.0),
+                const Text(
                   'Transfer Amount',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 TextField(
                   controller: _cashTransferController,
                   keyboardType: TextInputType.number,
@@ -102,14 +102,14 @@ class _TransferPageState extends State<TransferPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16.0),
-                Text(
+                const SizedBox(height: 16.0),
+                const Text(
                   'Recipient Driver',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 TextField(
                   controller: _driverRecipentController,
                   decoration: InputDecoration(
@@ -122,14 +122,20 @@ class _TransferPageState extends State<TransferPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 32.0),
+                const SizedBox(height: 32.0),
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
                       _transfer();
                       // Handle deposit button press
                     },
-                    child: Padding(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: customPurple,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(32.0),
+                      ),
+                    ),
+                    child: const Padding(
                       padding: EdgeInsets.symmetric(
                           vertical: 16.0, horizontal: 32.0),
                       child: Text(
@@ -138,12 +144,6 @@ class _TransferPageState extends State<TransferPage> {
                           fontWeight: FontWeight.bold,
                           fontSize: 18.0,
                         ),
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: customPurple,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32.0),
                       ),
                     ),
                   ),

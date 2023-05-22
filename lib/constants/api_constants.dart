@@ -12,4 +12,6 @@ class ApiConstants {
   static String chargeEndpoint = '/chargeDriver';
   static String driverAcceptRideEndpoint = '/driverAcceptRide';
   static String locationUpdatePingEndpoint = '/currentLocationPing';
+  static String getUserTransfersEndpoint = '/getUserTransfers';
+  static String getDepositsEndpoint = '/getDeposits';
 }

@@ -83,7 +83,7 @@ class _SignUpState extends State<SignUp> {
 
   Future getVehicleData() async {
     final http.Response response =
-        await http.get(Uri.parse('https://car-makers.onrender.com'));
+        await http.get(Uri.parse('https://car-makers-2.onrender.com/'));
     final data = await jsonDecode(response.body);
     //print(data[0]['MAKE']);
     print(data[0]['MODELS'][0]);
@@ -791,7 +791,7 @@ class _SignUpState extends State<SignUp> {
                                         Future getVehicleData2() async {
                                           final http.Response response =
                                               await http.get(Uri.parse(
-                                                  'https://car-makers.onrender.com'));
+                                                  'https://car-makers-2.onrender.com/'));
                                           final data =
                                               await jsonDecode(response.body);
                                           //print(data[0]['MAKE']);

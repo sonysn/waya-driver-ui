@@ -106,12 +106,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    locationPingServer();
     //findLoc();
+    locationPingServer();
     getSwitchValue();
-    getCar();
+    //getCar();
 
     // Request permission for receiving push notifications (only for iOS)
     FirebaseMessaging.instance.requestPermission();
@@ -206,6 +205,7 @@ class _HomePageState extends State<HomePage> {
                         ConnectToServer().connect(widget.data.id, context);
                         locationCallbacks(widget.data.id, widget.data.verified);
                         updateAvailability(1, widget.data.id);
+                        getCar();
                         await setSwitchValue(onlineStatus);
                         timedPing();
                       } else {
