@@ -10,6 +10,7 @@ import 'package:waya_driver/screens/widgets/transaction_card.dart';
 import 'package:waya_driver/screens/transactionhistory.dart';
 import 'package:waya_driver/screens/widgets/my_card.dart';
 import 'package:waya_driver/screens/earninghistorypage.dart';
+import 'package:waya_driver/screens/withdrawal.dart';
 
 class WalletPage extends StatefulWidget {
   final dynamic data;
@@ -81,61 +82,84 @@ class _WalletPageState extends State<WalletPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: InkWell(
+                      child: GestureDetector(
                         onTap: () {
-                          // navigate to withdrawal page or function
-                          Navigator.push(context, MaterialPageRoute(
+                          // navigate to deposit page or function
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
                               builder: (BuildContext context) {
-                            return CashDepositPage(
-                                id: widget.data.id,
-                                phone: widget.data.phoneNumber,
-                                email: widget.data.email);
-                          }));
+                                return CashDepositPage(
+                                  id: widget.data.id,
+                                  phone: widget.data.phoneNumber,
+                                  email: widget.data.email,
+                                );
+                              },
+                            ),
+                          );
                         },
                         child: Column(
                           children: const [
-                            Icon(Icons.money, size: 40),
+                            Icon(Icons.account_balance_wallet, size: 40),
                             SizedBox(height: 10),
-                            Text("Deposit"),
+                            Text("Deposit", style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
                     ),
                     Expanded(
-                      child: InkWell(
+                      child: GestureDetector(
                         onTap: () {
-                          // navigate to withdrawal page or function
+                          // Navigate to withdrawal page or function
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return CashWithdrawalPage(
+                                  id: widget.data.id,
+                                  phone: widget.data.phoneNumber,
+                                  email: widget.data.email,
+                                );
+                              },
+                            ),
+                          );
                         },
                         child: Column(
                           children: const [
-                            Icon(Icons.card_membership_sharp, size: 40),
+                            Icon(Icons.credit_card, size: 40),
                             SizedBox(height: 10),
-                            Text("Withdraw"),
+                            Text("Withdraw", style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
                     ),
                     Expanded(
-                      child: InkWell(
+                      child: GestureDetector(
                         onTap: () {
-                          // navigate to withdrawal page or function
-                          Navigator.push(context, MaterialPageRoute(
+                          // navigate to transfer page or function
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
                               builder: (BuildContext context) {
-                            return TransferPage(
-                                phoneNumber: widget.data.phoneNumber);
-                          }));
+                                return TransferPage(phoneNumber: widget.data.phoneNumber);
+                              },
+                            ),
+                          );
                         },
                         child: Column(
                           children: const [
-                            Icon(Icons.exit_to_app, size: 40),
+                            Icon(Icons.send, size: 40),
                             SizedBox(height: 10),
-                            Text("Share"),
+                            Text("Transfer", style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
                     ),
                   ],
                 ),
+
+
+
                 const SizedBox(
                   height: 30,
                 ),
