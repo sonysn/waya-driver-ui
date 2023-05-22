@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     locationDataSpot = await location.getLocation();
-    location.enableBackgroundMode(enable: true);
+    // location.enableBackgroundMode(enable: true);
     //check if widget is mounted
     if (mounted) {
       setState(() {
@@ -98,19 +98,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future locationPingServer() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int? id = prefs.getInt('driverID');
-    print(id);
-    Location location = Location();
-    LocationData locationDataSpot;
-    locationDataSpot = await location.getLocation();
-    location.enableBackgroundMode(enable: true);
-    LatLng data = LatLng(double.parse(locationDataSpot.latitude.toString()),
-        double.parse(locationDataSpot.longitude.toString()));
-    locationPing(driverID: widget.data.id, locationPoint: data);
-  }
-
   dynamic currentLocation;
   StreamController controller = StreamController();
   bool onlineStatus = false;
@@ -121,10 +108,10 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    findLoc();
+    locationPingServer();
+    //findLoc();
     getSwitchValue();
     getCar();
-    locationPingServer();
 
     // Request permission for receiving push notifications (only for iOS)
     FirebaseMessaging.instance.requestPermission();
@@ -140,7 +127,6 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    findLoc();
   }
 
   @override
@@ -221,11 +207,13 @@ class _HomePageState extends State<HomePage> {
                         locationCallbacks(widget.data.id, widget.data.verified);
                         updateAvailability(1, widget.data.id);
                         await setSwitchValue(onlineStatus);
+                        timedPing();
                       } else {
                         cancelLocationCallbacks();
                         ConnectToServer().disconnect();
                         updateAvailability(0, widget.data.id);
                         await setSwitchValue(onlineStatus);
+                        timedPing();
                       }
                     },
                     child: Container(

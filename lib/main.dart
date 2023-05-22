@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waya_driver/functions/location_functions.dart';
 import 'package:waya_driver/screens/homepage.dart';
 import 'package:waya_driver/screens/splash_screen.dart';
 import 'functions/notification_service.dart';
@@ -9,7 +10,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-Workmanager backWorkmanager = Workmanager();
+// Workmanager backWorkmanager = Workmanager();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,27 +25,25 @@ Future<void> main() async {
     print('Failed to get token: $err');
   });
 
-
   final NotificationService notificationService = NotificationService();
   await notificationService.initialize();
-  
-  // backWorkmanager.initialize(
+
+  // Workmanager().initialize(
   //   callbackDispatcher, // the callback function to run background tasks
   //   isInDebugMode: true, // enable logging in debug mode
   // );
-  // backWorkmanager.registerPeriodicTask(
-  //   "1", // unique name for the task
-  //   "Fetch Notifications", // task name
-  //   frequency: const Duration(seconds: 30), // execute the task each 30 seconds
+  // Workmanager().registerPeriodicTask(
+  //   "Task Ping Location", // unique name for the task
+  //   "Ping Location", // task name
+  //   frequency: const Duration(minutes: 15), // execute the task each 30 seconds
   // );
-    //Set app orientation to portrait only
+  //Set app orientation to portrait only
   SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
+          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((value) => runApp(const MaterialApp(
-    home: WApp(),
-  )));
+            home: WApp(),
+          )));
 }
-
 
 class WApp extends StatefulWidget {
   const WApp({Key? key}) : super(key: key);
@@ -64,10 +63,11 @@ class _WAppState extends State<WApp> {
 }
 
 // void callbackDispatcher() {
-//   backWorkmanager.executeTask((taskName, inputData) async {
-//     // do your background work here
-//     print('Running task $taskName...');
-//     await HomePageState().getSwitchValueWhileOff();
+//   Workmanager().executeTask((taskName, inputData) {
+//     //use task name here
+//     if (taskName == "Ping Location") {
+//       locationPingServer();
+//     }
 //     return Future.value(true);
 //   });
 // }

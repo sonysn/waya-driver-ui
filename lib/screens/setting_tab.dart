@@ -181,8 +181,8 @@ class _SettingTabState extends State<SettingTab> {
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (BuildContext context) {
-                          return const HelpPage();
-                        }));
+                      return const HelpPage();
+                    }));
                   },
                   child: const ListTile(
                     leading: Icon(
@@ -229,6 +229,7 @@ class _SettingTabState extends State<SettingTab> {
                           prefs.remove('emailOrPhone');
                           prefs.remove('password');
                           prefs.remove('deviceID');
+                          prefs.remove('driverID');
                           ConnectToServer().disconnect();
                           nav();
                         }
