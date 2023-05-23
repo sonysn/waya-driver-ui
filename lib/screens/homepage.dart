@@ -96,6 +96,19 @@ class _HomePageState extends State<HomePage> {
         onlineStatus = false;
       });
     }
+    if (isOnlineSaved == true) {
+      // ignore: no_leading_underscores_for_local_identifiers
+      void _connect() {
+        ConnectToServer().connect(widget.data.id, context);
+      }
+
+      _connect();
+      locationCallbacks(widget.data.id, widget.data.verified);
+      updateAvailability(1, widget.data.id);
+      getCar();
+      await setSwitchValue(onlineStatus);
+      timedPing();
+    }
   }
 
   dynamic currentLocation;
