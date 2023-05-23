@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/sockets/sockets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 StreamSubscription<LocationData>? _subscription;
 
@@ -43,6 +44,8 @@ cancelLocationCallbacks() {
 Future locationPingServer() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int? id = prefs.getInt('driverID');
+  DateTime now = DateTime.now();
+  String formattedDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
   debugPrint("Driver saved id is ${id!}");
   try {
     Location location = Location();
@@ -51,8 +54,9 @@ Future locationPingServer() async {
     //location.enableBackgroundMode(enable: true);
     LatLng data = LatLng(double.parse(locationDataSpot.latitude.toString()),
         double.parse(locationDataSpot.longitude.toString()));
-    await locationPing(driverID: id, locationPoint: data);
-    debugPrint("Sent to Server at: ${DateTime.now()}");
+    await locationPing(
+        driverID: id, locationPoint: data, timeStamp: formattedDateTime);
+    debugPrint("Sent to Server at: $formattedDateTime");
   } catch (e) {
     debugPrint(e.toString());
   }
@@ -60,7 +64,7 @@ Future locationPingServer() async {
 
 void timedPing() {
   Timer.periodic(const Duration(minutes: 30), (timer) {
-    // Code to repeat every 10 seconds
+    // Code to repeat every 30 minutes
     locationPingServer();
   });
 }
