@@ -17,9 +17,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class SignUp extends StatefulWidget {
-  String phoneNumber;
+  final String phoneNumber;
 
-  SignUp({Key? key, required this.phoneNumber}) : super(key: key);
+  const SignUp({Key? key, required this.phoneNumber}) : super(key: key);
 
   @override
   State<SignUp> createState() => _SignUpState();
@@ -75,6 +75,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   void _nav() {
+    _showSnackBar('Login to your new account');
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -181,7 +182,6 @@ class _SignUpState extends State<SignUp> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getVehicleData();
   }
@@ -211,7 +211,7 @@ class _SignUpState extends State<SignUp> {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
       } else {
-        print('No image selected.');
+        debugPrint('No image selected.');
       }
     });
   }
@@ -320,7 +320,7 @@ class _SignUpState extends State<SignUp> {
                 _permitFile = null;
               });
             },
-            child: Icon(Icons.close),
+            child: const Icon(Icons.close),
           ),
         ],
       ),
@@ -642,7 +642,7 @@ class _SignUpState extends State<SignUp> {
                                             BorderSide(color: Colors.black),
                                       ),
                                       filled: true,
-                                      focusedBorder: OutlineInputBorder(
+                                      focusedBorder: const OutlineInputBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(15)),
                                         borderSide:
