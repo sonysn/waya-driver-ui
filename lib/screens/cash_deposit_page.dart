@@ -104,13 +104,27 @@ class _CashDepositPageState extends State<CashDepositPage> {
             TextFormField(
               controller: _cashDepositController,
               keyboardType: TextInputType.number,
-              style: TextStyle(color: Colors.black),
-              decoration: const InputDecoration(
+              style: TextStyle(
+                color: Colors.black, // Set text color to black
+              ),
+              cursorColor: Colors.black, // Set cursor color to black
+              decoration: InputDecoration(
+                labelText: 'Deposit Amount',
+                labelStyle: TextStyle(
+                  color: Colors.black, // Set label color to black
+                ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                      color: Colors.black), // Set border color when focused
+                    color: Colors.black, // Set border color to black when focused
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                labelText: 'Deposit Amount',
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.black, // Set border color to black
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
               ),
               validator: (value) {
                 if (value!.isEmpty) {

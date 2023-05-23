@@ -47,21 +47,7 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
 
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return const NotificationSettingsPage();
-                  }));
-            },
-            child: const ListTile(
-              leading: Icon(
-                Icons.mail_outline,
-                color: Colors.black,
-              ),
-              title: Text("Notification Setings"),
-            ),
-          ),
+
           ListTile(
             leading: Icon(Icons.security),
             title: Text('Privacy & Security'),

@@ -9,22 +9,30 @@ class HelpPage extends StatefulWidget {
 
 class _HelpPageState extends State<HelpPage> {
   List<Map<String, String>> faqItems = [
-    {
-      'question': 'How do I request a ride?',
-      'answer': 'To request a ride, open the app and enter your destination. Then, confirm your pickup location and select the type of ride you want. Tap "Request" to find a driver near you.'
-    },
-    {
-      'question': 'What payment methods are accepted?',
-      'answer': 'We accept various payment methods including credit cards, debit cards, and digital wallets. You can add or update your payment methods in the app settings.'
-    },
-    {
-      'question': 'How can I change my pickup location?',
-      'answer': 'You can change your pickup location by tapping on the current pickup address during the ride booking process. You can also drag and drop the pickup pin on the map to a new location.'
-    },
-    {
-      'question': 'What should I do if I left an item in the vehicle?',
-      'answer': 'If you left an item in the vehicle, you can contact your driver directly through the app. Go to the "Your Trips" section, select the specific trip, and tap on "Contact driver" to get in touch with them.'
-    },
+  {
+  'question': 'How do I sign up as a driver?',
+  'answer': "To sign up as a driver, download the driver app and follow the registration process. Enter your personal information, upload the required documents such as your driver's license and proof of insurance, and agree to the terms and conditions. Once your information is verified, you will be able to start accepting ride requests."
+},
+
+{
+'question': 'How do I set my availability as a driver?',
+'answer': 'To set your availability as a driver, open the driver app and toggle the online button'
+},
+
+{
+'question': "How do I navigate to a passenger's pickup location?",
+'answer': "When a ride request is accepted, the driver app will provide you with the passenger's pickup location. To navigate there, simply tap on the 'Navigate' button within the app. It will open your preferred navigation app (such as Google Maps) with the destination pre-filled. Follow the directions provided to reach the pickup location."
+},
+
+{
+'question': 'How do I start a trip with a passenger?',
+'answer': "To start a trip with a passenger, ensure that you have arrived at the pickup location. Once you have confirmed the passenger's presence, tap on the 'Start Trip' button within the driver app. This will begin the trip, and the app will start tracking the distance and time for the fare calculation."
+},
+
+{
+'question': 'How do I receive payment as a driver?',
+'answer': "As a driver, you will receive payment through the app. After completing a trip, the app will automatically calculate the fare based on distance and time. The passenger's payment will be charged to their selected payment method, and you will receive your earnings."
+},
     // Add more FAQ items here
   ];
 
@@ -61,7 +69,7 @@ class _HelpPageState extends State<HelpPage> {
                   title: Text(
                     faqItems[index]['question']!,
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.bold,color: Colors.black,
                     ),
                   ),
                   children: [
