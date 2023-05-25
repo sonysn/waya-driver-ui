@@ -6,6 +6,7 @@ import 'package:waya_driver/functions/location_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:waya_driver/functions/notification_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../api/actions.dart';
 import '../sockets/sockets.dart';
@@ -456,12 +457,22 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Image.network(
+                                    CachedNetworkImage(
+                                      imageUrl:
                                       'https://www.sygic.com/blog/2019/we-have-android-smartphone-in-dash-connectivity-but-not-for-android-auto/web-blog.jpg',
                                       fit: BoxFit.fill,
                                       height: 120,
-                                      width: MediaQuery.of(context).size.width -
-                                          40,
+                                      width:
+                                      MediaQuery.of(context).size.width - 40,
+                                      placeholder: (context, url) => SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2, // Adjust the strokeWidth to make the loader smaller
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error), // Error widget when the image fails to load
                                     ),
                                   ],
                                 ),

@@ -512,7 +512,7 @@ class _SignUpState extends State<SignUp> {
                                       errorText: _errorMessage.isNotEmpty
                                           ? _errorMessage
                                           : null,
-                                      hintText: 'Enter your First Name',
+                                      hintText: 'Enter your Last Name',
                                       contentPadding: const EdgeInsets.all(15),
                                       enabledBorder: const OutlineInputBorder(
                                         borderRadius: BorderRadius.all(
@@ -553,7 +553,7 @@ class _SignUpState extends State<SignUp> {
                                       errorText: _errorMessage.isNotEmpty
                                           ? _errorMessage
                                           : null,
-                                      hintText: 'Enter your First Name',
+                                      hintText: 'Password',
                                       contentPadding: const EdgeInsets.all(15),
                                       enabledBorder: const OutlineInputBorder(
                                         borderRadius: BorderRadius.all(

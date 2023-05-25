@@ -33,6 +33,9 @@ dependencies:
     sdk: flutter
 
 
+
+
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -43,6 +46,7 @@ dev_dependencies:
   google_maps_flutter: ^2.2.3
   location: ^4.4.0
   http: ^0.13.5
+  cached_network_image: ^3.2.3
   socket_io_client: ^2.0.0
   image_picker: ^0.8.7+4
   file_picker: ^5.2.11
@@ -53,6 +57,7 @@ dev_dependencies:
   flutter_inappwebview: ^5.7.2+3
   firebase_core: ^2.10.0
   firebase_messaging: ^14.4.1
+
   animated_text_kit: ^4.2.2
   loading_animation_widget:
   # The "flutter_lints" package below contains a set of recommended lints to

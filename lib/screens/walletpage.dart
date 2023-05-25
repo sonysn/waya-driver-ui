@@ -88,18 +88,19 @@ class _WalletPageState extends State<WalletPage> {
                 SizedBox(
                   height: 180,
                   child: ListView.separated(
-                      physics: const ClampingScrollPhysics(),
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(
-                          width: 8,
-                        );
-                      },
-                      itemCount: 1,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return MyCard(data: widget.data, stream: stream);
-                      }),
+                    physics: const ClampingScrollPhysics(),
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(
+                        width: 8,
+                      );
+                    },
+                    itemCount: 1,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return MyCard(data: widget.data, stream: stream);
+                    },
+                  ),
                 ),
                 const SizedBox(
                   height: 30,
@@ -192,105 +193,126 @@ class _WalletPageState extends State<WalletPage> {
                   children: [
                     const Text("Recent Earnings"),
                     Flexible(
-                        child: Container(
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        onTap: () => Navigator.push(context,
-                            MaterialPageRoute(builder: (BuildContext context) {
-                          return EarningHistory(
-                              data: widget.data, credits: earnings);
-                        })),
-                        child: const Text("View all",
-                            style: TextStyle(color: customPurple)),
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        child: InkWell(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return EarningHistory(
+                                  data: widget.data,
+                                  credits: earnings,
+                                );
+                              },
+                            ),
+                          ),
+                          child: const Text(
+                            "View all",
+                            style: TextStyle(color: customPurple),
+                          ),
+                        ),
                       ),
-                    )),
+                    ),
                   ],
                 ),
                 const SizedBox(
                   height: 0,
                 ),
-                earnings != []
+                earnings.isNotEmpty
                     ? ListView.separated(
-                        itemCount: earnings.length,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(
-                            height: 10,
-                          );
-                        },
-                        itemBuilder: (context, index) {
-                          return EarningCard(
-                            data: widget.data,
-                            amountTransferred: reversedEarnings[index]
-                                ['amountTransferred'],
-                            dateTransferred: reversedEarnings[index]
-                                ['datePaid'],
-                          );
-                        })
+                  itemCount: earnings.length > 3 ? 3 : earnings.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      height: 10,
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    return EarningCard(
+                      data: widget.data,
+                      amountTransferred: reversedEarnings[index]['amountTransferred'],
+                      dateTransferred: reversedEarnings[index]['datePaid'],
+                    );
+                  },
+                )
                     : Center(
-                        child: Container(
-                          margin: const EdgeInsets.all(45),
-                          child: const Text(
-                            'No Earnings Yet',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ),
-                      ),
+                  child: Container(
+                    margin: const EdgeInsets.all(45),
+                    child: const Text(
+                      'No Earnings Yet',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                ),
+
                 const SizedBox(
                   height: 0,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Text("Recent Transactions"),
-                    Flexible(
-                        child: Container(
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        onTap: () => Navigator.push(context,
-                            MaterialPageRoute(builder: (BuildContext context) {
-                          return TransactionHistory(
-                              data: widget.data, transactions: transactions);
-                        })),
-                        child: const Text("View all",
-                            style: TextStyle(color: customPurple)),
-                      ),
-                    )),
-                  ],
-                ),
-                const SizedBox(
-                  height: 0,
-                ),
-                transactions != []
-                    ? ListView.separated(
-                        itemCount: transactions.length,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(
-                            height: 10,
-                          );
-                        },
-                        itemBuilder: (context, index) {
-                          return TransactionCard(
-                            data: widget.data,
-                            depositAmount: reversedTransactions[index]['data']
-                                    ['amount'] /
-                                100,
-                            depositDate: reversedTransactions[index]['data']
-                                ['paid_at'],
-                          );
-                        })
-                    : Center(
-                        child: Container(
-                          margin: const EdgeInsets.all(45),
-                          child: const Text(
-                            'No Transactions Yet',
-                            style: TextStyle(fontSize: 15),
-                          ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Text("Recent Transactions"),
+                Flexible(
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return TransactionHistory(
+                              data: widget.data,
+                              transactions: transactions,
+                            );
+                          },
                         ),
                       ),
+                      child: const Text(
+                        "View all",
+                        style: TextStyle(color: customPurple),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 0,
+            ),
+            transactions.isNotEmpty
+                ? ListView.separated(
+              itemCount: transactions.length > 3 ? 3 : transactions.length,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              separatorBuilder: (context, index) {
+                return const SizedBox(
+                  height: 10,
+                );
+              },
+              itemBuilder: (context, index) {
+                return TransactionCard(
+                  data: widget.data,
+                  depositAmount:
+                  reversedTransactions[index]['data']['amount'] / 100,
+                  depositDate: reversedTransactions[index]['data']['paid_at'],
+                );
+              },
+            )
+                : Center(
+              child: Container(
+                margin: const EdgeInsets.all(45),
+                child: const Text(
+                  'No Transactions Yet',
+                  style: TextStyle(fontSize: 15),
+                ),
+              ),
+            ),
+
+           const SizedBox(
+            height: 10,
+          ),
               ],
             ),
           ),
