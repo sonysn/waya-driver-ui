@@ -77,8 +77,8 @@ class _HomePageState extends State<HomePage> {
       driverPhone = widget.data.phoneNumber;
       driverPhoto = widget.data.profilePhoto;
     });
-    print(vehicleName);
-    print(vehicleBodyType);
+    debugPrint(vehicleName);
+    debugPrint(vehicleBodyType);
   }
 
   Future<void> setSwitchValue(bool value) async {
@@ -89,12 +89,14 @@ class _HomePageState extends State<HomePage> {
   Future<void> getSwitchValue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? isOnlineSaved = prefs.getBool('isOnline');
-    setState(() {
-      onlineStatus = isOnlineSaved!;
-    });
+
     if (isOnlineSaved == null) {
       setState(() {
         onlineStatus = false;
+      });
+    } else {
+      setState(() {
+        onlineStatus = isOnlineSaved;
       });
     }
     if (isOnlineSaved == true) {
@@ -138,7 +140,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -204,11 +205,9 @@ class _HomePageState extends State<HomePage> {
                       )
                     ],
                   ),
-
                   const SizedBox(
                     height: 30,
                   ),
-
                   GestureDetector(
                     onTap: () async {
                       setState(() {
@@ -291,7 +290,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-
                   GestureDetector(
                     onTap: () {
                       // Navigator.push(context,
@@ -304,10 +302,6 @@ class _HomePageState extends State<HomePage> {
                       //width: 20,
                     ),
                   ),
-                  //todo put picture as asset image, J do the next card.
-
-                  //TODO PLEASE READ TODOS THANKS!
-                  // TODO try not to use fitted box unnecessarily, especially with things with no solid dimensions. ALSO ask when that issue with overflowing screen arises
                   SizedBox(
                     height: 150,
                     width: MediaQuery.of(context).size.width / 1.1,
@@ -384,7 +378,6 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 30,
                   ),
-
                   FittedBox(
                     fit: BoxFit.fitWidth,
                     child: SizedBox(

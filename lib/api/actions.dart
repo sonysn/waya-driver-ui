@@ -84,11 +84,13 @@ Future acceptRide(
       }));
 }
 
-Future locationPing({required int driverID, required locationPoint}) async {
+Future locationPing(
+    {required int driverID, required locationPoint, required timeStamp}) async {
   final http.Response response = await http.post(
       Uri.parse('$baseUri/$driverID${ApiConstants.locationUpdatePingEndpoint}'),
       headers: {
         "Content-Type": "application/json",
       },
-      body: json.encode({'locationPoint': locationPoint}));
+      body: json
+          .encode({'locationPoint': locationPoint, 'timeStamp': timeStamp}));
 }
