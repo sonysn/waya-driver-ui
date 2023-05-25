@@ -225,15 +225,15 @@ class _SettingTabState extends State<SettingTab> {
                       try {
                         final response = await logOut(widget.data.id);
                         if (response == 'logout success') {
-                          cancelLocationCallbacks();
-                          ConnectToServer().disconnect();
-                          updateAvailability(0, widget.data.id);
+                          await cancelLocationCallbacks();
+                          await ConnectToServer().disconnect();
+                          await updateAvailability(0, widget.data.id);
                           // Remove the content of emailOrPhone and password
-                          prefs.remove('emailOrPhone');
-                          prefs.remove('password');
-                          prefs.remove('deviceID');
-                          prefs.remove('driverID');
-                          prefs.remove('isOnline');
+                          await prefs.remove('emailOrPhone');
+                          await prefs.remove('password');
+                          await prefs.remove('deviceID');
+                          await prefs.remove('driverID');
+                          await prefs.remove('isOnline');
                           nav();
                         }
                       } on SocketException catch (e) {
