@@ -6,7 +6,6 @@ import 'package:waya_driver/screens/welcomepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../api/auth.dart';
 import 'bottom_nav.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
