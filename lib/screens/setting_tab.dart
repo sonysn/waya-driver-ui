@@ -237,15 +237,15 @@ class _SettingTabState extends State<SettingTab> {
                           nav();
                         }
                       } on SocketException catch (e) {
-                        print(e);
+                        debugPrint(e.toString());
                         showSnackBar(
                             'Logout failed. Please check your internet connection.');
                       } on TimeoutException catch (e) {
-                        print(e);
+                        debugPrint(e.toString());
                         showSnackBar(
                             'Request timed out. Please try again later.');
                       } catch (e) {
-                        print(e);
+                        debugPrint(e.toString());
                       }
                     }
 
