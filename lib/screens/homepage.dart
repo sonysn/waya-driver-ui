@@ -457,26 +457,41 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 20,
                   ),
-         SizedBox(
-          height: MediaQuery.of(context).size.height / 6,
-          child: Card(
-              elevation: 15,
-              child: Stack(
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                                "https://img.freepik.com/premium-vector/taxi-city_1270-526.jpg?w=2000"))),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 6,
+                    child: Card(
+                      elevation: 15,
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(
+                                  "https://img.freepik.com/premium-vector/taxi-city_1270-526.jpg?w=2000",
+                                ),
+                              ),
+                            ),
+                          ),
+                          FutureBuilder(
+                            future: Future.delayed(const Duration(milliseconds: 500)), // Simulating a delay
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.orangeAccent),
+                                  ),
+                                );
+                              } else {
+                                return const SizedBox(); // Render nothing when image is loaded
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-            const CircularProgressIndicator(
-      color: Colors.black,
-      strokeWidth: 2,
-      ),
-                ],
-              )),
-        ),
+
 
                 ],
               ),
