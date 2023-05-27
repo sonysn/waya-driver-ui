@@ -56,7 +56,7 @@ class _BottomNavPageState extends State<BottomNavPage> {
         currentIndex: _currentIndex,
         onTap: onItemTapped,
         backgroundColor: Colors.white,
-        selectedItemColor: Colors.yellow,
+        selectedItemColor: customPurple,
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
         //type allows you have more than 1 item in bottom navigator
         type: BottomNavigationBarType.fixed,

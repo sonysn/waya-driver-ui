@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:waya_driver/functions/notification_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
+import '../../../colorscheme.dart';
 import '../api/actions.dart';
 import '../sockets/sockets.dart';
 
@@ -381,91 +381,68 @@ class _HomePageState extends State<HomePage> {
                   FittedBox(
                     fit: BoxFit.fitWidth,
                     child: SizedBox(
-                        height: 80,
-                        width: MediaQuery.of(context).size.width,
-                        child: Card(
-                          color: Colors.white,
-                          elevation: 5,
-                          shape: const RoundedRectangleBorder(
+                      height: 80,
+                      width: MediaQuery.of(context).size.width,
+                      child: Card(
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(15),
+                            bottom: Radius.circular(15),
+                          ),
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [customPurple, Colors.orangeAccent],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
                             borderRadius: BorderRadius.vertical(
                               top: Radius.circular(15),
                               bottom: Radius.circular(15),
                             ),
-                            //      side: BorderSide(color: Colors.yellow, width: 1),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 5,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(15.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: Row(
                               children: [
-                                const SizedBox(
-                                  width: 5,
+                                Container(
+                                  width: 4,
+                                  color: Colors.white,
                                 ),
-                                const Icon(Icons.wallet),
-                                const SizedBox(
-                                  width: 75,
+                                SizedBox(width: 10),
+                                Icon(
+                                  Icons.wallet,
+                                  color: Colors.white,
                                 ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      'Your Balance',
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                    Text(
-                                      "₦${widget.data.accountBalance}",
-                                      style: const TextStyle(fontSize: 15),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        )),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width - 20,
-                        child: Card(
-                          color: Colors.white,
-                          elevation: 5,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(15),
-                              bottom: Radius.circular(15),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(1.0),
-                            child: Row(
-                              children: [
-                                const SizedBox(width: 5),
+                                SizedBox(width: 15),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    CachedNetworkImage(
-                                      imageUrl:
-                                      'https://www.sygic.com/blog/2019/we-have-android-smartphone-in-dash-connectivity-but-not-for-android-auto/web-blog.jpg',
-                                      fit: BoxFit.fill,
-                                      height: 120,
-                                      width:
-                                      MediaQuery.of(context).size.width - 40,
-                                      placeholder: (context, url) => SizedBox(
-                                        width: 20,
-                                        height: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2, // Adjust the strokeWidth to make the loader smaller
-                                        ),
+                                    Text(
+                                      'Your Balance',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      errorWidget: (context, url, error) =>
-                                          Icon(Icons.error), // Error widget when the image fails to load
+                                    ),
+                                    Text(
+                                      "₦${widget.data.accountBalance}",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -475,7 +452,32 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
+                  )
+                  ,
+                  const SizedBox(
+                    height: 20,
                   ),
+         SizedBox(
+          height: MediaQuery.of(context).size.height / 6,
+          child: Card(
+              elevation: 15,
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(
+                                "https://img.freepik.com/premium-vector/taxi-city_1270-526.jpg?w=2000"))),
+                  ),
+            const CircularProgressIndicator(
+      color: Colors.black,
+      strokeWidth: 2,
+      ),
+                ],
+              )),
+        ),
+
                 ],
               ),
             )

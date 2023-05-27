@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import '../../../colorscheme.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:waya_driver/api/actions.dart';
@@ -231,11 +231,11 @@ class RideRequestCard extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.green,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
+                    primary: customPurple,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
                   child: const Text(
                     'Accept',

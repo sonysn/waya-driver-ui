@@ -5,23 +5,19 @@ class TransactionCard extends StatefulWidget {
   final dynamic data;
   final double depositAmount;
   final dynamic depositDate;
-  const TransactionCard(
-      {Key? key, this.data, required this.depositAmount, this.depositDate})
-      : super(key: key);
+
+  const TransactionCard({
+    Key? key,
+    required this.data,
+    required this.depositAmount,
+    this.depositDate,
+  }) : super(key: key);
 
   @override
   State<TransactionCard> createState() => _TransactionCardState();
 }
 
 class _TransactionCardState extends State<TransactionCard> {
-  void formatDate(String dateString) {
-    DateTime date = DateTime.parse(dateString);
-    DateFormat formatter = DateFormat('dd-MM-yyyy');
-    setState(() {
-      depositDateFormatted = formatter.format(date);
-    });
-  }
-
   String? depositDateFormatted;
 
   @override
@@ -30,13 +26,24 @@ class _TransactionCardState extends State<TransactionCard> {
     formatDate(widget.depositDate);
   }
 
+  void formatDate(String? dateString) {
+    if (dateString != null) {
+      DateTime date = DateTime.parse(dateString);
+      DateFormat formatter = DateFormat('dd-MM-yyyy');
+      setState(() {
+        depositDateFormatted = formatter.format(date);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.grey)),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.grey),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -51,18 +58,18 @@ class _TransactionCardState extends State<TransactionCard> {
                 ),
                 child: widget.data.profilePhoto != "null"
                     ? ClipOval(
-                        child: Image.network(
-                          '${widget.data.profilePhoto}',
-                          fit: BoxFit.cover,
-                          width: 50.0,
-                          height: 50.0,
-                        ),
-                      )
+                  child: Image.network(
+                    '${widget.data.profilePhoto}',
+                    fit: BoxFit.cover,
+                    width: 50.0,
+                    height: 50.0,
+                  ),
+                )
                     : const Icon(
-                        Icons.account_circle,
-                        size: 50.0,
-                        color: Colors.black,
-                      ),
+                  Icons.account_circle,
+                  size: 50.0,
+                  color: Colors.black,
+                ),
               ),
               const SizedBox(
                 width: 5,
@@ -83,7 +90,7 @@ class _TransactionCardState extends State<TransactionCard> {
                     style: const TextStyle(fontSize: 20),
                   ),
                   Text(
-                    depositDateFormatted!,
+                    depositDateFormatted ?? '',
                   ),
                 ],
               ),
