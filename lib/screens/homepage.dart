@@ -20,13 +20,14 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-//DO NOT DISTURB
+//!DO NOT DISTURB
 String? vehicleName;
 String? vehiclePlateNumber;
 String? vehicleColour;
 String? vehicleBodyType;
 String? driverPhone;
 String? driverPhoto;
+int? driverID;
 
 class _HomePageState extends State<HomePage> {
   void findLoc() async {
@@ -76,6 +77,7 @@ class _HomePageState extends State<HomePage> {
       vehicleBodyType = res['result'][0]['VEHICLE_BODY_TYPE'];
       driverPhone = widget.data.phoneNumber;
       driverPhoto = widget.data.profilePhoto;
+      driverID = widget.data.id;
     });
     debugPrint(vehicleName);
     debugPrint(vehicleBodyType);
@@ -114,11 +116,21 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // Future<void> getCurrentRides() async {
+  //   final response = await driverGetCurrentRides(driverID: widget.data.id);
+  //   setState(() {
+  //     currentRidesArray.add(response);
+  //   });
+  //   //TODO: JOHN FINISH THIS
+  //   print(currentRidesArray);
+  // }
+
   dynamic currentLocation;
   StreamController controller = StreamController();
   bool onlineStatus = false;
   DateTime?
       _lastPressedAt; // for tracking the time of the last back button press
+  //List currentRidesArray = [];
 
   @override
   void initState() {
@@ -126,6 +138,7 @@ class _HomePageState extends State<HomePage> {
     //findLoc();
     locationPingServer();
     getSwitchValue();
+    //getCurrentRides();
     //getCar();
 
     // Request permission for receiving push notifications (only for iOS)
@@ -452,8 +465,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                  )
-                  ,
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -474,12 +486,15 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           FutureBuilder(
-                            future: Future.delayed(const Duration(milliseconds: 500)), // Simulating a delay
+                            future: Future.delayed(const Duration(
+                                milliseconds: 500)), // Simulating a delay
                             builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
                                 return Center(
                                   child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.orangeAccent),
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.orangeAccent),
                                   ),
                                 );
                               } else {
@@ -491,8 +506,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-
-
+                  // ListView.builder(itemBuilder: (context, index){
+                  //   return
+                  // })
                 ],
               ),
             )

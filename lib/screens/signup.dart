@@ -83,8 +83,8 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future getVehicleData() async {
-    final http.Response response =
-        await http.get(Uri.parse('https://car-makers-2.onrender.com/'));
+    final http.Response response = await http
+        .get(Uri.parse('https://sea-lion-app-m46xn.ondigitalocean.app/'));
     final data = await jsonDecode(response.body);
     //print(data[0]['MAKE']);
     print(data[0]['MODELS'][0]);
@@ -93,6 +93,26 @@ class _SignUpState extends State<SignUp> {
       setState(() {
         vehicleMakeItemList.add(data[i]['MAKE']);
         //vehicleModelItemListAllFromServer.addAll(data[i]['MODELS']);
+      });
+    }
+  }
+
+  Future<void> _fetchSuggestions(String input) async {
+    const apiKey = '//TODO: PUT API KEY HERE'; // Replace with your own API key
+    const countryCode = "NG";
+    final url =
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&components=country:$countryCode&key=$apiKey';
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final predictions = data['predictions'] as List<dynamic>;
+      final suggestions = predictions
+          .map((prediction) => prediction['description'] as String)
+          .toList();
+
+      setState(() {
+        _suggestions = suggestions;
       });
     }
   }
@@ -179,6 +199,8 @@ class _SignUpState extends State<SignUp> {
     "Pickup Truck",
     "Van"
   ];
+  List<String> _suggestions = [];
+  bool isTyping = false;
 
   @override
   void initState() {
@@ -712,6 +734,7 @@ class _SignUpState extends State<SignUp> {
                                   border: Border.all(color: Colors.black),
                                 ),
                                 child: TextFormField(
+                                  onChanged: _fetchSuggestions,
                                   controller: homeAddress,
                                   cursorColor: customPurple,
                                   keyboardType: TextInputType.multiline,
@@ -732,13 +755,39 @@ class _SignUpState extends State<SignUp> {
                                     }
                                     return null;
                                   },
+                                  onTap: () {
+                                    setState(() {
+                                      isTyping = true;
+                                    });
+                                  },
                                 ),
                               ),
                             ],
                           ),
                         ),
-
-                        const SizedBox(height: 10),
+                        if (isTyping)
+                          SizedBox(
+                            height: 120,
+                            child: Expanded(
+                              child: ListView.builder(
+                                itemCount: _suggestions.length,
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                    title: Text(_suggestions[index]),
+                                    onTap: () {
+                                      homeAddress.text = _suggestions[index];
+                                      setState(() {
+                                        isTyping = false;
+                                        _suggestions = []; // Clear suggestions
+                                      });
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          )
+                        else
+                          const SizedBox(height: 10),
                         const Padding(
                           padding: EdgeInsets.only(left: 12),
                           child: Text(
@@ -791,7 +840,7 @@ class _SignUpState extends State<SignUp> {
                                         Future getVehicleData2() async {
                                           final http.Response response =
                                               await http.get(Uri.parse(
-                                                  'https://car-makers-2.onrender.com/'));
+                                                  'https://sea-lion-app-m46xn.ondigitalocean.app/'));
                                           final data =
                                               await jsonDecode(response.body);
                                           //print(data[0]['MAKE']);

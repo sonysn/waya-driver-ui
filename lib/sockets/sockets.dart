@@ -27,7 +27,7 @@ class ConnectToServer {
 
   //configure socket transport
   Socket socket = io(
-    //api link here
+      //api link here
       ApiConstants.baseUrl,
       OptionBuilder()
           .setTransports(['websocket'])
@@ -59,11 +59,13 @@ class ConnectToServer {
               builder: (BuildContext context) {
                 //TODO PUT GEOCODING TO REVERSE THE DROP OFF LOCATION
                 return RideRequestCard(
-                    riderId: data['userId'],
-                    name: 'John Doe',
-                    pickupLocation: data['pickupLocation'],
-                    dropoffLocation: data['dropoffLocation'],
-                    fare: data['estFare']);
+                  riderId: data['userId'],
+                  name: 'John Doe',
+                  pickupLocation: data['pickupLocation'],
+                  dropoffLocation: data['dropoffLocation'],
+                  fare: data['estFare'],
+                  riderPhoneNumber: data['riderPhone'],
+                );
               },
             );
           } catch (e) {
@@ -110,6 +112,7 @@ class RideRequestCard extends StatelessWidget {
   final String pickupLocation;
   final String dropoffLocation;
   final int fare;
+  final String riderPhoneNumber;
 
   const RideRequestCard({
     Key? key,
@@ -118,6 +121,7 @@ class RideRequestCard extends StatelessWidget {
     required this.pickupLocation,
     required this.dropoffLocation,
     required this.fare,
+    required this.riderPhoneNumber,
   }) : super(key: key);
 
   @override
@@ -176,7 +180,6 @@ class RideRequestCard extends StatelessWidget {
                         Flexible(
                           child: Text(
                             ' $pickupLocation',
-
                             style: const TextStyle(
                               fontSize: 14,
                             ),
@@ -221,14 +224,19 @@ class RideRequestCard extends StatelessWidget {
                 const SizedBox(height: 5),
                 ElevatedButton(
                   onPressed: () {
+                    //!some of this data comes from the home page
                     acceptRide(
-                      riderId: riderId,
-                      driverPhoto: driverPhoto,
-                      driverPhone: driverPhone,
-                      vehicleName: vehicleName,
-                      vehiclePlateNumber: vehiclePlateNumber,
-                      vehicleColour: vehicleColour,
-                    );
+                        riderId: riderId,
+                        riderPhoneNumber: riderPhoneNumber,
+                        driverId: driverID,
+                        driverPhoto: driverPhoto,
+                        driverPhone: driverPhone,
+                        vehicleName: vehicleName,
+                        vehiclePlateNumber: vehiclePlateNumber,
+                        vehicleColour: vehicleColour,
+                        destinationLocation: dropoffLocation,
+                        pickUpLocation: pickupLocation,
+                        fare: fare);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: customPurple,
@@ -272,6 +280,5 @@ class RideRequestCard extends StatelessWidget {
         );
       },
     );
-
   }
 }

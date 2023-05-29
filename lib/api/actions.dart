@@ -64,11 +64,16 @@ Future transfer(amount, receivingNum, sendingNum) async {
 
 Future acceptRide(
     {required int riderId,
+    required String riderPhoneNumber,
+    required int? driverId,
     required String? driverPhoto,
     required String? driverPhone,
     required String? vehicleName,
     required String? vehiclePlateNumber,
-    required String? vehicleColour}) async {
+    required String? vehicleColour,
+    required String? pickUpLocation,
+    required String? destinationLocation,
+    required int fare}) async {
   final http.Response response = await http.post(
       Uri.parse('$baseUri${ApiConstants.driverAcceptRideEndpoint}'),
       headers: {
@@ -76,11 +81,16 @@ Future acceptRide(
       },
       body: json.encode({
         'riderID': riderId,
+        'riderPhoneNumber': riderPhoneNumber,
+        'driverID': driverId,
         'driverPhoto': driverPhoto,
         'vehicleName': vehicleName,
         'vehiclePlateNumber': vehiclePlateNumber,
         'vehicleColour': vehicleColour,
-        'driverPhone': driverPhone
+        'driverPhone': driverPhone,
+        'pickUpLocation': pickUpLocation,
+        'destinationLocation': destinationLocation,
+        'fare': fare,
       }));
 }
 
@@ -93,4 +103,15 @@ Future locationPing(
       },
       body: json
           .encode({'locationPoint': locationPoint, 'timeStamp': timeStamp}));
+}
+
+Future driverGetCurrentRides({required int driverID}) async {
+  final http.Response response = await http.get(
+      Uri.parse(
+          '$baseUri/$driverID${ApiConstants.driverGetCurrentRidesEndpoint}'),
+      headers: {
+        "Content-Type": "application/json",
+      });
+  final data = await jsonDecode(response.body);
+  return data;
 }
