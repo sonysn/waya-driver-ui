@@ -147,7 +147,9 @@ class _HomePageState extends State<HomePage> {
     // Configure Firebase Messaging & Show Notification
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('Received message: ${message.notification?.title}');
-      NotificationService().showNotification('${message.notification?.title}');
+      NotificationService().showRideNotification(
+          dataTitle: '${message.notification?.title}',
+          dataBody: '${message.notification?.body}');
     });
   }
 

@@ -7,8 +7,8 @@ class NotificationService {
   Future<void> initialize() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('app_icon');
-    final DarwinInitializationSettings initializationSettingsIOS =
-        DarwinInitializationSettings();
+    DarwinInitializationSettings initializationSettingsIOS =
+        const DarwinInitializationSettings();
     final InitializationSettings initializationSettings =
         InitializationSettings(
             android: initializationSettingsAndroid,
@@ -16,16 +16,21 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  Future<void> showNotification(String data) async {
+  Future<void> showRideNotification(
+      {required String dataTitle, required String dataBody}) async {
+    //This variable is used to allow getures on multiline notifications
+    var bigTextStyleInformation = BigTextStyleInformation(dataBody);
     //for android
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-            'New Notification', // The title of the notification
-            'Shows a notification when new data is received',
-            // The description of the notification
-            importance: Importance.max,
-            priority: Priority.high,
-            ticker: 'ticker');
+      'New Notification', // The title of the notification
+      'Shows a notification when new data is received',
+      // The description of the notification
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+      styleInformation: bigTextStyleInformation, // Style
+    );
 
     //for ios
     const DarwinNotificationDetails iosPlatformChannelSpecifics =
@@ -37,12 +42,12 @@ class NotificationService {
             sound: 'default',
             badgeNumber: 1);
 
-    NotificationDetails platformChannelSpecifics = const NotificationDetails(
+    NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
       iOS: iosPlatformChannelSpecifics,
     );
     await flutterLocalNotificationsPlugin.show(
-        0, 'New Ride Received', data, platformChannelSpecifics,
+        0, dataTitle, dataBody, platformChannelSpecifics,
         payload: 'new_notification');
   }
 }
