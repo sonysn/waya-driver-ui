@@ -116,21 +116,20 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  // Future<void> getCurrentRides() async {
-  //   final response = await driverGetCurrentRides(driverID: widget.data.id);
-  //   setState(() {
-  //     currentRidesArray.add(response);
-  //   });
-  //   //TODO: JOHN FINISH THIS
-  //   print(currentRidesArray);
-  // }
+  Future<void> getCurrentRides() async {
+    final response = await driverGetCurrentRides(driverID: widget.data.id);
+    setState(() {
+      currentRidesArray.add(response);
+    });
+    print(currentRidesArray);
+  }
 
   dynamic currentLocation;
   StreamController controller = StreamController();
   bool onlineStatus = false;
   DateTime?
       _lastPressedAt; // for tracking the time of the last back button press
-  //List currentRidesArray = [];
+  List currentRidesArray = [];
 
   @override
   void initState() {
@@ -400,7 +399,7 @@ class _HomePageState extends State<HomePage> {
                       width: MediaQuery.of(context).size.width,
                       child: Card(
                         elevation: 5,
-                        shape: RoundedRectangleBorder(
+                        shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
                             top: Radius.circular(15),
                             bottom: Radius.circular(15),
@@ -408,12 +407,12 @@ class _HomePageState extends State<HomePage> {
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
+                            gradient: const LinearGradient(
                               colors: [customPurple, Colors.orangeAccent],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
-                            borderRadius: BorderRadius.vertical(
+                            borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(15),
                               bottom: Radius.circular(15),
                             ),
@@ -421,7 +420,7 @@ class _HomePageState extends State<HomePage> {
                               BoxShadow(
                                 color: Colors.black.withOpacity(0.1),
                                 blurRadius: 5,
-                                offset: Offset(0, 2),
+                                offset: const Offset(0, 2),
                               ),
                             ],
                           ),
@@ -433,17 +432,17 @@ class _HomePageState extends State<HomePage> {
                                   width: 4,
                                   color: Colors.white,
                                 ),
-                                SizedBox(width: 10),
-                                Icon(
+                                const SizedBox(width: 10),
+                                const Icon(
                                   Icons.wallet,
                                   color: Colors.white,
                                 ),
-                                SizedBox(width: 15),
+                                const SizedBox(width: 15),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Your Balance',
                                       style: TextStyle(
                                         fontSize: 18,
@@ -453,7 +452,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Text(
                                       "₦${widget.data.accountBalance}",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 15,
                                         color: Colors.white,
                                         fontWeight: FontWeight.w500,
@@ -493,7 +492,7 @@ class _HomePageState extends State<HomePage> {
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return Center(
+                                return const Center(
                                   child: CircularProgressIndicator(
                                     valueColor: AlwaysStoppedAnimation<Color>(
                                         Colors.orangeAccent),
@@ -508,9 +507,22 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  // ListView.builder(itemBuilder: (context, index){
-                  //   return
-                  // })
+                  ListView.builder(itemBuilder: (context, index) {
+                    return Container(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Text('Fare: ${currentRidesArray[index]['fare']}'),
+                          Text(
+                              'Rider Phone Number: ${currentRidesArray[index]['riderPhoneNumber']}'),
+                          Text(
+                              'Starting Location: ${currentRidesArray[index]['pickUpLocation']}'),
+                          Text(
+                              'Ending Location: ${currentRidesArray[index]['destinationLocation']}')
+                        ],
+                      ),
+                    );
+                  })
                 ],
               ),
             )
