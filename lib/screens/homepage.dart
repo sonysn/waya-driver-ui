@@ -119,7 +119,8 @@ class _HomePageState extends State<HomePage> {
   Future<void> getCurrentRides() async {
     final response = await driverGetCurrentRides(driverID: widget.data.id);
     setState(() {
-      currentRidesArray.add(response);
+      // currentRidesArray.add(response);
+      currentRidesArray = response;
     });
     print(currentRidesArray);
   }
@@ -137,7 +138,7 @@ class _HomePageState extends State<HomePage> {
     //findLoc();
     locationPingServer();
     getSwitchValue();
-    //getCurrentRides();
+    getCurrentRides();
     //getCar();
 
     // Request permission for receiving push notifications (only for iOS)
@@ -507,22 +508,35 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  ListView.builder(itemBuilder: (context, index) {
-                    return Container(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Text('Fare: ${currentRidesArray[index]['fare']}'),
-                          Text(
-                              'Rider Phone Number: ${currentRidesArray[index]['riderPhoneNumber']}'),
-                          Text(
-                              'Starting Location: ${currentRidesArray[index]['pickUpLocation']}'),
-                          Text(
-                              'Ending Location: ${currentRidesArray[index]['destinationLocation']}')
-                        ],
-                      ),
-                    );
-                  })
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
+                    height:
+                        //This code below get the lenght of the array, sets it to a string and parse it as a double and multiplies it with
+                        //70 to give the height, this is to make the height as dynamic as possible.
+                        70 * double.parse(currentRidesArray.length.toString()),
+                    child: ListView.builder(
+                        itemCount: currentRidesArray.length,
+                        itemBuilder: (context, index) {
+                          // int id = 0;
+                          return Container(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Text(
+                                    'Fare: ${currentRidesArray[index]['fare']}'),
+                                Text(
+                                    'Rider Phone Number: ${currentRidesArray[index]['riderPhoneNumber']}'),
+                                Text(
+                                    'Starting Location: ${currentRidesArray[index]['pickUpLocation']}'),
+                                Text(
+                                    'Ending Location: ${currentRidesArray[index]['destinationLocation']}')
+                              ],
+                            ),
+                          );
+                        }),
+                  )
                 ],
               ),
             )
