@@ -25,9 +25,9 @@ class _TransactionHistoryState extends State<TransactionHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
+      body: Column(
         children: [
-          const SizedBox(
+          SizedBox(
             height: 10,
           ),
           Row(
@@ -37,40 +37,28 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: const Icon(
+                icon: Icon(
                   Icons.arrow_back,
                   size: 25,
                   color: Colors.black,
                 ),
               ),
-              const Text(
+              Text(
                 'Transaction History',
                 style: TextStyle(fontSize: 30),
               ),
             ],
           ),
-          Container(
-            padding: const EdgeInsets.only(top: 40),
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                widget.transactions.isEmpty
-                    ? const Center(
-                  child: Text(
-                    'No transactions',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                )
-                    : ListView.separated(
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.only(top: 40),
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal, // Set scroll direction to horizontal
+                child: ListView.builder(
                   itemCount: widget.transactions.length,
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      height: 10,
-                    );
-                  },
+                  physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     return TransactionCard(
                       data: widget.data,
@@ -79,10 +67,10 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                     );
                   },
                 ),
-              ],
+              ),
             ),
           ),
-          const SizedBox(
+          SizedBox(
             height: 10,
           ),
         ],

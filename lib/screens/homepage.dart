@@ -4,13 +4,14 @@ import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:waya_driver/functions/location_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:waya_driver/screens/widgets/transaction_card.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:waya_driver/functions/notification_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../colorscheme.dart';
 import '../api/actions.dart';
 import '../sockets/sockets.dart';
-
+import 'package:waya_driver/screens/widgets/activeride.dart';
 class HomePage extends StatefulWidget {
   dynamic data;
 
@@ -511,32 +512,9 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  SizedBox(
-                    height:
-                        //This code below get the lenght of the array, sets it to a string and parse it as a double and multiplies it with
-                        //70 to give the height, this is to make the height as dynamic as possible.
-                        70 * double.parse(currentRidesArray.length.toString()),
-                    child: ListView.builder(
-                        itemCount: currentRidesArray.length,
-                        itemBuilder: (context, index) {
-                          // int id = 0;
-                          return Container(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Text(
-                                    'Fare: ${currentRidesArray[index]['fare']}'),
-                                Text(
-                                    'Rider Phone Number: ${currentRidesArray[index]['riderPhoneNumber']}'),
-                                Text(
-                                    'Starting Location: ${currentRidesArray[index]['pickUpLocation']}'),
-                                Text(
-                                    'Ending Location: ${currentRidesArray[index]['destinationLocation']}')
-                              ],
-                            ),
-                          );
-                        }),
-                  )
+                  DriverWidget(
+                    data: widget.data,
+                  ),
                 ],
               ),
             )
