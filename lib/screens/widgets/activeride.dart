@@ -58,128 +58,124 @@ class _DriverWidgetState extends State<DriverWidget> {
                 bottom: Radius.circular(15),
               ),
             ),
-            child: Material(
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(15),
-                  bottom: Radius.circular(15),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        right: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-                    padding: EdgeInsets.only(right: 16.0),
-                    child: Icon(
-                      Icons.phone,
-                      color: customPurple,
-                      size: 28,
+            child: Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      right: BorderSide(color: Colors.black, width: 1.0),
                     ),
                   ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.directions_car,
-                              color: Colors.black,
-                            ),
-                            SizedBox(width: 8.0),
-                            Expanded(
-                              child:  Text(
-                                "Your Trip",
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              "₦ ${currentRidesArray[index]['fare']}",
+                  padding: EdgeInsets.only(right: 16.0),
+                  child: Icon(
+                    Icons.phone,
+                    color: customPurple,
+                    size: 28,
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.directions_car,
+                            color: Colors.black,
+                          ),
+                          SizedBox(width: 8.0, height: 60,),
+                          Expanded(
+                            child:  Text(
+                              "Your Trip",
                               style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
-                                color: customPurple,
+                                color: Colors.black,
                               ),
                             ),
-                          ],
-                        ),
-                        SizedBox(height: 8.0),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.location_on,
-                              color: Colors.black,
-                              size: 16,
+                          ),
+                          Text(
+                            "₦ ${currentRidesArray[index]['fare']}",
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: customPurple,
                             ),
-                            SizedBox(width: 8.0),
-                            Flexible(
-                              child: Text(
-                                currentRidesArray[index]['pickUpLocation'],
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.black,
-                                ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8.0),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on,
+                            color: Colors.black,
+                            size: 16,
+                          ),
+                          SizedBox(width: 8.0),
+                          Flexible(
+                            child: Text(
+                              currentRidesArray[index]['pickUpLocation'],
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
                               ),
                             ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.location_on,
-                              color: Colors.black,
-                              size: 16,
-                            ),
-                            SizedBox(width: 8.0),
-                            Flexible(
-                              child:  Text(
-                                currentRidesArray[index]['destinationLocation'],
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),Container(
-                              width: double.infinity,
-                              height: 60, // Increased elevated button height
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  primary: customPurple,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                ),
-                                child: Text(
-                                  "Cancel",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on,
+                            color: Colors.black,
+                            size: 16,
+                          ),
+                          SizedBox(width: 8.0),
+                          Flexible(
+                            child:  Text(
+                              currentRidesArray[index]['destinationLocation'],
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
                               ),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         SizedBox(height: 16.0), // Added spacing between containers
-
+        Container(
+          height: 4.0, // Increased separator height
+          color: Colors.black,
+        ),
+        SizedBox(height: 16.0), // Added spacing between separator and button
+        Container(
+          width: double.infinity,
+          height: 60, // Increased elevated button height
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              primary: customPurple,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+            ),
+            child: Text(
+              "Cancel",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
