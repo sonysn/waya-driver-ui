@@ -60,11 +60,13 @@ class ConnectToServer {
                 //TODO PUT GEOCODING TO REVERSE THE DROP OFF LOCATION
                 return RideRequestCard(
                   riderId: data['userId'],
-                  name: 'John Doe',
+                  name: 'Someone',
                   pickupLocation: data['pickupLocation'],
                   dropoffLocation: data['dropoffLocation'],
                   fare: data['estFare'],
                   riderPhoneNumber: data['riderPhone'],
+                  pickupLocationPosition: data['pickupLocationPosition'],
+                  dropoffLocationPostion: data['dropoffLocationPostion'],
                 );
               },
             );
@@ -113,6 +115,8 @@ class RideRequestCard extends StatelessWidget {
   final String dropoffLocation;
   final int fare;
   final String riderPhoneNumber;
+  final List pickupLocationPosition;
+  final List dropoffLocationPostion;
 
   const RideRequestCard({
     Key? key,
@@ -122,6 +126,8 @@ class RideRequestCard extends StatelessWidget {
     required this.dropoffLocation,
     required this.fare,
     required this.riderPhoneNumber,
+    required this.pickupLocationPosition,
+    required this.dropoffLocationPostion,
   }) : super(key: key);
 
   @override
@@ -209,7 +215,7 @@ class RideRequestCard extends StatelessWidget {
                         ),
                         Flexible(
                           child: Text(
-                            '$dropoffLocation',
+                            dropoffLocation,
                             style: const TextStyle(
                               fontSize: 14,
                             ),
@@ -236,6 +242,8 @@ class RideRequestCard extends StatelessWidget {
                         vehicleColour: vehicleColour,
                         destinationLocation: dropoffLocation,
                         pickUpLocation: pickupLocation,
+                        pickupLocationPosition: pickupLocationPosition,
+                        dropoffLocationPostion: dropoffLocationPostion,
                         fare: fare);
                   },
                   style: ElevatedButton.styleFrom(
