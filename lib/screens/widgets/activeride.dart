@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:waya_driver/api/actions.dart';
-import 'package:flutter/material.dart';
 import 'package:waya_driver/screens/widgets/transaction_card.dart';
 import '../../../colorscheme.dart';
 
 class DriverWidget extends StatefulWidget {
   final dynamic data;
+
   const DriverWidget({Key? key, this.data}) : super(key: key);
 
   @override
@@ -51,134 +51,139 @@ class _DriverWidgetState extends State<DriverWidget> {
       children: [
         for (int index = 0; index < currentRidesArray.length; index++)
           Container(
-            padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-            height: 230,
+            margin: EdgeInsets.symmetric(vertical: 8.0),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1.0),
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(15),
-                bottom: Radius.circular(15),
-              ),
-            ),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                          right: BorderSide(color: Colors.black, width: 1.0),
-                        ),
-                      ),
-                      padding: EdgeInsets.only(right: 16.0),
-                      child: Icon(
-                        Icons.phone,
-                        color: customPurple,
-                        size: 28,
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.directions_car,
-                                color: Colors.black,
-                              ),
-                              SizedBox(width: 8.0, height: 60),
-                              Expanded(
-                                child: Text(
-                                  "Your Trip",
-                                  style: TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                "₦ ${currentRidesArray[index]['fare']}",
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: customPurple,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 8.0),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.location_on,
-                                color: Colors.black,
-                                size: 16,
-                              ),
-                              SizedBox(width: 8.0),
-                              Flexible(
-                                child: Text(
-                                  currentRidesArray[index]['pickUpLocation'],
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.location_on,
-                                color: Colors.black,
-                                size: 16,
-                              ),
-                              SizedBox(width: 8.0),
-                              Flexible(
-                                child: Text(
-                                  currentRidesArray[index]['destinationLocation'],
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16.0),
-                Container(
-                  width: double.infinity,
-                  height: 45,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      primary: customPurple,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                    ),
-                    child: Text(
-                      "End",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
+
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  blurRadius: 5,
+                  spreadRadius: 1,
                 ),
               ],
             ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+                    decoration: BoxDecoration(
+                      border: Border(
+
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.phone,
+                          color: customPurple,
+                          size: 28,
+                        ),
+                        SizedBox(width: 16.0),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.directions_car,
+                                    color: Colors.black,
+                                  ),
+                                  SizedBox(width: 8.0),
+                                  Expanded(
+                                    child: Text(
+                                      "Your Trip",
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    "₦ ${currentRidesArray[index]['fare']}",
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: customPurple,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 8.0),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on,
+                                    color: Colors.black,
+                                    size: 19,
+                                  ),
+                                  SizedBox(width: 8.0),
+                                  Flexible(
+                                    child: Text(
+                                      currentRidesArray[index]['pickUpLocation'],
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on,
+                                    color: Colors.black,
+                                    size: 16,
+                                  ),
+                                  SizedBox(width: 8.0),
+                                  Flexible(
+                                    child: Text(
+                                      currentRidesArray[index]['destinationLocation'],
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 45,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                      ),
+                      color: Colors.orangeAccent,
+                    ),
+                    child: TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        "End",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         SizedBox(height: 16.0),
-
       ],
     );
   }

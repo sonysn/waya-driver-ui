@@ -59,6 +59,8 @@ dev_dependencies:
   firebase_core: ^2.10.0
   firebase_messaging: ^14.4.1
 
+  flutter_svg: ^1.1.5
+
   animated_text_kit: ^4.2.2
   loading_animation_widget:
   # The "flutter_lints" package below contains a set of recommended lints to
