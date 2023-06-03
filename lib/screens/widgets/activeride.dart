@@ -1,100 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:waya/api/actions.dart';
-import 'package:waya/colorscheme.dart';
-<<<<<<< HEAD
-import 'package:waya/screens/loginpage.dart';
+import 'package:waya_driver/api/actions.dart';
+import 'package:waya_driver/screens/widgets/transaction_card.dart';
+import '../../../colorscheme.dart';
+
 class DriverWidget extends StatefulWidget {
   final dynamic data;
-  const DriverWidget({Key? key, this.data}) : super(key: key);
-=======
-import 'package:waya/screens/homepage.dart';
 
-class ActiveRide extends StatefulWidget {
-  final dynamic userID;
-  const ActiveRide({Key? key, this.userID}) : super(key: key);
->>>>>>> 04655fbe0af6b83b2b42a9dbbff0b9f818331efc
+  const DriverWidget({Key? key, this.data}) : super(key: key);
 
   @override
-  State<ActiveRide> createState() => _ActiveRideState();
+  State<DriverWidget> createState() => _DriverWidgetState();
 }
 
-class _ActiveRideState extends State<ActiveRide> {
-  Future getCurrentTripDetails() async {
-    final response = await getCurrentRide(userID: widget.userID);
-    //print(response);
-    if (response == null) {
-      setState(() {
-        driverPhoto = null;
-        driverVehicleName = null;
-        driverVehiclePlateNumber = null;
-        vehicleColour = null;
-        driverPhoneNumber = null;
-        pickUpLocation = null;
-        destination = null;
-        fare = null;
-        driverID = null;
-      });
-    } else {
-      setState(() {
-        driverPhoto = response['driverPhoto'];
-        driverVehicleName = response['vehicleName'];
-        driverVehiclePlateNumber = response['vehiclePlateNumber'];
-        vehicleColour = response['vehicleColour'];
-        driverPhoneNumber = response['driverPhone'];
-        pickUpLocation = response['pickUpLocation'];
-        destination = response['destinationLocation'];
-        fare = response['fare'];
-        driverID = response['driverID'];
-      });
-    }
+class _DriverWidgetState extends State<DriverWidget> {
+  Future<void> getCurrentRides() async {
+    final response = await driverGetCurrentRides(driverID: widget.data.id);
+    setState(() {
+      currentRidesArray = response;
+    });
+    print(currentRidesArray);
   }
 
-  Future riderCancelTrip() async {
-    final response =
-        await onRiderCancelRide(riderID: widget.userID, driverID: driverID!);
-    if (response == 200) {
-      setState(() {
-        driverPhoto = null;
-        driverVehicleName = null;
-        driverVehiclePlateNumber = null;
-        vehicleColour = null;
-        driverPhoneNumber = null;
-        pickUpLocation = null;
-        destination = null;
-        fare = null;
-        driverID = null;
-      });
-    }
-  }
-
-  void dialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Cancel Ride'),
-          content: const Text('Are you sure you want to cancel the ride?'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('No'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-            ),
-            TextButton(
-              child: const Text('Yes'),
-              onPressed: () {
-                // Perform cancel ride operation here
-                Navigator.of(context).pop(); // Close the dialog
-                riderCancelTrip();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  List currentRidesArray = [];
 
   //CURRENT TRIP DETAILS
   String? driverPhoto;
@@ -105,286 +33,332 @@ class _ActiveRideState extends State<ActiveRide> {
   String? pickUpLocation;
   String? destination;
   int? fare;
-  int? driverID;
   double? rating;
 
   @override
   void initState() {
     super.initState();
-    findLoc();
-    getCurrentTripDetails();
-    rating = 0;
-  }
-
-  Future _refreshItems() async {
-    findLoc();
-    getCurrentTripDetails();
-  }
-
-  void findLoc() {
-    // Implement the logic for finding location here
-  }
-
-  void _submitRating() {
-    // Implement the logic to submit the rating
-    print('Rating: $rating');
+    getCurrentRides();
   }
 
   @override
-  Widget build(BuildContext context) {
-    if (driverVehicleName != null) {
-      return Container(
-        width: double.infinity,
-        margin: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 5,
-              spreadRadius: 2,
+  void dispose() {
+    super.dispose();
+  }
+
+  void _endTrip() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          title: const Text(
+            'End Trip',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
             ),
-          ],
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: 110,
-                    height: 110,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        colors: [customPurple, Colors.orangeAccent],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                    ),
-                  ),
-                  CircleAvatar(
-                    radius: 45,
-                    backgroundImage: NetworkImage(driverPhoto!),
-                  ),
-                ],
+          ),
+          content: const Text(
+            'Are you sure you want to end the trip?',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                // Perform the end trip action
+              },
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                backgroundColor: Colors.orangeAccent,
               ),
-              Column(
-                children: [
-                  Text(
-                    driverVehicleName!,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    driverVehiclePlateNumber!,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: customPurple,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: IconButton(
-                      icon: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: customPurple.withOpacity(0.1),
-                        ),
-                        child: const Icon(
-                          Icons.phone,
-                          color: customPurple,
-                          size: 28,
-                        ),
-                      ),
-                      onPressed: () {
-                        launch("tel:$driverPhoneNumber");
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const Divider(
-                color: Colors.grey,
-                thickness: 3,
-              ),
-              const SizedBox(height: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 30,
-                        height: 30,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.black,
-                        ),
-                        child: const Icon(
-                          Icons.directions_car,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Text(
-                        "Your Trip",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 18.0),
-                        child: Text(
-                          "₦${fare.toString()}",
-                          style: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: customPurple,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Icon(
-                        Icons.location_on,
-                        color: Colors.black,
-                        size: 16,
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          pickUpLocation!,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 7.0),
-                    child: Container(
-                      width: 3,
-                      height: 20,
-                      color: Colors.black,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Icon(
-                        Icons.location_on,
-                        color: Colors.black,
-                        size: 18,
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          destination!,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(5, (index) {
-                  return IconButton(
-                    onPressed: () {
-                      setState(() {
-                        rating = index + 1.toDouble();
-                      });
-                      //print(rating);
-                    },
-                    icon: Icon(
-                      Icons.star,
-                      color: rating != null && index < rating!
-                          ? Colors.yellow
-                          : Colors.grey,
-                      size: 40,
-                    ),
-                  );
-                }),
-              ),
-              const SizedBox(height: 15),
-              Container(
-                width: double.infinity,
-                height: 45,
-                child: ElevatedButton(
-                  onPressed: () {
-<<<<<<< HEAD
-                    Navigator.of(context).push(
-                      PageRouteBuilder(
-                        transitionDuration: Duration(milliseconds: 500),
-                        pageBuilder: (BuildContext context, Animation<double> animation,
-                            Animation<double> secondaryAnimation) {
-                          return SlideTransition(
-                            position: Tween<Offset>(
-                              begin: Offset(1.0, 0.0),
-                              end: Offset.zero,
-                            ).animate(animation),
-                            child: LoginPage(),
-                          );
-                        },
-                      ),
-                    );
-=======
-                    // Implement the functionality to cancel the trip here
-                    dialog();
->>>>>>> 04655fbe0af6b83b2b42a9dbbff0b9f818331efc
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: customPurple,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                  child: const Text(
-                    "Cancel",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
+              child: const Text(
+                'End',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
-            ],
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                backgroundColor: Colors.grey,
+              ),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _cancelTrip() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
           ),
-        ),
-      );
-    } else {
-      return const Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Center(
-          child: Text(""),
-        ),
-      );
-    }
+          title: const Text(
+            'Cancel Trip',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: const Text(
+            'Are you sure you want to cancel the trip?',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                // Perform the cancel trip action
+              },
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                backgroundColor: Colors.orangeAccent,
+              ),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                backgroundColor: Colors.grey,
+              ),
+              child: const Text(
+                'No',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        for (int index = 0; index < currentRidesArray.length; index++)
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 8.0),
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  blurRadius: 5,
+                  spreadRadius: 1,
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+                    decoration: BoxDecoration(
+                      border: Border(),
+                    ),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: IconButton(
+                            icon: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: customPurple.withOpacity(0.1),
+                              ),
+                              child: Icon(
+                                Icons.phone,
+                                color: customPurple,
+                                size: 28,
+                              ),
+                            ),
+                            onPressed: () {
+                              launch("tel:${currentRidesArray[index]['riderPhoneNumber']}");
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 16.0),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.directions_car,
+                                    color: Colors.black,
+                                  ),
+                                  SizedBox(width: 8.0),
+                                  Expanded(
+                                    child: Text(
+                                      "Your Trip",
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    "₦ ${currentRidesArray[index]['fare']}",
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: customPurple,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 8.0),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on,
+                                    color: Colors.black,
+                                    size: 19,
+                                  ),
+                                  SizedBox(width: 8.0),
+                                  Flexible(
+                                    child: Text(
+                                      currentRidesArray[index]['pickUpLocation'],
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on,
+                                    color: Colors.black,
+                                    size: 16,
+                                  ),
+                                  SizedBox(width: 8.0),
+                                  Flexible(
+                                    child: Text(
+                                      currentRidesArray[index]['destinationLocation'],
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 45,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: _endTrip,
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(15),
+                                ),
+                              ),
+                              primary: Colors.orangeAccent,
+                            ),
+                            child: Text(
+                              "End",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: _cancelTrip,
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(15),
+                                ),
+                              ),
+                              primary: customPurple,
+                            ),
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        SizedBox(height: 16.0),
+      ],
+    );
   }
 }
