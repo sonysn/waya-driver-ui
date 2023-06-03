@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:waya_driver/constants/api_constants.dart';
 
@@ -73,7 +73,26 @@ Future acceptRide(
     required String? vehicleColour,
     required String? pickUpLocation,
     required String? destinationLocation,
-    required int fare}) async {
+    required int fare,
+    required List pickupLocationPosition,
+    required List dropoffLocationPostion}) async {
+  DateTime now = DateTime.now();
+
+  // Format the current time with timezone
+  String formattedTime = DateFormat('HH:mm').format(now);
+
+  // Get the timezone offset
+  Duration offset = now.timeZoneOffset;
+
+  // Calculate the GMT offset in hours and minutes
+  int hours = offset.inHours;
+  int minutes = offset.inMinutes.remainder(60).abs();
+
+  // Format the GMT offset string
+  String gmtOffset =
+      'GMT ${hours >= 0 ? '+' : '-'}${hours.abs()}:${minutes.toString().padLeft(2, '0')}';
+  print(gmtOffset);
+
   final http.Response response = await http.post(
       Uri.parse('$baseUri${ApiConstants.driverAcceptRideEndpoint}'),
       headers: {
@@ -82,6 +101,8 @@ Future acceptRide(
       body: json.encode({
         'riderID': riderId,
         'riderPhoneNumber': riderPhoneNumber,
+        'requestTime': formattedTime,
+        'GMT': gmtOffset,
         'driverID': driverId,
         'driverPhoto': driverPhoto,
         'vehicleName': vehicleName,
@@ -90,6 +111,8 @@ Future acceptRide(
         'driverPhone': driverPhone,
         'pickUpLocation': pickUpLocation,
         'destinationLocation': destinationLocation,
+        'pickupLocationPosition': pickupLocationPosition,
+        'dropoffLocationPosition': dropoffLocationPostion,
         'fare': fare,
       }));
 }
@@ -114,4 +137,14 @@ Future driverGetCurrentRides({required int driverID}) async {
       });
   final data = await jsonDecode(response.body);
   return data;
+}
+
+//TODO COMPLETE THIS
+Future onDriverCancelRide({required int driverID, required int riderID}) async {
+  final http.Response response =
+      await http.post(Uri.parse('$baseUri/$driverID/onDriverCancelledRide'),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: json.encode({'riderID': riderID}));
 }

@@ -12,6 +12,7 @@ import '../../../colorscheme.dart';
 import '../api/actions.dart';
 import '../sockets/sockets.dart';
 import 'package:waya_driver/screens/widgets/activeride.dart';
+
 class HomePage extends StatefulWidget {
   dynamic data;
 
@@ -316,79 +317,6 @@ class _HomePageState extends State<HomePage> {
                     child: const SizedBox(
                       height: 30,
                       //width: 20,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 150,
-                    width: MediaQuery.of(context).size.width / 1.1,
-                    child: Card(
-                      elevation: 5,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(15),
-                          bottom: Radius.circular(15),
-                        ),
-                        //      side: BorderSide(color: Colors.yellow, width: 1),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                Text(
-                                  'Trips Summary',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25),
-                                )
-                              ],
-                            ),
-                            const Divider(),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
-                                    Text('Total Trips'),
-                                    Text(
-                                      '15',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
-                                    Text('Time Online'),
-                                    Text(
-                                      '15h 30m',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
-                                    Text('Total Distance'),
-                                    Text(
-                                      '45 km',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
                     ),
                   ),
                   const SizedBox(

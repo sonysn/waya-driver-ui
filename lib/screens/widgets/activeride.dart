@@ -46,6 +46,132 @@ class _DriverWidgetState extends State<DriverWidget> {
     super.dispose();
   }
 
+  void _endTrip() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          title: const Text(
+            'End Trip',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: const Text(
+            'Are you sure you want to end the trip?',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                // Perform the end trip action
+              },
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                backgroundColor: Colors.orangeAccent,
+              ),
+              child: const Text(
+                'End',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                backgroundColor: Colors.grey,
+              ),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _cancelTrip() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          title: const Text(
+            'Cancel Trip',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: const Text(
+            'Are you sure you want to cancel the trip?',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                // Perform the cancel trip action
+              },
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                backgroundColor: Colors.orangeAccent,
+              ),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                backgroundColor: Colors.grey,
+              ),
+              child: const Text(
+                'No',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -53,7 +179,6 @@ class _DriverWidgetState extends State<DriverWidget> {
           Container(
             margin: EdgeInsets.symmetric(vertical: 8.0),
             decoration: BoxDecoration(
-
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.3),
@@ -69,16 +194,30 @@ class _DriverWidgetState extends State<DriverWidget> {
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
                     decoration: BoxDecoration(
-                      border: Border(
-
-                      ),
+                      border: Border(),
                     ),
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.phone,
-                          color: customPurple,
-                          size: 28,
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: IconButton(
+                            icon: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: customPurple.withOpacity(0.1),
+                              ),
+                              child: Icon(
+                                Icons.phone,
+                                color: customPurple,
+                                size: 28,
+                              ),
+                            ),
+                            onPressed: () {
+                              launch("tel:${currentRidesArray[index]['riderPhoneNumber']}");
+                            },
+                          ),
                         ),
                         SizedBox(width: 16.0),
                         Expanded(
@@ -165,18 +304,53 @@ class _DriverWidgetState extends State<DriverWidget> {
                         bottomLeft: Radius.circular(15),
                         bottomRight: Radius.circular(15),
                       ),
-                      color: Colors.orangeAccent,
                     ),
-                    child: TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        "End",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: _endTrip,
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(15),
+                                ),
+                              ),
+                              primary: Colors.orangeAccent,
+                            ),
+                            child: Text(
+                              "End",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: _cancelTrip,
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(15),
+                                ),
+                              ),
+                              primary: customPurple,
+                            ),
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
