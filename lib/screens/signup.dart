@@ -98,7 +98,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future<void> _fetchSuggestions(String input) async {
-    const apiKey = '//TODO: PUT API KEY HERE'; // Replace with your own API key
+    String apiKey = mapApiKey!; // Replace with your own API key
     const countryCode = "NG";
     final url =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&components=country:$countryCode&key=$apiKey';
@@ -152,6 +152,18 @@ class _SignUpState extends State<SignUp> {
     }
   }
 
+  Future<void> getApikey() async {
+    const url = 'https://sea-lion-app-m46xn.ondigitalocean.app/getAPIKEY';
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      setState(() {
+        mapApiKey = data['KEY'];
+      });
+      // print(data['KEY']);
+    }
+  }
+
   //Todo Text editing controller holds the user input for program execution, the names are self explanatory of what they do or hold
   TextEditingController firstname = TextEditingController();
   TextEditingController lastname = TextEditingController();
@@ -201,10 +213,12 @@ class _SignUpState extends State<SignUp> {
   ];
   List<String> _suggestions = [];
   bool isTyping = false;
+  String? mapApiKey;
 
   @override
   void initState() {
     super.initState();
+    getApikey();
     getVehicleData();
   }
 
