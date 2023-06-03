@@ -22,6 +22,12 @@ class _DriverWidgetState extends State<DriverWidget> {
     print(currentRidesArray);
   }
 
+  Future driverCancelTrip({required int xindex}) async {
+    final response = await onDriverCancelRide(
+        driverID: widget.data.id,
+        riderID: currentRidesArray[xindex]['riderID']);
+  }
+
   List currentRidesArray = [];
 
   //CURRENT TRIP DETAILS
@@ -109,7 +115,7 @@ class _DriverWidgetState extends State<DriverWidget> {
     );
   }
 
-  void _cancelTrip() {
+  Future<void> _cancelTrip({required int indexPos}) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -135,6 +141,7 @@ class _DriverWidgetState extends State<DriverWidget> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 // Perform the cancel trip action
+                driverCancelTrip(xindex: indexPos);
               },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -172,6 +179,7 @@ class _DriverWidgetState extends State<DriverWidget> {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -192,7 +200,8 @@ class _DriverWidgetState extends State<DriverWidget> {
               child: Column(
                 children: [
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
                     decoration: BoxDecoration(
                       border: Border(),
                     ),
@@ -215,7 +224,8 @@ class _DriverWidgetState extends State<DriverWidget> {
                               ),
                             ),
                             onPressed: () {
-                              launch("tel:${currentRidesArray[index]['riderPhoneNumber']}");
+                              launch(
+                                  "tel:${currentRidesArray[index]['riderPhoneNumber']}");
                             },
                           ),
                         ),
@@ -254,7 +264,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                               SizedBox(height: 8.0),
                               Row(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.location_on,
                                     color: Colors.black,
                                     size: 19,
@@ -262,8 +272,9 @@ class _DriverWidgetState extends State<DriverWidget> {
                                   SizedBox(width: 8.0),
                                   Flexible(
                                     child: Text(
-                                      currentRidesArray[index]['pickUpLocation'],
-                                      style: TextStyle(
+                                      currentRidesArray[index]
+                                          ['pickUpLocation'],
+                                      style: const TextStyle(
                                         fontSize: 15,
                                         color: Colors.black,
                                       ),
@@ -273,16 +284,17 @@ class _DriverWidgetState extends State<DriverWidget> {
                               ),
                               Row(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.location_on,
                                     color: Colors.black,
                                     size: 16,
                                   ),
-                                  SizedBox(width: 8.0),
+                                  const SizedBox(width: 8.0),
                                   Flexible(
                                     child: Text(
-                                      currentRidesArray[index]['destinationLocation'],
-                                      style: TextStyle(
+                                      currentRidesArray[index]
+                                          ['destinationLocation'],
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
                                       ),
@@ -299,7 +311,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                   Container(
                     width: double.infinity,
                     height: 45,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(15),
                         bottomRight: Radius.circular(15),
@@ -312,14 +324,14 @@ class _DriverWidgetState extends State<DriverWidget> {
                           child: ElevatedButton(
                             onPressed: _endTrip,
                             style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
+                              shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(15),
                                 ),
                               ),
                               primary: Colors.orangeAccent,
                             ),
-                            child: Text(
+                            child: const Text(
                               "End",
                               style: TextStyle(
                                 fontSize: 18,
@@ -331,9 +343,11 @@ class _DriverWidgetState extends State<DriverWidget> {
                         ),
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: _cancelTrip,
+                            onPressed: () {
+                              _cancelTrip(indexPos: index);
+                            },
                             style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
+                              shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
                                   bottomRight: Radius.circular(15),
                                 ),

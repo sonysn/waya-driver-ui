@@ -236,6 +236,7 @@ class _HomePageState extends State<HomePage> {
                         locationCallbacks(widget.data.id, widget.data.verified);
                         updateAvailability(1, widget.data.id);
                         getCar();
+                        locationPingServer();
                         await setSwitchValue(onlineStatus);
                         timedPing();
                       } else {
@@ -243,6 +244,7 @@ class _HomePageState extends State<HomePage> {
                         ConnectToServer().disconnect();
                         updateAvailability(0, widget.data.id);
                         await setSwitchValue(onlineStatus);
+                        locationPingServer();
                         timedPing();
                       }
                     },
