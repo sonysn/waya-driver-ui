@@ -41,7 +41,7 @@ class _MapsPageState extends State<MapsPage> {
     }
 
     locationDataSpot = await location.getLocation();
-    location.enableBackgroundMode(enable: true);
+    //location.enableBackgroundMode(enable: true);
     //check if widget is mounted
     if (mounted) {
       setState(() {

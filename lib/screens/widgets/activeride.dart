@@ -26,6 +26,18 @@ class _DriverWidgetState extends State<DriverWidget> {
     final response = await onDriverCancelRide(
         driverID: widget.data.id,
         riderID: currentRidesArray[xindex]['riderID']);
+    if (response == 200) {
+      print("OK RIDE CANCELLED");
+    }
+  }
+
+  Future driverEndTrip({required int xindex}) async {
+    final response = await onRideCompleted(
+        driverID: widget.data.id,
+        riderID: currentRidesArray[xindex]['riderID']);
+    if (response == 200) {
+      print("OK RIDE COMPLETED");
+    }
   }
 
   List currentRidesArray = [];
@@ -52,7 +64,7 @@ class _DriverWidgetState extends State<DriverWidget> {
     super.dispose();
   }
 
-  void _endTrip() {
+  Future<void> _endTrip({required int indexPos}) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -78,6 +90,7 @@ class _DriverWidgetState extends State<DriverWidget> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 // Perform the end trip action
+                driverEndTrip(xindex: indexPos);
               },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -322,7 +335,9 @@ class _DriverWidgetState extends State<DriverWidget> {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: _endTrip,
+                            onPressed: () {
+                              _endTrip(indexPos: index);
+                            },
                             style: ElevatedButton.styleFrom(
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(

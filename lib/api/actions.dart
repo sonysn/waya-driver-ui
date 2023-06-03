@@ -139,12 +139,25 @@ Future driverGetCurrentRides({required int driverID}) async {
   return data;
 }
 
-//TODO COMPLETE THIS
+//TODO ADD RETURN VALUE
 Future onDriverCancelRide({required int driverID, required int riderID}) async {
-  final http.Response response =
-      await http.post(Uri.parse('$baseUri/$driverID/onDriverCancelledRide'),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: json.encode({'riderID': riderID}));
+  final http.Response response = await http.post(
+      Uri.parse('$baseUri/$driverID${ApiConstants.driverCancelRideEndpoint}'),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: json.encode({'riderID': riderID}));
+  final data = response.statusCode;
+  return data;
+}
+
+Future onRideCompleted({required int driverID, required int riderID}) async {
+  final http.Response response = await http.post(
+      Uri.parse('$baseUri${ApiConstants.driverOnRideCompleteEndpoint}'),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: json.encode({'driverID': driverID, 'riderID': riderID}));
+  final data = response.statusCode;
+  return data;
 }
