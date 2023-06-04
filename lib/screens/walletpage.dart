@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/api/payments.dart';
 import 'package:waya_driver/screens/cash_deposit_page.dart';
+import 'package:waya_driver/screens/homepage.dart';
 import 'package:waya_driver/screens/transfers.dart';
+import 'package:waya_driver/sockets/sockets.dart';
 import '../../../colorscheme.dart';
 import 'package:waya_driver/screens/widgets/earning_card.dart';
 import 'package:waya_driver/screens/widgets/transaction_card.dart';
@@ -30,6 +32,15 @@ class _WalletPageState extends State<WalletPage> {
   List reversedEarnings = [];
   List transactions = [];
   List reversedTransactions = [];
+
+  void _initOnlineStatus() {
+    //!Info: This is from the home page
+    if (onlineStatus) {
+      ConnectToServer().connect(widget.data.id, context);
+    } else {
+      ConnectToServer().disconnect();
+    }
+  }
 
   Future _getAccountBalance() async {
     final response = await getBalance(widget.data.id, widget.data.phoneNumber);
@@ -59,6 +70,7 @@ class _WalletPageState extends State<WalletPage> {
   @override
   void initState() {
     super.initState();
+    _initOnlineStatus();
     _getAccountBalance();
     _getEarnings();
     _getDepositTransactions();
@@ -231,9 +243,11 @@ class _WalletPageState extends State<WalletPage> {
                   },
                   itemBuilder: (context, index) {
                     return EarningCard(
-                      data: widget.data,
-                      amountTransferred: reversedEarnings[index]['amountTransferred'],
-                      dateTransferred: reversedEarnings[index]['datePaid'],
+
+                      amountTransferred: reversedEarnings[index]
+                      ['amountTransferred'],
+                      dateTransferred: reversedEarnings[index]
+                      ['datePaid'],
                     );
                   },
                 )
@@ -246,73 +260,74 @@ class _WalletPageState extends State<WalletPage> {
                     ),
                   ),
                 ),
-
                 const SizedBox(
                   height: 0,
                 ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Text("Recent Transactions"),
-                Flexible(
-                  child: Container(
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) {
-                            return TransactionHistory(
-                              data: widget.data,
-                              transactions: transactions,
-                            );
-                          },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Text("Recent Transactions"),
+                    Flexible(
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        child: InkWell(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return TransactionHistory(
+                                  data: widget.data,
+                                  transactions: transactions,
+                                );
+                              },
+                            ),
+                          ),
+                          child: const Text(
+                            "View all",
+                            style: TextStyle(color: customPurple),
+                          ),
                         ),
                       ),
-                      child: const Text(
-                        "View all",
-                        style: TextStyle(color: customPurple),
-                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 0,
+                ),
+                transactions.isNotEmpty
+                    ? ListView.separated(
+                  itemCount:
+                  transactions.length > 3 ? 3 : transactions.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      height: 10,
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    return TransactionCard(
+                      data: widget.data,
+                      depositAmount: reversedTransactions[index]['data']
+                      ['amount'] /
+                          100,
+                      depositDate: reversedTransactions[index]['data']
+                      ['paid_at'],
+                    );
+                  },
+                )
+                    : Center(
+                  child: Container(
+                    margin: const EdgeInsets.all(45),
+                    child: const Text(
+                      'No Transactions Yet',
+                      style: TextStyle(fontSize: 15),
                     ),
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(
-              height: 0,
-            ),
-            transactions.isNotEmpty
-                ? ListView.separated(
-              itemCount: transactions.length > 3 ? 3 : transactions.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              separatorBuilder: (context, index) {
-                return const SizedBox(
+                const SizedBox(
                   height: 10,
-                );
-              },
-              itemBuilder: (context, index) {
-                return TransactionCard(
-                  data: widget.data,
-                  depositAmount:
-                  reversedTransactions[index]['data']['amount'] / 100,
-                  depositDate: reversedTransactions[index]['data']['paid_at'],
-                );
-              },
-            )
-                : Center(
-              child: Container(
-                margin: const EdgeInsets.all(45),
-                child: const Text(
-                  'No Transactions Yet',
-                  style: TextStyle(fontSize: 15),
                 ),
-              ),
-            ),
-
-           const SizedBox(
-            height: 10,
-          ),
               ],
             ),
           ),

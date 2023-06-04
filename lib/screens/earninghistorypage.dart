@@ -63,7 +63,7 @@ class _EarningHistoryState extends State<EarningHistory> {
                   },
                   itemBuilder: (context, index) {
                     return EarningCard(
-                      data: widget.data,
+
                       amountTransferred: reversedTransactions[index]['amountTransferred'],
                       dateTransferred: reversedTransactions[index]['datePaid'],
                     );

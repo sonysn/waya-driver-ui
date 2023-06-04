@@ -3,7 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/screens/widgets/transaction_card.dart';
 import '../../../colorscheme.dart';
-
+import 'package:waya_driver/screens/bottom_nav.dart';
 class DriverWidget extends StatefulWidget {
   final dynamic data;
 
@@ -21,7 +21,25 @@ class _DriverWidgetState extends State<DriverWidget> {
     });
     print(currentRidesArray);
   }
+  bool _showDialog = false;
 
+  void _startRefreshing() {
+    setState(() {
+      _showDialog = true;
+    });
+
+    // Simulating a delay of 2 seconds for the refresh process
+    Future.delayed(Duration(seconds: 2), () {
+      setState(() {
+        _showDialog = false;
+      });
+      // Once the refresh is complete, navigate to the homepage
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => BottomNavPage()),
+      );
+    });
+  }
   Future driverCancelTrip({required int xindex}) async {
     final response = await onDriverCancelRide(
         driverID: widget.data.id,
@@ -93,6 +111,8 @@ class _DriverWidgetState extends State<DriverWidget> {
                 Navigator.of(context).pop(); // Close the dialog
                 // Perform the end trip action
                 driverEndTrip(xindex: indexPos);
+                // Start the refreshing process
+                _startRefreshing();
               },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -107,6 +127,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                 ),
               ),
             ),
+
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
@@ -196,7 +217,6 @@ class _DriverWidgetState extends State<DriverWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         for (int index = 0; index < currentRidesArray.length; index++)

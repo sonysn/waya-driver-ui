@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:waya_driver/screens/homepage.dart';
+import 'package:waya_driver/sockets/sockets.dart';
 
 class MapsPage extends StatefulWidget {
-  const MapsPage({Key? key}) : super(key: key);
+  final int driverID;
+  const MapsPage({Key? key, required this.driverID}) : super(key: key);
 
   @override
   State<MapsPage> createState() => _MapsPageState();
@@ -12,6 +15,15 @@ class MapsPage extends StatefulWidget {
 class _MapsPageState extends State<MapsPage> {
   late GoogleMapController mapController;
   late final LatLng _center = _currentLocation;
+
+  void _initOnlineStatus() {
+    //!Info: This is from the home page
+    if (onlineStatus) {
+      ConnectToServer().connect(widget.driverID, context);
+    } else {
+      ConnectToServer().disconnect();
+    }
+  }
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -60,8 +72,8 @@ class _MapsPageState extends State<MapsPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    _initOnlineStatus();
     findLoc();
   }
 
@@ -70,41 +82,41 @@ class _MapsPageState extends State<MapsPage> {
     return Scaffold(
         body: _currentLocation != null
             ? SafeArea(
-                child: Stack(children: [
-                  GoogleMap(
-                    markers: <Marker>{
-                      Marker(
-                        markerId: const MarkerId("1"),
-                        position: _center,
-                      ),
+          child: Stack(children: [
+            GoogleMap(
+              markers: <Marker>{
+                Marker(
+                  markerId: const MarkerId("1"),
+                  position: _center,
+                ),
+              },
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: _center,
+                zoom: 14.0,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(
+                  bottom: 105, //MediaQuery.of(context).size.height / 5.2,
+                  right: MediaQuery.of(context).size.width / 250),
+              child: Align(
+                alignment: AlignmentDirectional.bottomEnd,
+                child: ElevatedButton(
+                    onPressed: () {
+                      findLoc();
                     },
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: CameraPosition(
-                      target: _center,
-                      zoom: 14.0,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(8),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        bottom: 105, //MediaQuery.of(context).size.height / 5.2,
-                        right: MediaQuery.of(context).size.width / 250),
-                    child: Align(
-                      alignment: AlignmentDirectional.bottomEnd,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            findLoc();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            shape: const CircleBorder(),
-                            padding: const EdgeInsets.all(8),
-                          ),
-                          child:
-                              const Icon(Icons.gps_fixed, color: Colors.black)),
-                    ),
-                  ),
-                ]),
-              )
+                    child:
+                    const Icon(Icons.gps_fixed, color: Colors.black)),
+              ),
+            ),
+          ]),
+        )
             : const Center(child: Text('Loading...')));
   }
 }

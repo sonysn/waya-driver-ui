@@ -33,14 +33,14 @@ Future getDriverCars(id, token) async {
 
 Future getBalance(id, phone) async {
   final http.Response response =
-      await http.post(Uri.parse('$baseUri${ApiConstants.getBalanceEndpoint}'),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: json.encode({
-            'id': id,
-            'phoneNumber': phone,
-          }));
+  await http.post(Uri.parse('$baseUri${ApiConstants.getBalanceEndpoint}'),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: json.encode({
+        'id': id,
+        'phoneNumber': phone,
+      }));
   final data = json.decode(response.body);
   final d = data['balance'].toString();
   return d;
@@ -64,18 +64,18 @@ Future transfer(amount, receivingNum, sendingNum) async {
 
 Future acceptRide(
     {required int riderId,
-    required String riderPhoneNumber,
-    required int? driverId,
-    required String? driverPhoto,
-    required String? driverPhone,
-    required String? vehicleName,
-    required String? vehiclePlateNumber,
-    required String? vehicleColour,
-    required String? pickUpLocation,
-    required String? destinationLocation,
-    required int fare,
-    required List pickupLocationPosition,
-    required List dropoffLocationPostion}) async {
+      required String riderPhoneNumber,
+      required int? driverId,
+      required String? driverPhoto,
+      required String? driverPhone,
+      required String? vehicleName,
+      required String? vehiclePlateNumber,
+      required String? vehicleColour,
+      required String? pickUpLocation,
+      required String? destinationLocation,
+      required int fare,
+      required List pickupLocationPosition,
+      required List dropoffLocationPostion}) async {
   DateTime now = DateTime.now();
 
   // Format the current time with timezone
@@ -142,8 +142,8 @@ Future driverGetCurrentRides({required int driverID}) async {
 //TODO ADD RETURN VALUE
 Future onDriverCancelRide(
     {required int driverID,
-    required int riderID,
-    required String dbObjectID}) async {
+      required int riderID,
+      required String dbObjectID}) async {
   final http.Response response = await http.post(
       Uri.parse('$baseUri/$driverID${ApiConstants.driverCancelRideEndpoint}'),
       headers: {
@@ -156,8 +156,8 @@ Future onDriverCancelRide(
 
 Future onRideCompleted(
     {required int driverID,
-    required int riderID,
-    required String dbObjectID}) async {
+      required int riderID,
+      required String dbObjectID}) async {
   final http.Response response = await http.post(
       Uri.parse('$baseUri${ApiConstants.driverOnRideCompleteEndpoint}'),
       headers: {
