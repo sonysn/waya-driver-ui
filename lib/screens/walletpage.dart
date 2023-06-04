@@ -233,33 +233,33 @@ class _WalletPageState extends State<WalletPage> {
                 ),
                 earnings.isNotEmpty
                     ? ListView.separated(
-                  itemCount: earnings.length > 3 ? 3 : earnings.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      height: 10,
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    return EarningCard(
-
-                      amountTransferred: reversedEarnings[index]
-                      ['amountTransferred'],
-                      dateTransferred: reversedEarnings[index]
-                      ['datePaid'],
-                    );
-                  },
-                )
+                        itemCount: earnings.length > 3 ? 3 : earnings.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(
+                            height: 10,
+                          );
+                        },
+                        itemBuilder: (context, index) {
+                          return EarningCard(
+                            data: widget.data,
+                            amountTransferred: reversedEarnings[index]
+                                ['amountTransferred'],
+                            dateTransferred: reversedEarnings[index]
+                                ['datePaid'],
+                          );
+                        },
+                      )
                     : Center(
-                  child: Container(
-                    margin: const EdgeInsets.all(45),
-                    child: const Text(
-                      'No Earnings Yet',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ),
-                ),
+                        child: Container(
+                          margin: const EdgeInsets.all(45),
+                          child: const Text(
+                            'No Earnings Yet',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ),
+                      ),
                 const SizedBox(
                   height: 0,
                 ),
@@ -296,35 +296,35 @@ class _WalletPageState extends State<WalletPage> {
                 ),
                 transactions.isNotEmpty
                     ? ListView.separated(
-                  itemCount:
-                  transactions.length > 3 ? 3 : transactions.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      height: 10,
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    return TransactionCard(
-                      data: widget.data,
-                      depositAmount: reversedTransactions[index]['data']
-                      ['amount'] /
-                          100,
-                      depositDate: reversedTransactions[index]['data']
-                      ['paid_at'],
-                    );
-                  },
-                )
+                        itemCount:
+                            transactions.length > 3 ? 3 : transactions.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(
+                            height: 10,
+                          );
+                        },
+                        itemBuilder: (context, index) {
+                          return TransactionCard(
+                            data: widget.data,
+                            depositAmount: reversedTransactions[index]['data']
+                                    ['amount'] /
+                                100,
+                            depositDate: reversedTransactions[index]['data']
+                                ['paid_at'],
+                          );
+                        },
+                      )
                     : Center(
-                  child: Container(
-                    margin: const EdgeInsets.all(45),
-                    child: const Text(
-                      'No Transactions Yet',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ),
-                ),
+                        child: Container(
+                          margin: const EdgeInsets.all(45),
+                          child: const Text(
+                            'No Transactions Yet',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ),
+                      ),
                 const SizedBox(
                   height: 10,
                 ),
