@@ -30,6 +30,7 @@ String? vehicleBodyType;
 String? driverPhone;
 String? driverPhoto;
 int? driverID;
+bool onlineStatus = false;
 
 class _HomePageState extends State<HomePage> {
   void findLoc() async {
@@ -128,8 +129,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   dynamic currentLocation;
-  StreamController controller = StreamController();
-  bool onlineStatus = false;
+
   DateTime?
       _lastPressedAt; // for tracking the time of the last back button press
   List currentRidesArray = [];

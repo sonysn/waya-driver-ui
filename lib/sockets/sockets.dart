@@ -14,16 +14,16 @@ class ConnectToServer {
 
   ConnectToServer({this.id});
 
-  //TODO CHECK IF THIS CODE DOES SOMETHING
-  final socketResponse = StreamController();
+  // //
+  // final socketResponse = StreamController();
 
-  void get addResponse => socketResponse.sink.add;
+  // void get addResponse => socketResponse.sink.add;
 
-  Stream get getResponse => socketResponse.stream;
+  // Stream get getResponse => socketResponse.stream;
 
-  void dispose() {
-    socketResponse.close();
-  }
+  // void dispose() {
+  //   socketResponse.close();
+  // }
 
   //configure socket transport
   Socket socket = io(
@@ -57,7 +57,6 @@ class ConnectToServer {
             showModalBottomSheet<void>(
               context: context,
               builder: (BuildContext context) {
-                //TODO PUT GEOCODING TO REVERSE THE DROP OFF LOCATION
                 return RideRequestCard(
                   riderId: data['userId'],
                   name: 'Someone',
@@ -154,7 +153,7 @@ class RideRequestCard extends StatelessWidget {
                 const SizedBox(height: 24),
                 Text(
                   'Hello, $name is requesting a ride',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),

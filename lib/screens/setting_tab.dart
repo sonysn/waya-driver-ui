@@ -5,6 +5,7 @@ import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/api/auth.dart';
 import 'package:waya_driver/functions/location_functions.dart';
 import 'package:waya_driver/screens/bookings.dart';
+import 'package:waya_driver/screens/homepage.dart';
 import 'package:waya_driver/screens/mapsearchpage.dart';
 import 'package:waya_driver/screens/settingspage.dart';
 import 'package:waya_driver/screens/messages.dart';
@@ -24,13 +25,27 @@ class SettingTab extends StatefulWidget {
   State<SettingTab> createState() => _SettingTabState();
 }
 
-bool onlineStatus = false;
-
 class _SettingTabState extends State<SettingTab> {
   // Future<void> setSwitchValue(bool value) async {
   //   final prefs = await SharedPreferences.getInstance();
   //   await prefs.setBool('isOnline', value);
   // }
+  void _initOnlineStatus() {
+    //!Info: This is from the home page
+    if (onlineStatus) {
+      //print(true);
+      ConnectToServer().connect(widget.data.id, context);
+    } else {
+      //print(false);
+      ConnectToServer().disconnect();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initOnlineStatus();
+  }
 
   @override
   Widget build(BuildContext context) {
