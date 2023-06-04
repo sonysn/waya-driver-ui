@@ -5,7 +5,7 @@ import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/api/auth.dart';
 import 'package:waya_driver/functions/location_functions.dart';
 import 'package:waya_driver/screens/bookings.dart';
-import 'package:waya_driver/screens/mapsearchpage.dart';
+
 import 'package:waya_driver/screens/settingspage.dart';
 import 'package:waya_driver/screens/messages.dart';
 import 'package:waya_driver/screens/welcomepage.dart';
@@ -182,7 +182,7 @@ class _SettingTabState extends State<SettingTab> {
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (BuildContext context) {
-                      return const DestinationPage();
+                      return const HelpPage();
                     }));
                   },
                   child: const ListTile(

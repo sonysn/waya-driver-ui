@@ -29,9 +29,67 @@ class _TransferPageState extends State<TransferPage> {
 
     // Start a new timer to prevent multiple triggers within 2 seconds
     _debounceTimer = Timer(const Duration(seconds: 3), () {
-      _performTransfer();
+      _showTransferConfirmationDialog();
     });
   }
+
+  void _showTransferConfirmationDialog() {
+    final transferAmount = _cashTransferController.text.trim();
+    final recipientDriver = _driverRecipientController.text.trim();
+
+    if (transferAmount.isEmpty || recipientDriver.isEmpty) {
+      // Don't show the dialog if the fields are empty
+      return;
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Transfer Confirmation'),
+          content: const Text('Are you sure you want to transfer funds?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _performTransfer();
+              },
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                backgroundColor: Colors.orangeAccent,
+              ),
+              child: const Text(
+                'Yes',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                backgroundColor:  customPurple,
+              ),
+              child: const Text(
+                'No',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   void _performTransfer() async {
     final response = await transfer(
