@@ -155,6 +155,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future _refreshItems() async {
+    await getCurrentRides();
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -162,293 +166,300 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (_lastPressedAt == null ||
-            DateTime.now().difference(_lastPressedAt!) >
-                const Duration(seconds: 2)) {
-          // show a toast or snackbar to inform the user to press back again to exit
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Press back again to exit'),
-            duration: Duration(seconds: 2),
-          ));
-          _lastPressedAt = DateTime.now();
-          return false; // prevent the app from closing
-        }
-        return true; // allow the app to close
-      },
-      child: Scaffold(
-        body: ListView(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(top: 15),
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      //todo fix this error
-                      widget.data.profilePhoto != null
-                          ? CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage('${widget.data.profilePhoto}'),
-                              radius: 30.0,
-                            )
-                          : const CircleAvatar(
-                              backgroundColor: Colors.black,
-                              radius: 30.0,
-                            ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${widget.data.firstName} ${widget.data.lastName}',
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                          Row(
-                            children: [
-                              const Icon(Icons.star),
-                              Text(
-                                widget.data.rating.toString(),
-                                style: const TextStyle(fontSize: 20),
+    return RefreshIndicator(
+      color: Colors.orangeAccent,
+      backgroundColor: customPurple,
+      onRefresh: _refreshItems,
+      child: WillPopScope(
+        onWillPop: () async {
+          if (_lastPressedAt == null ||
+              DateTime.now().difference(_lastPressedAt!) >
+                  const Duration(seconds: 2)) {
+            // show a toast or snackbar to inform the user to press back again to exit
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Press back again to exit'),
+              duration: Duration(seconds: 2),
+            ));
+            _lastPressedAt = DateTime.now();
+            return false; // prevent the app from closing
+          }
+          return true; // allow the app to close
+        },
+        child: Scaffold(
+          body: ListView(
+            children: [
+              Container(
+                padding: const EdgeInsets.only(top: 15),
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        //todo fix this error
+                        widget.data.profilePhoto != null
+                            ? CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage('${widget.data.profilePhoto}'),
+                                radius: 30.0,
                               )
-                            ],
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      setState(() {
-                        onlineStatus = !onlineStatus;
-                      });
-
-                      if (onlineStatus) {
-                        ConnectToServer().connect(widget.data.id, context);
-                        locationCallbacks(widget.data.id, widget.data.verified);
-                        updateAvailability(1, widget.data.id);
-                        getCar();
-                        locationPingServer();
-                        await setSwitchValue(onlineStatus);
-                        timedPing();
-                      } else {
-                        cancelLocationCallbacks();
-                        ConnectToServer().disconnect();
-                        updateAvailability(0, widget.data.id);
-                        await setSwitchValue(onlineStatus);
-                        locationPingServer();
-                        timedPing();
-                      }
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      height: 60.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30.0),
-                        gradient: LinearGradient(
-                          colors: onlineStatus
-                              ? [
-                                  const Color(0xFF1BE611),
-                                  const Color(0xFF21E672)
-                                ]
-                              : [
-                                  const Color(0xFFE62121),
-                                  const Color(0xFFE66565)
-                                ],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
+                            : const CircleAvatar(
+                                backgroundColor: Colors.black,
+                                radius: 30.0,
+                              ),
+                        const SizedBox(
+                          width: 5,
                         ),
-                      ),
-                      child: Stack(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 16.0),
-                              child: Icon(
-                                onlineStatus
-                                    ? Icons.check_circle
-                                    : Icons.cancel,
-                                color: Colors.white,
-                                size: 32.0,
-                              ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${widget.data.firstName} ${widget.data.lastName}',
+                              style: const TextStyle(fontSize: 20),
                             ),
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
-                              child: Icon(
-                                onlineStatus
-                                    ? Icons.toggle_on
-                                    : Icons.toggle_off,
-                                color: Colors.white,
-                                size: 32.0,
-                              ),
-                            ),
-                          ),
-                          Center(
-                            child: Text(
-                              onlineStatus ? 'Online' : 'Offline',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.0,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                            Row(
+                              children: [
+                                const Icon(Icons.star),
+                                Text(
+                                  widget.data.rating.toString(),
+                                  style: const TextStyle(fontSize: 20),
+                                )
+                              ],
+                            )
+                          ],
+                        )
+                      ],
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      // Navigator.push(context,
-                      //     MaterialPageRoute(builder: (BuildContext context) {
-                      //       return const MessagesNotificationPage();
-                      //     }));
-                    },
-                    child: const SizedBox(
+                    const SizedBox(
                       height: 30,
-                      //width: 20,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  FittedBox(
-                    fit: BoxFit.fitWidth,
-                    child: SizedBox(
-                      height: 80,
-                      width: MediaQuery.of(context).size.width,
-                      child: Card(
-                        elevation: 5,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(15),
-                            bottom: Radius.circular(15),
+                    GestureDetector(
+                      onTap: () async {
+                        setState(() {
+                          onlineStatus = !onlineStatus;
+                        });
+
+                        if (onlineStatus) {
+                          ConnectToServer().connect(widget.data.id, context);
+                          locationCallbacks(
+                              widget.data.id, widget.data.verified);
+                          updateAvailability(1, widget.data.id);
+                          getCar();
+                          locationPingServer();
+                          await setSwitchValue(onlineStatus);
+                          timedPing();
+                        } else {
+                          cancelLocationCallbacks();
+                          ConnectToServer().disconnect();
+                          updateAvailability(0, widget.data.id);
+                          await setSwitchValue(onlineStatus);
+                          locationPingServer();
+                          timedPing();
+                        }
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        height: 60.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30.0),
+                          gradient: LinearGradient(
+                            colors: onlineStatus
+                                ? [
+                                    const Color(0xFF1BE611),
+                                    const Color(0xFF21E672)
+                                  ]
+                                : [
+                                    const Color(0xFFE62121),
+                                    const Color(0xFFE66565)
+                                  ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
                           ),
                         ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [customPurple, Colors.orangeAccent],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 16.0),
+                                child: Icon(
+                                  onlineStatus
+                                      ? Icons.check_circle
+                                      : Icons.cancel,
+                                  color: Colors.white,
+                                  size: 32.0,
+                                ),
+                              ),
                             ),
-                            borderRadius: const BorderRadius.vertical(
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: Icon(
+                                  onlineStatus
+                                      ? Icons.toggle_on
+                                      : Icons.toggle_off,
+                                  color: Colors.white,
+                                  size: 32.0,
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: Text(
+                                onlineStatus ? 'Online' : 'Offline',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (BuildContext context) {
+                        //       return const MessagesNotificationPage();
+                        //     }));
+                      },
+                      child: const SizedBox(
+                        height: 30,
+                        //width: 20,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: SizedBox(
+                        height: 80,
+                        width: MediaQuery.of(context).size.width,
+                        child: Card(
+                          elevation: 5,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
                               top: Radius.circular(15),
                               bottom: Radius.circular(15),
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 5,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 4,
-                                  color: Colors.white,
-                                ),
-                                const SizedBox(width: 10),
-                                const Icon(
-                                  Icons.wallet,
-                                  color: Colors.white,
-                                ),
-                                const SizedBox(width: 15),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Your Balance',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      "₦${widget.data.accountBalance}",
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [customPurple, Colors.orangeAccent],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(15),
+                                bottom: Radius.circular(15),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 2),
                                 ),
                               ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 4,
+                                    color: Colors.white,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  const Icon(
+                                    Icons.wallet,
+                                    color: Colors.white,
+                                  ),
+                                  const SizedBox(width: 15),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Your Balance',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        "₦${widget.data.accountBalance}",
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height / 6,
-                    child: Card(
-                      elevation: 15,
-                      child: Stack(
-                        children: [
-                          Container(
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                  "https://img.freepik.com/premium-vector/taxi-city_1270-526.jpg?w=2000",
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 6,
+                      child: Card(
+                        elevation: 15,
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                    "https://img.freepik.com/premium-vector/taxi-city_1270-526.jpg?w=2000",
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          FutureBuilder(
-                            future: Future.delayed(const Duration(
-                                milliseconds: 500)), // Simulating a delay
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.orangeAccent),
-                                  ),
-                                );
-                              } else {
-                                return const SizedBox(); // Render nothing when image is loaded
-                              }
-                            },
-                          ),
-                        ],
+                            FutureBuilder(
+                              future: Future.delayed(const Duration(
+                                  milliseconds: 500)), // Simulating a delay
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.orangeAccent),
+                                    ),
+                                  );
+                                } else {
+                                  return const SizedBox(); // Render nothing when image is loaded
+                                }
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  DriverWidget(
-                    data: widget.data,
-                  ),
-                ],
-              ),
-            )
-          ],
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    DriverWidget(
+                      data: widget.data,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
