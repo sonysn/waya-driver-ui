@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:waya_driver/constants/api_constants.dart';
 
 //todo base uri value here
-//var baseUri = 'http://192.168.100.43:3000';
+// var baseUri = 'http://192.168.100.43:3000';
 var baseUri = 'https://waya-api.onrender.com';
 
 //availability is a bool returns 1 or 0
@@ -140,24 +140,31 @@ Future driverGetCurrentRides({required int driverID}) async {
 }
 
 //TODO ADD RETURN VALUE
-Future onDriverCancelRide({required int driverID, required int riderID}) async {
+Future onDriverCancelRide(
+    {required int driverID,
+    required int riderID,
+    required String dbObjectID}) async {
   final http.Response response = await http.post(
       Uri.parse('$baseUri/$driverID${ApiConstants.driverCancelRideEndpoint}'),
       headers: {
         "Content-Type": "application/json",
       },
-      body: json.encode({'riderID': riderID}));
+      body: json.encode({'riderID': riderID, 'objectID': dbObjectID}));
   final data = response.statusCode;
   return data;
 }
 
-Future onRideCompleted({required int driverID, required int riderID}) async {
+Future onRideCompleted(
+    {required int driverID,
+    required int riderID,
+    required String dbObjectID}) async {
   final http.Response response = await http.post(
       Uri.parse('$baseUri${ApiConstants.driverOnRideCompleteEndpoint}'),
       headers: {
         "Content-Type": "application/json",
       },
-      body: json.encode({'driverID': driverID, 'riderID': riderID}));
+      body: json.encode(
+          {'driverID': driverID, 'riderID': riderID, 'objectID': dbObjectID}));
   final data = response.statusCode;
   return data;
 }

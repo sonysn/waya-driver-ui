@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
     final res = await getDriverCars(widget.data.id, widget.data.token);
     setState(() {
       vehicleName =
-      "${res['result'][0]['VEHICLE_MAKE']}, ${res['result'][0]['VEHICLE_MODEL']}";
+          "${res['result'][0]['VEHICLE_MAKE']}, ${res['result'][0]['VEHICLE_MODEL']}";
       vehiclePlateNumber = res['result'][0]['VEHICLE_PLATE_NUMBER'];
       vehicleColour = res['result'][0]['VEHICLE_COLOUR'];
       vehicleBodyType = res['result'][0]['VEHICLE_BODY_TYPE'];
@@ -131,7 +131,7 @@ class _HomePageState extends State<HomePage> {
   StreamController controller = StreamController();
   bool onlineStatus = false;
   DateTime?
-  _lastPressedAt; // for tracking the time of the last back button press
+      _lastPressedAt; // for tracking the time of the last back button press
   List currentRidesArray = [];
 
   @override
@@ -199,14 +199,14 @@ class _HomePageState extends State<HomePage> {
                         //todo fix this error
                         widget.data.profilePhoto != null
                             ? CircleAvatar(
-                          backgroundImage:
-                          NetworkImage('${widget.data.profilePhoto}'),
-                          radius: 30.0,
-                        )
+                                backgroundImage:
+                                    NetworkImage('${widget.data.profilePhoto}'),
+                                radius: 30.0,
+                              )
                             : const CircleAvatar(
-                          backgroundColor: Colors.black,
-                          radius: 30.0,
-                        ),
+                                backgroundColor: Colors.black,
+                                radius: 30.0,
+                              ),
                         const SizedBox(
                           width: 5,
                         ),
@@ -265,13 +265,13 @@ class _HomePageState extends State<HomePage> {
                           gradient: LinearGradient(
                             colors: onlineStatus
                                 ? [
-                              const Color(0xFF1BE611),
-                              const Color(0xFF21E672)
-                            ]
+                                    const Color(0xFF1BE611),
+                                    const Color(0xFF21E672)
+                                  ]
                                 : [
-                              const Color(0xFFE62121),
-                              const Color(0xFFE66565)
-                            ],
+                                    const Color(0xFFE62121),
+                                    const Color(0xFFE66565)
+                                  ],
                             begin: Alignment.centerLeft,
                             end: Alignment.centerRight,
                           ),
@@ -382,7 +382,7 @@ class _HomePageState extends State<HomePage> {
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const Text(
                                         'Your Balance',
@@ -465,7 +465,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-/* return Scaffold(
+  /* return Scaffold(
    body: ListView(
     children: [
        Stack(children: [

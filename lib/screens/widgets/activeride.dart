@@ -43,7 +43,8 @@ class _DriverWidgetState extends State<DriverWidget> {
   Future driverCancelTrip({required int xindex}) async {
     final response = await onDriverCancelRide(
         driverID: widget.data.id,
-        riderID: currentRidesArray[xindex]['riderID']);
+        riderID: currentRidesArray[xindex]['riderID'],
+        dbObjectID: currentRidesArray[xindex]['objectId']);
     if (response == 200) {
       print("OK RIDE CANCELLED");
     }
@@ -52,7 +53,8 @@ class _DriverWidgetState extends State<DriverWidget> {
   Future driverEndTrip({required int xindex}) async {
     final response = await onRideCompleted(
         driverID: widget.data.id,
-        riderID: currentRidesArray[xindex]['riderID']);
+        riderID: currentRidesArray[xindex]['riderID'],
+        dbObjectID: currentRidesArray[xindex]['objectId']);
     if (response == 200) {
       print("OK RIDE COMPLETED");
     }
