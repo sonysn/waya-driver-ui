@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:waya_driver/api/actions.dart';
-
+import '../../../colorscheme.dart';
 class Vehicle extends StatefulWidget {
   dynamic data;
 
@@ -23,51 +23,93 @@ class _VehicleState extends State<Vehicle> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    //getDriverCars(widget.data.id, widget.data.token);
     count();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Your Cars',
-            style: TextStyle(color: Colors.black),
-          ),
-          backgroundColor: Colors.grey,
+      appBar: AppBar(
+        title: const Text(
+          'Vehicles',
+          style: TextStyle(color: Colors.white),
         ),
-        body: itemList != null
-            ? Container(
-                padding: const EdgeInsets.only(top: 10),
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                child: ListView.builder(
-                    itemCount: itemList['result'].length,
-                    itemBuilder: (context, index) {
-                      const Text(
-                        'Your Cars',
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold),
-                      );
-                      return ListTile(
-                        title: Text(
-                            '${itemList['result'][index]['VEHICLE_MAKE']}, ${itemList['result'][index]['VEHICLE_MODEL']}'),
-                        subtitle: Text(
-                          itemList['result'][index]['VEHICLE_PLATE_NUMBER'],
+        backgroundColor: customPurple,
+      ),
+      body: itemList != null
+          ? Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 10),
+            const Text(
+              'Your Cars',
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: ListView.builder(
+                itemCount: itemList['result'].length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    elevation: 2,
+                    child: ListTile(
+                      title: Text(
+                        '${itemList['result'][index]['VEHICLE_MAKE']}, ${itemList['result'][index]['VEHICLE_MODEL']}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
                         ),
-                        trailing: Text(
-                          itemList['result'][index]['VEHICLE_COLOUR'],
-                        ),
-                      );
-                    }),
-              )
-            : Container(
-                padding: const EdgeInsets.only(top: 10),
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                child: const Center(
-                  child: Text('No Vehicles found or go back!'),
-                )));
+                      ),
+                      subtitle: Text(
+                        itemList['result'][index]['VEHICLE_PLATE_NUMBER'],
+                      ),
+                      trailing: Text(
+                        itemList['result'][index]['VEHICLE_COLOUR'],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      )
+          : Center(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.car_rental,
+                size: 80,
+                color: Colors.grey,
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'No Vehicles Found',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'You have no Registered vehicles',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

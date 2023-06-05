@@ -243,7 +243,7 @@ class _WalletPageState extends State<WalletPage> {
                         },
                         itemBuilder: (context, index) {
                           return EarningCard(
-                            data: widget.data,
+
                             amountTransferred: reversedEarnings[index]
                                 ['amountTransferred'],
                             dateTransferred: reversedEarnings[index]

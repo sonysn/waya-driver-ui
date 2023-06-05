@@ -243,7 +243,7 @@ class RideRequestCard extends StatelessWidget {
                         pickUpLocation: pickupLocation,
                         pickupLocationPosition: pickupLocationPosition,
                         dropoffLocationPostion: dropoffLocationPostion,
-                        fare: fare);
+                        fare: fare);   Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: customPurple,

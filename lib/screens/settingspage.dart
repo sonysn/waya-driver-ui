@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:waya_driver/screens/vehicle.dart';
 import 'package:waya_driver/screens/notification.dart';
-import 'package:waya_driver/screens/language.dart';
+import 'package:waya_driver/screens/aboutpage.dart';
 import '../main.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 class SettingsPage extends StatefulWidget {
   dynamic data;
   SettingsPage({Key? key, this.data}) : super(key: key);
@@ -49,41 +49,31 @@ class _SettingsPageState extends State<SettingsPage> {
 
 
           ListTile(
-            leading: Icon(Icons.security),
+            leading: Icon(Icons.security,       color: Colors.black,),
             title: Text('Privacy & Security'),
             onTap: () {
               // Navigate to the Privacy & Security screen
             },
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return  LanguageSelectionPage();
-                  }));
-            },
-            child: const ListTile(
-              leading: Icon(
-                Icons.mail_outline,
-                color: Colors.black,
-              ),
-              title: Text("Language"),
-            ),
-          ),
 
           ListTile(
-            leading: Icon(Icons.info),
+            leading: Icon(Icons.info,       color: Colors.black,),
             title: Text('About'),
-            onTap: () {
-              // Navigate to the About screen
+            onTap: (){
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                    return const AboutPage(
+                
+                    );
+                  }));
             },
           ),
           ListTile(
-            leading: Icon(Icons.web),
+            leading: Icon(Icons.web,       color: Colors.black,),
             title: Text('Website'),
             onTap: () {
               // Open the website link
-              // Example: launch('https://www.example.com');
+               Example: launch('https://www.qunot.com');
             },
           ),
         ],
