@@ -39,6 +39,7 @@ class _DriverWidgetState extends State<DriverWidget> {
         dbObjectID: currentRidesArray[xindex]['objectId']);
     if (response == 200) {
       print("OK RIDE COMPLETED");
+      getCurrentRides(); // Refresh the rides list
     }
   }
 
@@ -89,10 +90,11 @@ class _DriverWidgetState extends State<DriverWidget> {
           ),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop(); // Close the dialog
                 // Perform the end trip action
-                driverEndTrip(xindex: indexPos);
+                await driverEndTrip(xindex: indexPos);
+                getCurrentRides(); // Refresh the rides list
               },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -174,6 +176,7 @@ class _DriverWidgetState extends State<DriverWidget> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
+                getCurrentRides();
               },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),

@@ -78,11 +78,10 @@ class AboutPage extends StatelessWidget {
             SizedBox(height: 8.0),
             Row(
               children: [
-                Icon(Icons.phone),
+                Icon(Icons.public),
                 SizedBox(width: 8.0),
                 Text(
-                  'Phone: +1 123-456-7890',
-                ),
+                  'Website: www.qunot.com',)
               ],
             ),
           ],

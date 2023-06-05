@@ -6,7 +6,7 @@ import 'package:waya_driver/api/auth.dart';
 import 'package:waya_driver/functions/location_functions.dart';
 import 'package:waya_driver/screens/bookings.dart';
 import 'package:waya_driver/screens/homepage.dart';
-
+import 'package:waya_driver/screens/legalpage.dart';
 import 'package:waya_driver/screens/settingspage.dart';
 import 'package:waya_driver/screens/messages.dart';
 import 'package:waya_driver/screens/welcomepage.dart';
@@ -208,13 +208,20 @@ class _SettingTabState extends State<SettingTab> {
                     title: Text("Help"),
                   ),
                 ),
-                const ListTile(
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
+                      return const LegalPage();
+                    }));
+              },
+              child:const ListTile(
                   leading: Icon(
                     Icons.info_outline,
                     color: Colors.black,
                   ),
                   title: Text("Legal"),
-                ),
+                ),),
                 GestureDetector(
                   onTap: () async {
                     SharedPreferences prefs =

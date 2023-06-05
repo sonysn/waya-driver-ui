@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:waya_driver/screens/passwordsettings.dart';
+import 'package:waya_driver/screens/privacypolicy.dart';
 import 'package:waya_driver/screens/vehicle.dart';
-import 'package:waya_driver/screens/notification.dart';
+import 'package:waya_driver/screens/privacypolicy.dart';
 import 'package:waya_driver/screens/aboutpage.dart';
 import '../main.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -50,9 +52,26 @@ class _SettingsPageState extends State<SettingsPage> {
 
           ListTile(
             leading: Icon(Icons.security,       color: Colors.black,),
-            title: Text('Privacy & Security'),
-            onTap: () {
-              // Navigate to the Privacy & Security screen
+            title: Text('Security'),
+            onTap: (){
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                    return const PasswordSettings(
+
+                    );
+                  }));
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.privacy_tip,       color: Colors.black,),
+            title: Text('Privacy Policy'),
+            onTap: (){
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                    return const DriverPrivacyPolicyPage(
+
+                    );
+                  }));
             },
           ),
 
@@ -63,7 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (BuildContext context) {
                     return const AboutPage(
-                
+
                     );
                   }));
             },
