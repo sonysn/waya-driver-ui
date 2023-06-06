@@ -10,15 +10,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-// Workmanager backWorkmanager = Workmanager();
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-// Get the device's FCM registration token
+  // Get the device's FCM registration token
   FirebaseMessaging.instance.getToken().then((token) {
     print('FCM Token: $token');
   }).catchError((err) {
@@ -28,21 +26,9 @@ Future<void> main() async {
   final NotificationService notificationService = NotificationService();
   await notificationService.initialize();
 
-  // Workmanager().initialize(
-  //   callbackDispatcher, // the callback function to run background tasks
-  //   isInDebugMode: true, // enable logging in debug mode
-  // );
-  // Workmanager().registerPeriodicTask(
-  //   "Task Ping Location", // unique name for the task
-  //   "Ping Location", // task name
-  //   frequency: const Duration(minutes: 15), // execute the task each 30 seconds
-  // );
-  //Set app orientation to portrait only
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
-      .then((value) => runApp(const MaterialApp(
+  runApp(const MaterialApp(
     home: WApp(),
-  )));
+  ));
 }
 
 class WApp extends StatefulWidget {
@@ -53,21 +39,44 @@ class WApp extends StatefulWidget {
 }
 
 class _WAppState extends State<WApp> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _configureFirebaseMessaging();
+  }
+
+  void _configureFirebaseMessaging() {
+    _firebaseMessaging.requestPermission();
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      // Handle notification click here
+      navigateToScreenBasedOnPayload(message.data);
+    });
+  }
+
+  void navigateToScreenBasedOnPayload(Map<String, dynamic> data) {
+    // Extract the necessary data from the payload and navigate to the appropriate screen
+    if (data.containsKey('screen')) {
+      String screen = data['screen'];
+
+      // Navigate to the specified screen
+      if (screen == 'homepage') {
+        // Extract additional data if needed and pass it to the screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(data: data),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      // body: WelcomePage(),
       body: SplashScreen(),
     );
   }
 }
-
-// void callbackDispatcher() {
-//   Workmanager().executeTask((taskName, inputData) {
-//     //use task name here
-//     if (taskName == "Ping Location") {
-//       locationPingServer();
-//     }
-//     return Future.value(true);
-//   });
-// }

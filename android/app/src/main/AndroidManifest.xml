@@ -10,6 +10,9 @@
         android:label="Waya Driver"
         android:name="${applicationName}"
         android:icon="@drawable/app_icon">
+        <meta-data
+            android:name="com.google.firebase.messaging.default_test"
+            android:resource="@drawable/test" />
        <meta-data android:name="com.google.android.geo.API_KEY"
            android:value="A4"/>
 <!--        this comes from strings.xml android/app/src/main/res/values directory.-->
