@@ -10,7 +10,10 @@ import 'package:intl/intl.dart';
 
 StreamSubscription<LocationData>? _subscription;
 
-locationCallbacks(id, verificationStatus) async {
+locationCallbacks(
+    {required int id,
+    required int verificationStatus,
+    required List driverDestPoint}) async {
   Location location = Location();
   location.enableBackgroundMode(enable: true);
 
@@ -19,20 +22,24 @@ locationCallbacks(id, verificationStatus) async {
     _subscription =
         location.onLocationChanged.listen((LocationData currentLocation) {
       ConnectToServer().sendDriverLocation(
-          LatLng(double.parse(currentLocation.latitude.toString()),
-              double.parse(currentLocation.longitude.toString())),
-          id,
-          verificationStatus);
+        data: LatLng(double.parse(currentLocation.latitude.toString()),
+            double.parse(currentLocation.longitude.toString())),
+        id: id,
+        verificationStatus: verificationStatus,
+        driverDestPoint: driverDestPoint,
+      );
     });
   } else {
     bool verificationStatus = false;
     _subscription =
         location.onLocationChanged.listen((LocationData currentLocation) {
       ConnectToServer().sendDriverLocation(
-          LatLng(double.parse(currentLocation.latitude.toString()),
-              double.parse(currentLocation.longitude.toString())),
-          id,
-          verificationStatus);
+        data: LatLng(double.parse(currentLocation.latitude.toString()),
+            double.parse(currentLocation.longitude.toString())),
+        id: id,
+        verificationStatus: verificationStatus,
+        driverDestPoint: driverDestPoint,
+      );
     });
   }
 }

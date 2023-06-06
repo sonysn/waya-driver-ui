@@ -8,6 +8,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:waya_driver/functions/notification_service.dart';
 import 'package:waya_driver/main.dart';
 import 'package:waya_driver/screens/homepage.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ConnectToServer {
   final int? id;
@@ -27,7 +28,7 @@ class ConnectToServer {
 
   //configure socket transport
   Socket socket = io(
-    //api link here
+      //api link here
       ApiConstants.baseUrl,
       OptionBuilder()
           .setTransports(['websocket'])
@@ -90,8 +91,14 @@ class ConnectToServer {
     socket.dispose();
   }
 
-  void sendDriverLocation(data, id, verificationStatus) {
-    socket.emit("driverLocationUpdates", {data, id, verificationStatus});
+  void sendDriverLocation(
+      {required LatLng data,
+      required int id,
+      required bool verificationStatus,
+      required List driverDestPoint}) {
+    //List driverDestPoint = [6.518751, 3.391288];
+    socket.emit("driverLocationUpdates",
+        {data, id, verificationStatus, driverDestPoint});
   }
 
 //   Stream getRideNotifications() async* {
@@ -243,7 +250,8 @@ class RideRequestCard extends StatelessWidget {
                         pickUpLocation: pickupLocation,
                         pickupLocationPosition: pickupLocationPosition,
                         dropoffLocationPostion: dropoffLocationPostion,
-                        fare: fare);   Navigator.pop(context);
+                        fare: fare);
+                    Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: customPurple,

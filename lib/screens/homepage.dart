@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:flutter/widgets.dart';
@@ -13,6 +14,8 @@ import '../../../colorscheme.dart';
 import '../api/actions.dart';
 import '../sockets/sockets.dart';
 import 'package:waya_driver/screens/widgets/activeride.dart';
+import 'package:http/http.dart' as http;
+import 'package:geocoding/geocoding.dart' as locationGeocodingPackage;
 
 class HomePage extends StatefulWidget {
   dynamic data;
@@ -75,7 +78,7 @@ class _HomePageState extends State<HomePage> {
     final res = await getDriverCars(widget.data.id, widget.data.token);
     setState(() {
       vehicleName =
-      "${res['result'][0]['VEHICLE_MAKE']}, ${res['result'][0]['VEHICLE_MODEL']}";
+          "${res['result'][0]['VEHICLE_MAKE']}, ${res['result'][0]['VEHICLE_MODEL']}";
       vehiclePlateNumber = res['result'][0]['VEHICLE_PLATE_NUMBER'];
       vehicleColour = res['result'][0]['VEHICLE_COLOUR'];
       vehicleBodyType = res['result'][0]['VEHICLE_BODY_TYPE'];
@@ -112,7 +115,10 @@ class _HomePageState extends State<HomePage> {
       }
 
       _connect();
-      locationCallbacks(widget.data.id, widget.data.verified);
+      locationCallbacks(
+          id: widget.data.id,
+          verificationStatus: widget.data.verified,
+          driverDestPoint: driverDestLatLng!);
       updateAvailability(1, widget.data.id);
       getCar();
       await setSwitchValue(onlineStatus);
@@ -129,20 +135,102 @@ class _HomePageState extends State<HomePage> {
     print(currentRidesArray);
   }
 
-  dynamic currentLocation;
+  Future<void> getApikey() async {
+    const url = 'https://sea-lion-app-m46xn.ondigitalocean.app/getAPIKEY';
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      setState(() {
+        gApiKey = data['KEY'];
+      });
+      // print(data['KEY']);
+    }
+  }
 
+  Future<void> _fetchSuggestions(String input) async {
+    String apiKey = gApiKey!; // Replace with your own API key
+    const countryCode = "NG";
+    final url =
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&components=country:$countryCode&key=$apiKey';
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final predictions = data['predictions'] as List<dynamic>;
+      final suggestions = predictions
+          .map((prediction) => prediction['description'] as String)
+          .toList();
+
+      setState(() {
+        _suggestions = suggestions;
+      });
+    }
+  }
+
+  Future getDriverDestinationCoordinates({required String address}) async {
+    try {
+      List<locationGeocodingPackage.Location> locations =
+          await locationGeocodingPackage.locationFromAddress(address);
+      print(locations[0].latitude);
+      print(locations[0].longitude);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setStringList('driverDestinationPoint', [
+        locations[0].latitude.toString(),
+        locations[0].longitude.toString()
+      ]);
+      await prefs.setString('driverDestinationAddress', address);
+    } catch (e) {
+      print('Error getting location from address: $e');
+      return null;
+    }
+  }
+
+  void getDriverDestData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? address = prefs.getString('driverDestinationAddress');
+    if (address != null) {
+      setState(() {
+        driverDestinationLocationController.text = address;
+      });
+    }
+  }
+
+  void clearDriverDestData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('driverDestinationPoint', []);
+    await prefs.remove('driverDestinationAddress');
+    setLatLng();
+  }
+
+  void setLatLng() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List? p = prefs.getStringList('driverDestinationPoint');
+    setState(() {
+      driverDestLatLng = p;
+    });
+  }
+
+  dynamic currentLocation;
+  String? gApiKey;
   DateTime?
-  _lastPressedAt; // for tracking the time of the last back button press
+      _lastPressedAt; // for tracking the time of the last back button press
   List currentRidesArray = [];
+  List<String> _suggestions = [];
+  TextEditingController driverDestinationLocationController =
+      TextEditingController();
+  List? driverDestLatLng;
 
   @override
   void initState() {
     super.initState();
     //findLoc();
+    //setLatLng();
+    getDriverDestData();
     locationPingServer();
     getSwitchValue();
     getCurrentRides();
     //getCar();
+    getApikey();
 
     // Request permission for receiving push notifications (only for iOS)
     FirebaseMessaging.instance.requestPermission();
@@ -164,381 +252,379 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
   }
-  String searchText = '';
-  List<String> allSuggestions = [
-    'Apple',
-    'Banana',
-    'Orange',
-    'Mango',
-    'Grapes',
-  ];
 
-  List<String> filteredSuggestions = [];
-
-  void updateSuggestions() {
-    filteredSuggestions.clear();
-
-    if (searchText.isNotEmpty) {
-      // Filter the suggestions based on the searchText
-      for (final suggestion in allSuggestions) {
-        if (suggestion.toLowerCase().contains(searchText.toLowerCase())) {
-          filteredSuggestions.add(suggestion);
-        }
-      }
-    }
-
-    setState(() {
-      // Update the state to trigger UI update
-    });
-  }
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      color: Colors.orangeAccent,
-      backgroundColor: customPurple,
-      onRefresh: _refreshItems,
-      child: WillPopScope(
-        onWillPop: () async {
-          if (_lastPressedAt == null ||
-              DateTime.now().difference(_lastPressedAt!) >
-                  const Duration(seconds: 2)) {
-            // show a toast or snackbar to inform the user to press back again to exit
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('Press back again to exit'),
-              duration: Duration(seconds: 2),
-            ));
-            _lastPressedAt = DateTime.now();
-            return false; // prevent the app from closing
-          }
-          return true; // allow the app to close
-        },
-        child: Scaffold(
-          body: ListView(
-            children: [
-              Container(
-                padding: const EdgeInsets.only(top: 15),
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        //todo fix this error
-                        widget.data.profilePhoto != null
-                            ? CircleAvatar(
-                          backgroundImage:
-                          NetworkImage('${widget.data.profilePhoto}'),
-                          radius: 30.0,
-                        )
-                            : const CircleAvatar(
-                          backgroundColor: Colors.black,
-                          radius: 30.0,
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${widget.data.firstName} ${widget.data.lastName}',
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                            Row(
-                              children: [
-                                const Icon(Icons.star),
-                                Text(
-                                  widget.data.rating.toString(),
-                                  style: const TextStyle(fontSize: 20),
+        color: Colors.orangeAccent,
+        backgroundColor: customPurple,
+        onRefresh: _refreshItems,
+        child: WillPopScope(
+            onWillPop: () async {
+              if (_lastPressedAt == null ||
+                  DateTime.now().difference(_lastPressedAt!) >
+                      const Duration(seconds: 2)) {
+                // show a toast or snackbar to inform the user to press back again to exit
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Press back again to exit'),
+                  duration: Duration(seconds: 2),
+                ));
+                _lastPressedAt = DateTime.now();
+                return false; // prevent the app from closing
+              }
+              return true; // allow the app to close
+            },
+            child: Scaffold(
+              body: ListView(children: [
+                Container(
+                  padding: const EdgeInsets.only(top: 15),
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          //todo fix this error
+                          widget.data.profilePhoto != null
+                              ? CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      '${widget.data.profilePhoto}'),
+                                  radius: 30.0,
                                 )
-                              ],
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        setState(() {
-                          onlineStatus = !onlineStatus;
-                        });
-
-                        if (onlineStatus) {
-                          ConnectToServer().connect(widget.data.id, context);
-                          locationCallbacks(
-                              widget.data.id, widget.data.verified);
-                          updateAvailability(1, widget.data.id);
-                          getCar();
-                          locationPingServer();
-                          await setSwitchValue(onlineStatus);
-                          timedPing();
-                        } else {
-                          cancelLocationCallbacks();
-                          ConnectToServer().disconnect();
-                          updateAvailability(0, widget.data.id);
-                          await setSwitchValue(onlineStatus);
-                          locationPingServer();
-                          timedPing();
-                        }
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        height: 60.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30.0),
-                          gradient: LinearGradient(
-                            colors: onlineStatus
-                                ? [
-                              const Color(0xFF1BE611),
-                              const Color(0xFF21E672)
-                            ]
-                                : [
-                              const Color(0xFFE62121),
-                              const Color(0xFFE66565)
+                              : const CircleAvatar(
+                                  backgroundColor: Colors.black,
+                                  radius: 30.0,
+                                ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${widget.data.firstName} ${widget.data.lastName}',
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                              Row(
+                                children: [
+                                  const Icon(Icons.star),
+                                  Text(
+                                    widget.data.rating.toString(),
+                                    style: const TextStyle(fontSize: 20),
+                                  )
+                                ],
+                              )
                             ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
-                        ),
-                        child: Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 16.0),
-                                child: Icon(
-                                  onlineStatus
-                                      ? Icons.check_circle
-                                      : Icons.cancel,
-                                  color: Colors.white,
-                                  size: 32.0,
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 16.0),
-                                child: Icon(
-                                  onlineStatus
-                                      ? Icons.toggle_on
-                                      : Icons.toggle_off,
-                                  color: Colors.white,
-                                  size: 32.0,
-                                ),
-                              ),
-                            ),
-                            Center(
-                              child: Text(
-                                onlineStatus ? 'Online' : 'Offline',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20.0,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                          )
+                        ],
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // Navigator.push(context,
-                        //     MaterialPageRoute(builder: (BuildContext context) {
-                        //       return const MessagesNotificationPage();
-                        //     }));
-                      },
-                      child: const SizedBox(
-                        height: 15,
+                      const SizedBox(
+                        height: 30,
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Search',
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.orangeAccent),
-                          ),
-                          prefixIcon: Icon(Icons.search),
-                          fillColor: Colors.grey[200],
-                          filled: true,
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.orangeAccent),
-                          ),
-                          hintText: 'Search...',
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                          ),
-                        ),
-                        onChanged: (value) {
+                      GestureDetector(
+                        onTap: () async {
                           setState(() {
-                            searchText = value;
-                            updateSuggestions();
+                            onlineStatus = !onlineStatus;
                           });
-                        },
-                      ),
-                    ),
 
-// Display suggestions
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        // Do nothing to consume the tap event
-                      },
-                      child: Container(
-                        color: Colors.white,
+                          if (onlineStatus) {
+                            ConnectToServer().connect(widget.data.id, context);
+                            locationCallbacks(
+                                id: widget.data.id,
+                                verificationStatus: widget.data.verified,
+                                driverDestPoint: driverDestLatLng!);
+                            updateAvailability(1, widget.data.id);
+                            getCar();
+                            locationPingServer();
+                            await setSwitchValue(onlineStatus);
+                            timedPing();
+                          } else {
+                            cancelLocationCallbacks();
+                            ConnectToServer().disconnect();
+                            updateAvailability(0, widget.data.id);
+                            await setSwitchValue(onlineStatus);
+                            locationPingServer();
+                          }
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 60.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30.0),
+                            gradient: LinearGradient(
+                              colors: onlineStatus
+                                  ? [
+                                      const Color(0xFF1BE611),
+                                      const Color(0xFF21E672)
+                                    ]
+                                  : [
+                                      const Color(0xFFE62121),
+                                      const Color(0xFFE66565)
+                                    ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                          ),
+                          child: Stack(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 16.0),
+                                  child: Icon(
+                                    onlineStatus
+                                        ? Icons.check_circle
+                                        : Icons.cancel,
+                                    color: Colors.white,
+                                    size: 32.0,
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 16.0),
+                                  child: Icon(
+                                    onlineStatus
+                                        ? Icons.toggle_on
+                                        : Icons.toggle_off,
+                                    color: Colors.white,
+                                    size: 32.0,
+                                  ),
+                                ),
+                              ),
+                              Center(
+                                child: Text(
+                                  onlineStatus ? 'Online' : 'Offline',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.0,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          // Navigator.push(context,
+                          //     MaterialPageRoute(builder: (BuildContext context) {
+                          //       return const MessagesNotificationPage();
+                          //     }));
+                        },
+                        child: const SizedBox(
+                          height: 15,
+                        ),
+                      ),
+                      Container(
+                        child: TextFormField(
+                          controller: driverDestinationLocationController,
+                          onChanged: _fetchSuggestions,
+                          textInputAction: TextInputAction.search,
+                          decoration: InputDecoration(
+                            hintText: 'Enter destination',
+                            prefixIcon: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 12.0),
+                              child: SizedBox(
+                                width: 12.0,
+                                height: 24.0,
+                                child: Icon(Icons.description),
+                              ),
+                            ),
+                            fillColor:
+                                Colors.grey[150], // Set light grey background
+                            filled: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 4.0), // Adjust the vertical height
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Center(
+                          child: Row(
+                        children: [
+                          ElevatedButton(
+                              onPressed: () async {
+                                await getDriverDestinationCoordinates(
+                                    address: driverDestinationLocationController
+                                        .text);
+                                setLatLng();
+                              },
+                              child: const Text('ok')),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          ElevatedButton(
+                              onPressed: () {
+                                driverDestinationLocationController.clear();
+                                clearDriverDestData();
+                              },
+                              child: const Text(
+                                  'clear data from phone and textfield')),
+                        ],
+                      )),
+                      Container(
+                        constraints: const BoxConstraints(
+                            maxHeight:
+                                200), // Set a maximum height for the suggestion list
                         child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: filteredSuggestions.length,
+                          itemCount: _suggestions.length,
                           itemBuilder: (context, index) {
-                            final suggestion = filteredSuggestions[index];
                             return ListTile(
-                              title: Text(suggestion),
+                              leading: const SizedBox(
+                                  width: 24.0,
+                                  height: 24.0,
+                                  child: Icon(Icons.description)),
+                              title: Text(_suggestions[index]),
                               onTap: () {
-                                // Handle suggestion tapped
-                                print('Tapped: $suggestion');
+                                driverDestinationLocationController.text =
+                                    _suggestions[index];
+
+                                setState(() {
+                                  _suggestions = []; // Clear suggestions
+                                });
                               },
                             );
                           },
                         ),
                       ),
-                    ),
-
-
-                    const SizedBox(
-                height: 15,
-              ),
-              FittedBox(
-                fit: BoxFit.fitWidth,
-                child: SizedBox(
-                  height: 80,
-                  width: MediaQuery.of(context).size.width,
-                  child: Card(
-                    elevation: 5,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(15),
-                        bottom: Radius.circular(15),
+                      const SizedBox(
+                        height: 15,
                       ),
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [customPurple, Colors.orangeAccent],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(15),
-                          bottom: Radius.circular(15),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 5,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 4,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(width: 10),
-                            const Icon(
-                              Icons.wallet,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(width: 15),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Your Balance',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  "₦${widget.data.accountBalance}",
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 6,
-                child: Card(
-                  elevation: 15,
-                  child: Stack(
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                              "https://img.freepik.com/premium-vector/taxi-city_1270-526.jpg?w=2000",
-                            ),
-                          ),
-                        ),
-                      ),
-                      FutureBuilder(
-                        future: Future.delayed(const Duration(
-                            milliseconds: 500)), // Simulating a delay
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.orangeAccent),
+                      FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: SizedBox(
+                          height: 80,
+                          width: MediaQuery.of(context).size.width,
+                          child: Card(
+                            elevation: 5,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(15),
+                                bottom: Radius.circular(15),
                               ),
-                            );
-                          } else {
-                            return const SizedBox(); // Render nothing when image is loaded
-                          }
-                        },
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [customPurple, Colors.orangeAccent],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(15),
+                                  bottom: Radius.circular(15),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 4,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    const Icon(
+                                      Icons.wallet,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(width: 15),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'Your Balance',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          "₦${widget.data.accountBalance}",
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 6,
+                        child: Card(
+                          elevation: 15,
+                          child: Stack(
+                            children: [
+                              Container(
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                      "https://img.freepik.com/premium-vector/taxi-city_1270-526.jpg?w=2000",
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              FutureBuilder(
+                                future: Future.delayed(const Duration(
+                                    milliseconds: 500)), // Simulating a delay
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Colors.orangeAccent),
+                                      ),
+                                    );
+                                  } else {
+                                    return const SizedBox(); // Render nothing when image is loaded
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      DriverWidget(
+                        data: widget.data,
                       ),
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              DriverWidget(
-                data: widget.data,
-              ),
-            ],
-          ),
-        ),
-      ]),
-    )));
+              ]),
+            )));
   }
 }
