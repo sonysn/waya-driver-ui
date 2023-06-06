@@ -9,7 +9,7 @@ import 'package:workmanager/workmanager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
+import 'package:waya_driver/sockets/sockets.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -70,7 +70,36 @@ class _WAppState extends State<WApp> {
           ),
         );
       }
+      else if (screen == 'riderequest') {
+        // Extract additional data if needed
+        int riderId = data['riderId'];
+        String name = data['name'];
+        String pickupLocation = data['pickupLocation'];
+        String dropoffLocation = data['dropoffLocation'];
+        int fare = data['fare'];
+        String riderPhoneNumber = data['riderPhoneNumber'];
+        List pickupLocationPosition = data['pickupLocationPosition'];
+        List dropoffLocationPostion = data['dropoffLocationPostion'];
+
+        // Pass the data to the RideRequestCard widget
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => RideRequestCard(
+              riderId: riderId,
+              name: name,
+              pickupLocation: pickupLocation,
+              dropoffLocation: dropoffLocation,
+              fare: fare,
+              riderPhoneNumber: riderPhoneNumber,
+              pickupLocationPosition: pickupLocationPosition,
+              dropoffLocationPostion: dropoffLocationPostion,
+            ),
+          ),
+        );
+      }
     }
+
   }
 
   @override

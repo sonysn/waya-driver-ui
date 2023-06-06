@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:waya_driver/functions/location_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -163,7 +164,33 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
   }
+  String searchText = '';
+  List<String> allSuggestions = [
+    'Apple',
+    'Banana',
+    'Orange',
+    'Mango',
+    'Grapes',
+  ];
 
+  List<String> filteredSuggestions = [];
+
+  void updateSuggestions() {
+    filteredSuggestions.clear();
+
+    if (searchText.isNotEmpty) {
+      // Filter the suggestions based on the searchText
+      for (final suggestion in allSuggestions) {
+        if (suggestion.toLowerCase().contains(searchText.toLowerCase())) {
+          filteredSuggestions.add(suggestion);
+        }
+      }
+    }
+
+    setState(() {
+      // Update the state to trigger UI update
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -326,279 +353,192 @@ class _HomePageState extends State<HomePage> {
                         //     }));
                       },
                       child: const SizedBox(
-                        height: 30,
-                        //width: 20,
+                        height: 15,
                       ),
                     ),
-                    const SizedBox(
-                      height: 30,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Search',
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.orangeAccent),
+                          ),
+                          prefixIcon: Icon(Icons.search),
+                          fillColor: Colors.grey[200],
+                          filled: true,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.orangeAccent),
+                          ),
+                          hintText: 'Search...',
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            searchText = value;
+                            updateSuggestions();
+                          });
+                        },
+                      ),
                     ),
-                    FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: SizedBox(
-                        height: 80,
-                        width: MediaQuery.of(context).size.width,
-                        child: Card(
-                          elevation: 5,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(15),
-                              bottom: Radius.circular(15),
-                            ),
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [customPurple, Colors.orangeAccent],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(15),
-                                bottom: Radius.circular(15),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 4,
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  const Icon(
-                                    Icons.wallet,
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(width: 15),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        'Your Balance',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        "₦${widget.data.accountBalance}",
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+
+// Display suggestions
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        // Do nothing to consume the tap event
+                      },
+                      child: Container(
+                        color: Colors.white,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: filteredSuggestions.length,
+                          itemBuilder: (context, index) {
+                            final suggestion = filteredSuggestions[index];
+                            return ListTile(
+                              title: Text(suggestion),
+                              onTap: () {
+                                // Handle suggestion tapped
+                                print('Tapped: $suggestion');
+                              },
+                            );
+                          },
                         ),
                       ),
                     ),
+
+
                     const SizedBox(
-                      height: 20,
+                height: 15,
+              ),
+              FittedBox(
+                fit: BoxFit.fitWidth,
+                child: SizedBox(
+                  height: 80,
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    elevation: 5,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(15),
+                        bottom: Radius.circular(15),
+                      ),
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height / 6,
-                      child: Card(
-                        elevation: 15,
-                        child: Stack(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [customPurple, Colors.orangeAccent],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(15),
+                          bottom: Radius.circular(15),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 5,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
                           children: [
                             Container(
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                    "https://img.freepik.com/premium-vector/taxi-city_1270-526.jpg?w=2000",
+                              width: 4,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(width: 10),
+                            const Icon(
+                              Icons.wallet,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(width: 15),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Your Balance',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              ),
-                            ),
-                            FutureBuilder(
-                              future: Future.delayed(const Duration(
-                                  milliseconds: 500)), // Simulating a delay
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const Center(
-                                    child: CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.orangeAccent),
-                                    ),
-                                  );
-                                } else {
-                                  return const SizedBox(); // Render nothing when image is loaded
-                                }
-                              },
+                                Text(
+                                  "₦${widget.data.accountBalance}",
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    DriverWidget(
-                      data: widget.data,
-                    ),
-                  ],
+                  ),
                 ),
-              )
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 6,
+                child: Card(
+                  elevation: 15,
+                  child: Stack(
+                    children: [
+                      Container(
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(
+                              "https://img.freepik.com/premium-vector/taxi-city_1270-526.jpg?w=2000",
+                            ),
+                          ),
+                        ),
+                      ),
+                      FutureBuilder(
+                        future: Future.delayed(const Duration(
+                            milliseconds: 500)), // Simulating a delay
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.orangeAccent),
+                              ),
+                            );
+                          } else {
+                            return const SizedBox(); // Render nothing when image is loaded
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              DriverWidget(
+                data: widget.data,
+              ),
             ],
           ),
         ),
-      ),
-    );
+      ]),
+    )));
   }
-
-/* return Scaffold(
-   body: ListView(
-    children: [
-       Stack(children: [
-            Container(
-              //color: Colors.yellow,
-              height: 120,
-              decoration: const BoxDecoration(
-                  color: Colors.yellow,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30))),
-            ),
-            Container(
-              padding: const EdgeInsets.only(top: 10),
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                children: [
-                  const Text(
-                    'Profile',
-                    style: TextStyle(fontSize: 25),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      //todo fix this error
-                      widget.data.profilePhoto != null
-                          ? CircleAvatar(
-                        backgroundImage: NetworkImage('${widget.data
-                            .profilePhoto}'),
-                        radius: 30.0,
-                      ) : const CircleAvatar(
-                        backgroundColor: Colors.black,
-                        radius: 30.0,
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${widget.data.firstName} ${widget.data.lastName}',
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                          Row(
-                            children: [
-                              const Icon(Icons.star),
-                              Text(
-                                widget.data.rating.toString(),
-                                style: const TextStyle(fontSize: 20),
-                              )
-                            ],
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 150,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width / 1.1,
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                Text('Earned Today'),
-                                Text(
-                                  '£250.65',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 30),
-                                )
-                              ],
-                            ),
-                            const Divider(),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
-                                    Text('Total Trips'),
-                                    Text(
-                                      '15',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
-                                    Text('Time Online'),
-                                    Text(
-                                      '15h 30m',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
-                                    Text('Total Distance'),
-                                    Text(
-                                      '45 km',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ])
-        ],
-      ),
-    );*/
 }
