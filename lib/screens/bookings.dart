@@ -26,7 +26,7 @@ class _BookingPageState extends State<BookingPage>
           appBar: AppBar(
             backgroundColor: Colors.black,
             leading: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -48,11 +48,11 @@ class _BookingPageState extends State<BookingPage>
                 Container(
                   height: 45,
                   decoration: const BoxDecoration(
-                    //color: Colors.grey[300],
-                    // border: Border(
-                    //   bottom: BorderSide(width: 3.0, color: Colors.grey)
-                    // ),
-                  ),
+                      //color: Colors.grey[300],
+                      // border: Border(
+                      //   bottom: BorderSide(width: 3.0, color: Colors.grey)
+                      // ),
+                      ),
                   child: TabBar(
                     indicator: const BoxDecoration(
                       //color: Colors.yellow[100],
@@ -76,8 +76,8 @@ class _BookingPageState extends State<BookingPage>
                 ),
                 const Expanded(
                     child: TabBarView(
-                      children: [ActivePage(), CompletedPage(), CancelledPage()],
-                    ))
+                  children: [ActivePage(), CompletedPage(), CancelledPage()],
+                ))
               ],
             ),
           )),
@@ -92,14 +92,15 @@ class ActivePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [Image.asset("assets/images/booking.png"),
-            const Text(
-              'You have no Active Bookings',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            )
-          ],
-        ));
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset("assets/images/booking.png"),
+        const Text(
+          'You have no Active Bookings',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        )
+      ],
+    ));
   }
 }
 
@@ -110,15 +111,15 @@ class CompletedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset("assets/images/booking.png"),
-            const Text(
-              'You have no Completed Bookings',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            )
-          ],
-        ));
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset("assets/images/booking.png"),
+        const Text(
+          'You have no Completed Bookings',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        )
+      ],
+    ));
   }
 }
 
@@ -129,15 +130,16 @@ class CancelledPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              "assets/images/booking.png",),
-            const Text(
-              'You have no Cancelled Bookings',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            )
-          ],
-        ));
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          "assets/images/booking.png",
+        ),
+        const Text(
+          'You have no Cancelled Bookings',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        )
+      ],
+    ));
   }
 }

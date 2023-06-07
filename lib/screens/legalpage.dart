@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import '../../../colorscheme.dart';
+
 class LegalPage extends StatelessWidget {
-  const  LegalPage({Key? key}) : super(key: key);
+  const LegalPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Legal'),
+        title: const Text('Legal'),
         backgroundColor: customPurple,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: const [
               Text(
                 'Terms of Service',
                 style: TextStyle(

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class LanguageSelectionPage extends StatefulWidget {
+  const LanguageSelectionPage({super.key});
+
   @override
-  _LanguageSelectionPageState createState() => _LanguageSelectionPageState();
+  LanguageSelectionPageState createState() => LanguageSelectionPageState();
 }
 
-class _LanguageSelectionPageState extends State<LanguageSelectionPage> {
+class LanguageSelectionPageState extends State<LanguageSelectionPage> {
   String? selectedLanguage;
 
   @override
@@ -13,14 +15,14 @@ class _LanguageSelectionPageState extends State<LanguageSelectionPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text(
+        title: const Text(
           'Language Selection',
           style: TextStyle(color: Colors.white),
         ),
       ),
       body: Container(
         color: Colors.black,
-        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -68,22 +70,22 @@ class _LanguageSelectionPageState extends State<LanguageSelectionPage> {
 }
 
 class LanguageOption extends StatelessWidget {
-  final String language;
-  final bool isSelected;
-  final VoidCallback onPressed;
-
   const LanguageOption({
     required this.language,
     required this.isSelected,
     required this.onPressed,
   });
 
+  final bool isSelected;
+  final String language;
+  final VoidCallback onPressed;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        margin: EdgeInsets.only(bottom: 16.0),
+        margin: const EdgeInsets.only(bottom: 16.0),
         child: Row(
           children: [
             Icon(
@@ -91,10 +93,10 @@ class LanguageOption extends StatelessWidget {
               color: Colors.white,
               size: 24.0,
             ),
-            SizedBox(width: 12.0),
+            const SizedBox(width: 12.0),
             Text(
               language,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18.0,
                 color: Colors.white,
               ),
