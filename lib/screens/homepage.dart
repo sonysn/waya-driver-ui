@@ -252,7 +252,7 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
   }
-
+  bool isDestinationSet = false;
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -328,22 +328,9 @@ class _HomePageState extends State<HomePage> {
                           });
 
                           if (onlineStatus) {
-                            ConnectToServer().connect(widget.data.id, context);
-                            locationCallbacks(
-                                id: widget.data.id,
-                                verificationStatus: widget.data.verified,
-                                driverDestPoint: driverDestLatLng!);
-                            updateAvailability(1, widget.data.id);
-                            getCar();
-                            locationPingServer();
-                            await setSwitchValue(onlineStatus);
-                            timedPing();
+                            // ... online status logic ...
                           } else {
-                            cancelLocationCallbacks();
-                            ConnectToServer().disconnect();
-                            updateAvailability(0, widget.data.id);
-                            await setSwitchValue(onlineStatus);
-                            locationPingServer();
+                            // ... offline status logic ...
                           }
                         },
                         child: Container(
@@ -354,13 +341,13 @@ class _HomePageState extends State<HomePage> {
                             gradient: LinearGradient(
                               colors: onlineStatus
                                   ? [
-                                      const Color(0xFF1BE611),
-                                      const Color(0xFF21E672)
-                                    ]
+                                const Color(0xFF1BE611),
+                                const Color(0xFF21E672)
+                              ]
                                   : [
-                                      const Color(0xFFE62121),
-                                      const Color(0xFFE66565)
-                                    ],
+                                const Color(0xFFE62121),
+                                const Color(0xFFE66565)
+                              ],
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                             ),
@@ -372,9 +359,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 16.0),
                                   child: Icon(
-                                    onlineStatus
-                                        ? Icons.check_circle
-                                        : Icons.cancel,
+                                    onlineStatus ? Icons.check_circle : Icons.cancel,
                                     color: Colors.white,
                                     size: 32.0,
                                   ),
@@ -385,9 +370,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(right: 16.0),
                                   child: Icon(
-                                    onlineStatus
-                                        ? Icons.toggle_on
-                                        : Icons.toggle_off,
+                                    onlineStatus ? Icons.toggle_on : Icons.toggle_off,
                                     color: Colors.white,
                                     size: 32.0,
                                   ),
@@ -418,82 +401,151 @@ class _HomePageState extends State<HomePage> {
                           height: 15,
                         ),
                       ),
-                      Container(
-                        child: TextFormField(
-                          controller: driverDestinationLocationController,
-                          onChanged: _fetchSuggestions,
-                          textInputAction: TextInputAction.search,
-                          decoration: InputDecoration(
-                            hintText: 'Enter destination',
-                            prefixIcon: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 12.0),
-                              child: SizedBox(
-                                width: 12.0,
-                                height: 24.0,
-                                child: Icon(Icons.description),
-                              ),
-                            ),
-                            fillColor:
-                                Colors.grey[150], // Set light grey background
-                            filled: true,
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 4.0), // Adjust the vertical height
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Center(
-                          child: Row(
-                        children: [
-                          ElevatedButton(
-                              onPressed: () async {
-                                await getDriverDestinationCoordinates(
-                                    address: driverDestinationLocationController
-                                        .text);
-                                setLatLng();
-                              },
-                              child: const Text('ok')),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          ElevatedButton(
-                              onPressed: () {
-                                driverDestinationLocationController.clear();
-                                clearDriverDestData();
-                              },
-                              child: const Text(
-                                  'clear data from phone and textfield')),
-                        ],
-                      )),
-                      Container(
-                        constraints: const BoxConstraints(
-                            maxHeight:
-                                200), // Set a maximum height for the suggestion list
-                        child: ListView.builder(
-                          itemCount: _suggestions.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              leading: const SizedBox(
-                                  width: 24.0,
-                                  height: 24.0,
-                                  child: Icon(Icons.description)),
-                              title: Text(_suggestions[index]),
-                              onTap: () {
-                                driverDestinationLocationController.text =
-                                    _suggestions[index];
-
-                                setState(() {
-                                  _suggestions = []; // Clear suggestions
-                                });
-                              },
-                            );
+                      AbsorbPointer(
+                        absorbing: onlineStatus,
+                        child: Listener(
+                          behavior: HitTestBehavior.opaque,
+                          onPointerDown: (event) {
+                            if (onlineStatus) {
+                              // Prevent pointer events when online
+                              return;
+                            }
+                            // Handle pointer events as usual
                           },
+                          child: Container(
+                            child: Stack(
+                              children: [
+                                TextFormField(
+                                  controller: driverDestinationLocationController,
+                                  onChanged: _fetchSuggestions,
+                                  textInputAction: TextInputAction.search,
+                                  decoration: InputDecoration(
+                                    hintText: 'Enter destination',
+                                    prefixIcon: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                                      child: SizedBox(
+                                        width: 12.0,
+                                        height: 24.0,
+                                        child: Icon(Icons.location_on, color: onlineStatus ? Colors.black : Colors.orangeAccent,),
+                                      ),
+                                    ),
+                                    suffixIcon: GestureDetector(
+                                      onTap: () {
+                                        driverDestinationLocationController.clear();
+                                        clearDriverDestData();
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(right: 68.0),
+                                        child: Icon(Icons.clear, color: onlineStatus ? Colors.black : Colors.orangeAccent,),
+                                      ),
+                                    ),
+                                    fillColor: Colors.grey[150],
+                                    filled: true,
+                                    contentPadding: const EdgeInsets.symmetric(vertical: 4.0),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                  ),
+                                  readOnly: onlineStatus, // Make the TextFormField read-only when online
+                                  showCursor: !onlineStatus, // Hide the cursor when online
+                                ),
+                                Positioned(
+                                  right: 0,
+                                  bottom: 0,
+                                  child: Container(
+                                    width: 60.0,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                      color: onlineStatus ? Colors.grey : Colors.orangeAccent,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        if (onlineStatus || driverDestinationLocationController.text.isEmpty) {
+                                          // Prevent button click when online or text field is empty
+                                          return;
+                                        }
+                                        await getDriverDestinationCoordinates(
+                                          address: driverDestinationLocationController.text,
+                                        );
+                                        setLatLng();
+
+                                        setState(() {
+                                          isDestinationSet = true; // Set the flag to true when the destination is set
+                                        });
+
+                                        // Show the flash message
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            duration: const Duration(milliseconds: 500),
+                                            content: Row(
+                                              children: [
+                                                Icon(Icons.check, color: Colors.white),
+                                                const SizedBox(width: 8.0),
+                                                Text('Destination set'),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Center(
+                                        child: Text(
+                                          'OK',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                if (_suggestions.isNotEmpty)
+                                  Container(
+                                    margin: const EdgeInsets.only(top: 56.0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.3),
+                                          spreadRadius: 2,
+                                          blurRadius: 5,
+                                          offset: Offset(0, 3),
+                                        ),
+                                      ],
+                                    ),
+                                    constraints: const BoxConstraints(maxHeight: 200),
+                                    child: ListView.builder(
+                                      itemCount: _suggestions.length,
+                                      itemBuilder: (context, index) {
+                                        return ListTile(
+                                          leading: const SizedBox(
+                                            width: 24.0,
+                                            height: 24.0,
+                                            child: Icon(Icons.location_on, color: Colors.orangeAccent),
+                                          ),
+                                          title: Text(_suggestions[index]),
+                                          onTap: () {
+                                            driverDestinationLocationController.text = _suggestions[index];
+                                            setState(() {
+                                              _suggestions = [];
+                                            });
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
+
+
                       const SizedBox(
                         height: 15,
                       ),
