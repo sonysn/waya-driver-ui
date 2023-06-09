@@ -3,7 +3,7 @@ import 'package:waya_driver/functions/location_functions.dart';
 import 'package:waya_driver/screens/homepage.dart';
 import 'package:waya_driver/screens/splash_screen.dart';
 import 'functions/notification_service.dart';
-import 'screens/welcomepage.dart';
+import 'screens/onboarding.dart';
 import 'package:flutter/services.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:firebase_core/firebase_core.dart';

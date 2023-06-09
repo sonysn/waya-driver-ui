@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:waya_driver/colorscheme.dart';
 class EarningCard extends StatefulWidget {
   final dynamic amountTransferred;
   final dynamic dateTransferred;
@@ -101,7 +101,7 @@ class _EarningCardState extends State<EarningCard> {
                     ),
                     child: Icon(
                       Icons.calendar_today,
-                      color: Colors.blue,
+                      color: customPurple,
                       size: 24,
                     ),
                   ),

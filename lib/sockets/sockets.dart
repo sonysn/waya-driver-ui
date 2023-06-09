@@ -9,7 +9,7 @@ import 'package:waya_driver/functions/notification_service.dart';
 import 'package:waya_driver/main.dart';
 import 'package:waya_driver/screens/homepage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import 'package:waya_driver/screens/widgets/activeride.dart';
 class ConnectToServer {
   final int? id;
 
@@ -252,6 +252,7 @@ class RideRequestCard extends StatelessWidget {
                         dropoffLocationPostion: dropoffLocationPostion,
                         fare: fare);
                     Navigator.pop(context);
+
                   },
                   style: ElevatedButton.styleFrom(
                     primary: customPurple,

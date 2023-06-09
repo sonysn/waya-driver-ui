@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:waya_driver/screens/welcomepage.dart';
+import 'package:waya_driver/screens/onboarding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../api/auth.dart';
 import 'bottom_nav.dart';
@@ -70,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
           context,
           PageRouteBuilder(
             pageBuilder: (context, animation1, animation2) =>
-                const WelcomePage(),
+                const Onboarding(),
             transitionsBuilder: (context, animation1, animation2, child) {
               return FadeTransition(
                 opacity: animation1,

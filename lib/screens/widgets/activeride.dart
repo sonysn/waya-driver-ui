@@ -11,6 +11,8 @@ class DriverWidget extends StatefulWidget {
 
   @override
   State<DriverWidget> createState() => _DriverWidgetState();
+
+
 }
 
 class _DriverWidgetState extends State<DriverWidget> {
@@ -94,7 +96,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                 Navigator.of(context).pop(); // Close the dialog
                 // Perform the end trip action
                 await driverEndTrip(xindex: indexPos);
-                getCurrentRides(); // Refresh the rides list
+                // Refresh the rides list
               },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -195,6 +197,13 @@ class _DriverWidgetState extends State<DriverWidget> {
         );
       },
     );
+  }
+  void refreshPage() {
+    // Perform the necessary refresh operations here
+    // For example, setState or call an API to update the page data
+    setState(() {
+      // Update the necessary data in the page
+    });
   }
 
   @override

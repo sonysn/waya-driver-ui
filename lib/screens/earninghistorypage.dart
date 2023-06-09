@@ -41,12 +41,18 @@ class _EarningHistoryState extends State<EarningHistory> {
                   color: Colors.black,
                 ),
               ),
-              const Text(
+              const SizedBox(width: 10),
+              Text(
                 'Earning History',
-                style: TextStyle(fontSize: 30),
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
             ],
           ),
+
           widget.credits.isNotEmpty
               ? Container(
             padding: const EdgeInsets.only(top: 40),

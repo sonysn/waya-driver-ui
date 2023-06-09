@@ -266,10 +266,17 @@ class _HomePageState extends State<HomePage> {
                   DateTime.now().difference(_lastPressedAt!) >
                       const Duration(seconds: 2)) {
                 // show a toast or snackbar to inform the user to press back again to exit
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Press back again to exit'),
-                  duration: Duration(seconds: 2),
-                ));
+                SnackBar(
+                  duration: const Duration(milliseconds: 1000),
+                  backgroundColor: customPurple, // Custom purple background color
+                  content: Row(
+                    children: const [
+                      Icon(Icons.not_interested, color: Colors.orangeAccent), // Orange accent color
+                      SizedBox(width: 8.0),
+                      Text(' press back again to exit.', style: TextStyle(color: Colors.white)),
+                    ],
+                  ),
+                );
                 _lastPressedAt = DateTime.now();
                 return false; // prevent the app from closing
               }
@@ -418,7 +425,7 @@ class _HomePageState extends State<HomePage> {
                           //     }));
                         },
                         child: const SizedBox(
-                          height: 15,
+                          height: 35,
                         ),
                       ),
                       AbsorbPointer(
@@ -444,7 +451,7 @@ class _HomePageState extends State<HomePage> {
                                     hintText: 'Enter destination',
                                     prefixIcon: Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: 12.0),
+                                          vertical: 20.0),
                                       child: SizedBox(
                                         width: 12.0,
                                         height: 24.0,
@@ -492,7 +499,7 @@ class _HomePageState extends State<HomePage> {
                                   bottom: 0,
                                   child: Container(
                                     width: 60.0,
-                                    height: 48,
+                                    height: 63,
                                     decoration: BoxDecoration(
                                       color: onlineStatus
                                           ? Colors.grey
@@ -517,25 +524,24 @@ class _HomePageState extends State<HomePage> {
 
                                         setState(() {
                                           isDestinationSet =
-                                              true; // Set the flag to true when the destination is set
+                                              false; // Set the flag to true when the destination is set
                                         });
 
                                         // Show the flash message
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
+                                        ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(
-                                            duration: const Duration(
-                                                milliseconds: 500),
+                                            duration: const Duration(milliseconds: 500),
+                                            backgroundColor: customPurple, // Custom purple background color
                                             content: Row(
                                               children: const [
-                                                Icon(Icons.check,
-                                                    color: Colors.white),
+                                                Icon(Icons.check, color: Colors.orangeAccent), // Orange accent color
                                                 SizedBox(width: 8.0),
-                                                Text('Destination set'),
+                                                Text('Destination set', style: TextStyle(color: Colors.white)),
                                               ],
                                             ),
                                           ),
                                         );
+
                                       },
                                       child: const Center(
                                         child: Text(
@@ -584,7 +590,20 @@ class _HomePageState extends State<HomePage> {
                                                 .text = _suggestions[index];
                                             setState(() {
                                               _suggestions = [];
-                                            });
+                                            });ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                duration: const Duration(milliseconds: 3000),
+                                                backgroundColor: customPurple, // Custom purple background color
+                                                content: Row(
+                                                  children: const [
+                                                    Icon(Icons.check, color: Colors.orangeAccent), // Orange accent color
+                                                    SizedBox(width: 8.0),
+                                                    Text('Please press "OK" to set destination.', style: TextStyle(color: Colors.white)),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+
                                           },
                                         );
                                       },
@@ -596,7 +615,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       const SizedBox(
-                        height: 15,
+                        height: 35,
                       ),
                       FittedBox(
                         fit: BoxFit.fitWidth,

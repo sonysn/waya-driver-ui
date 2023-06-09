@@ -200,35 +200,43 @@ class _WalletPageState extends State<WalletPage> {
                 const SizedBox(
                   height: 30,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Text("Recent Earnings"),
-                    Flexible(
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        child: InkWell(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) {
-                                return EarningHistory(
-                                  data: widget.data,
-                                  credits: earnings,
-                                );
-                              },
-                            ),
-                          ),
-                          child: const Text(
-                            "View all",
-                            style: TextStyle(color: customPurple),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Recent Earnings",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                const SizedBox(
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return EarningHistory(
+                            data: widget.data,
+                            credits: earnings,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  child: Text(
+                    "View all",
+                    style: TextStyle(
+                      color: customPurple,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(
                   height: 0,
                 ),
                 earnings.isNotEmpty
@@ -266,7 +274,12 @@ class _WalletPageState extends State<WalletPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Text("Recent Transactions"),
+                    const Text("Recent Transactions",
+                  style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
                     Flexible(
                       child: Container(
                         alignment: Alignment.centerRight,
@@ -284,7 +297,11 @@ class _WalletPageState extends State<WalletPage> {
                           ),
                           child: const Text(
                             "View all",
-                            style: TextStyle(color: customPurple),
+                            style: TextStyle(
+                              color: customPurple,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
