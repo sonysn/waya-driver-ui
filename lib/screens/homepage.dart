@@ -109,16 +109,18 @@ class _HomePageState extends State<HomePage> {
       });
     }
     if (isOnlineSaved == true) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List? p = prefs.getStringList('driverDestinationPoint');
       // ignore: no_leading_underscores_for_local_identifiers
       void _connect() {
         ConnectToServer().connect(widget.data.id, context);
       }
 
       _connect();
-      locationCallbacks(
+      await locationCallbacks(
           id: widget.data.id,
           verificationStatus: widget.data.verified,
-          driverDestPoint: driverDestLatLng!);
+          driverDestPoint: p!);
       updateAvailability(1, widget.data.id);
       getCar();
       await setSwitchValue(onlineStatus);
@@ -188,9 +190,15 @@ class _HomePageState extends State<HomePage> {
   void getDriverDestData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? address = prefs.getString('driverDestinationAddress');
+    List? p = prefs.getStringList('driverDestinationPoint');
     if (address != null) {
       setState(() {
         driverDestinationLocationController.text = address;
+      });
+    }
+    if (p == null || p == []) {
+      setState(() {
+        driverDestLatLng = [];
       });
     }
   }
@@ -199,7 +207,9 @@ class _HomePageState extends State<HomePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setStringList('driverDestinationPoint', []);
     await prefs.remove('driverDestinationAddress');
-    setLatLng();
+    setState(() {
+      driverDestLatLng = [];
+    });
   }
 
   void setLatLng() async {
@@ -268,12 +278,15 @@ class _HomePageState extends State<HomePage> {
                 // show a toast or snackbar to inform the user to press back again to exit
                 SnackBar(
                   duration: const Duration(milliseconds: 1000),
-                  backgroundColor: customPurple, // Custom purple background color
+                  backgroundColor:
+                      customPurple, // Custom purple background color
                   content: Row(
                     children: const [
-                      Icon(Icons.not_interested, color: Colors.orangeAccent), // Orange accent color
+                      Icon(Icons.not_interested,
+                          color: Colors.orangeAccent), // Orange accent color
                       SizedBox(width: 8.0),
-                      Text(' press back again to exit.', style: TextStyle(color: Colors.white)),
+                      Text(' press back again to exit.',
+                          style: TextStyle(color: Colors.white)),
                     ],
                   ),
                 );
@@ -337,11 +350,15 @@ class _HomePageState extends State<HomePage> {
 
                           if (onlineStatus) {
                             // ... online status logic ...
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            List? p =
+                                prefs.getStringList('driverDestinationPoint');
                             ConnectToServer().connect(widget.data.id, context);
                             locationCallbacks(
                                 id: widget.data.id,
                                 verificationStatus: widget.data.verified,
-                                driverDestPoint: driverDestLatLng!);
+                                driverDestPoint: p!);
                             updateAvailability(1, widget.data.id);
                             getCar();
                             locationPingServer();
@@ -528,20 +545,26 @@ class _HomePageState extends State<HomePage> {
                                         });
 
                                         // Show the flash message
-                                        ScaffoldMessenger.of(context).showSnackBar(
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
                                           SnackBar(
-                                            duration: const Duration(milliseconds: 500),
-                                            backgroundColor: customPurple, // Custom purple background color
+                                            duration: const Duration(
+                                                milliseconds: 500),
+                                            backgroundColor:
+                                                customPurple, // Custom purple background color
                                             content: Row(
                                               children: const [
-                                                Icon(Icons.check, color: Colors.orangeAccent), // Orange accent color
+                                                Icon(Icons.check,
+                                                    color: Colors
+                                                        .orangeAccent), // Orange accent color
                                                 SizedBox(width: 8.0),
-                                                Text('Destination set', style: TextStyle(color: Colors.white)),
+                                                Text('Destination set',
+                                                    style: TextStyle(
+                                                        color: Colors.white)),
                                               ],
                                             ),
                                           ),
                                         );
-
                                       },
                                       child: const Center(
                                         child: Text(
@@ -590,20 +613,29 @@ class _HomePageState extends State<HomePage> {
                                                 .text = _suggestions[index];
                                             setState(() {
                                               _suggestions = [];
-                                            });ScaffoldMessenger.of(context).showSnackBar(
+                                            });
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
                                               SnackBar(
-                                                duration: const Duration(milliseconds: 3000),
-                                                backgroundColor: customPurple, // Custom purple background color
+                                                duration: const Duration(
+                                                    milliseconds: 3000),
+                                                backgroundColor:
+                                                    customPurple, // Custom purple background color
                                                 content: Row(
                                                   children: const [
-                                                    Icon(Icons.check, color: Colors.orangeAccent), // Orange accent color
+                                                    Icon(Icons.check,
+                                                        color: Colors
+                                                            .orangeAccent), // Orange accent color
                                                     SizedBox(width: 8.0),
-                                                    Text('Please press "OK" to set destination.', style: TextStyle(color: Colors.white)),
+                                                    Text(
+                                                        'Please press "OK" to set destination.',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white)),
                                                   ],
                                                 ),
                                               ),
                                             );
-
                                           },
                                         );
                                       },
