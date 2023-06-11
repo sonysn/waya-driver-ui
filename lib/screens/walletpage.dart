@@ -200,43 +200,42 @@ class _WalletPageState extends State<WalletPage> {
                 const SizedBox(
                   height: 30,
                 ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Recent Earnings",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) {
-                          return EarningHistory(
-                            data: widget.data,
-                            credits: earnings,
-                          );
-                        },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Recent Earnings",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                    );
-                  },
-                  child: Text(
-                    "View all",
-                    style: TextStyle(
-                      color: customPurple,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
                     ),
-                  ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) {
+                              return EarningHistory(
+                                data: widget.data,
+                                credits: earnings,
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "View all",
+                        style: TextStyle(
+                          color: customPurple,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-
-            const SizedBox(
+                const SizedBox(
                   height: 0,
                 ),
                 earnings.isNotEmpty
@@ -251,7 +250,6 @@ class _WalletPageState extends State<WalletPage> {
                         },
                         itemBuilder: (context, index) {
                           return EarningCard(
-
                             amountTransferred: reversedEarnings[index]
                                 ['amountTransferred'],
                             dateTransferred: reversedEarnings[index]
@@ -274,12 +272,13 @@ class _WalletPageState extends State<WalletPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Text("Recent Transactions",
-                  style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
+                    const Text(
+                      "Recent Transactions",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     Flexible(
                       child: Container(
                         alignment: Alignment.centerRight,
@@ -289,9 +288,8 @@ class _WalletPageState extends State<WalletPage> {
                             MaterialPageRoute(
                               builder: (BuildContext context) {
                                 return TransactionHistory(
-                                  data: widget.data,
-                                  transactions: transactions,
-                                );
+                                    transactions: transactions,
+                                    earnings: reversedEarnings);
                               },
                             ),
                           ),
@@ -324,7 +322,6 @@ class _WalletPageState extends State<WalletPage> {
                         },
                         itemBuilder: (context, index) {
                           return TransactionCard(
-                            data: widget.data,
                             depositAmount: reversedTransactions[index]['data']
                                     ['amount'] /
                                 100,

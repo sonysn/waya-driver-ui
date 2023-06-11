@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:waya_driver/colorscheme.dart';
+
 class EarningCard extends StatefulWidget {
   final dynamic amountTransferred;
   final dynamic dateTransferred;
@@ -18,7 +19,7 @@ class EarningCard extends StatefulWidget {
 class _EarningCardState extends State<EarningCard> {
   void formatDate(String dateString) {
     DateFormat originalFormat = DateFormat('dd-M-yyyy');
-    DateFormat targetFormat = DateFormat('dd-MM-yyyy');
+    DateFormat targetFormat = DateFormat('MMM dd, yyyy');
     DateTime date = originalFormat.parse(dateString);
     setState(() {
       depositTransferredFormatted = targetFormat.format(date);
@@ -44,7 +45,7 @@ class _EarningCardState extends State<EarningCard> {
           BoxShadow(
             color: Colors.grey.withOpacity(0.3),
             blurRadius: 6,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -62,8 +63,8 @@ class _EarningCardState extends State<EarningCard> {
                       shape: BoxShape.circle,
                       color: Colors.green.withOpacity(0.2),
                     ),
-                    child: Icon(
-                      Icons.arrow_circle_up,
+                    child: const Icon(
+                      Icons.arrow_circle_down,
                       color: Colors.green,
                       size: 24,
                     ),
@@ -81,7 +82,7 @@ class _EarningCardState extends State<EarningCard> {
               const SizedBox(height: 8),
               Text(
                 "₦${widget.amountTransferred.toString()}",
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -99,7 +100,7 @@ class _EarningCardState extends State<EarningCard> {
                       shape: BoxShape.circle,
                       color: Colors.blue.withOpacity(0.2),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.calendar_today,
                       color: customPurple,
                       size: 24,
@@ -118,7 +119,7 @@ class _EarningCardState extends State<EarningCard> {
               const SizedBox(height: 8),
               Text(
                 depositTransferredFormatted!,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),

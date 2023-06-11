@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:waya_driver/screens/widgets/earning_card.dart';
 import 'package:waya_driver/screens/widgets/transaction_card.dart';
 
 class TransactionHistory extends StatefulWidget {
-  final dynamic data;
   final List transactions;
+  final List earnings;
 
-  const TransactionHistory({Key? key, this.data, required this.transactions})
+  const TransactionHistory(
+      {Key? key, required this.transactions, required this.earnings})
       : super(key: key);
 
   @override
   State<TransactionHistory> createState() => _TransactionHistoryState();
 }
 
+//TODO: WITHDRAW HISTORY AND DRIVER TRANSFER HISTORY
 class _TransactionHistoryState extends State<TransactionHistory>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   List reversedTransactions = [];
+  List reversedEarnings = [];
 
   @override
   void initState() {
@@ -23,6 +27,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
     _tabController = TabController(length: 4, vsync: this);
     setState(() {
       reversedTransactions = widget.transactions.reversed.toList();
+      reversedEarnings = widget.earnings; //earnings are already reversed
     });
   }
 
@@ -36,7 +41,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
     // Implement your refresh logic here
     // For example, fetch updated transaction data from an API
     // Once you have the updated data, update the 'transactions' list and call 'setState'
-    await Future.delayed(Duration(seconds: 2)); // Simulating a delay
+    await Future.delayed(const Duration(seconds: 2)); // Simulating a delay
 
     setState(() {
       // Update 'transactions' list with new data
@@ -47,7 +52,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           backgroundColor: Colors.black, // Set the tab bar color to black
         ),
       ),
@@ -82,10 +87,13 @@ class _TransactionHistoryState extends State<TransactionHistory>
             // Implement your refresh logic here
             // For example, fetch updated transaction data from an API
             // Once you have the updated data, update the 'reversedTransactions' list and call 'setState'
-            await Future.delayed(Duration(seconds: 2)); // Simulating a delay
+            await Future.delayed(
+                const Duration(seconds: 2)); // Simulating a delay
 
             setState(() {
               reversedTransactions = widget.transactions.reversed.toList();
+              reversedEarnings =
+                  widget.earnings; //earnings are already reversed
             });
           },
           color: Colors.orange, // Set the refresh indicator color to orange
@@ -101,33 +109,30 @@ class _TransactionHistoryState extends State<TransactionHistory>
                     children: [
                       widget.transactions.isEmpty
                           ? const Center(
-                        child: Text(
-                          'No transactions',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      )
+                              child: Text(
+                                'No transactions',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            )
                           : ListView.separated(
-                        itemCount: widget.transactions.length,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(
-                            height: 10,
-                          );
-                        },
-                        itemBuilder: (context, index) {
-                          return TransactionCard(
-                            data: widget.data,
-                            depositAmount:
-                            reversedTransactions[index]['data']
-                            ['amount'] /
-                                100,
-                            depositDate:
-                            reversedTransactions[index]['data']
-                            ['paid_at'],
-                          );
-                        },
-                      ),
+                              itemCount: widget.transactions.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              separatorBuilder: (context, index) {
+                                return const SizedBox(
+                                  height: 10,
+                                );
+                              },
+                              itemBuilder: (context, index) {
+                                return TransactionCard(
+                                  depositAmount: reversedTransactions[index]
+                                          ['data']['amount'] /
+                                      100,
+                                  depositDate: reversedTransactions[index]
+                                      ['data']['paid_at'],
+                                );
+                              },
+                            ),
                     ],
                   ),
                 ),
@@ -180,14 +185,31 @@ class _TransactionHistoryState extends State<TransactionHistory>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // TODO: Implement the UI for Money Received History tab
-                      // Replace the following placeholder widget
-                      const Center(
-                        child: Text(
-                          'Money Received History',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
+                      widget.earnings.isEmpty
+                          ? const Center(
+                              child: Text(
+                                'Money Received History',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            )
+                          : ListView.separated(
+                              itemCount: widget.earnings.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              separatorBuilder: (context, index) {
+                                return const SizedBox(
+                                  height: 10,
+                                );
+                              },
+                              itemBuilder: (context, index) {
+                                return EarningCard(
+                                  amountTransferred: reversedEarnings[index]
+                                      ['amountTransferred'],
+                                  dateTransferred: reversedEarnings[index]
+                                      ['datePaid'],
+                                );
+                              },
+                            ),
                     ],
                   ),
                 ),

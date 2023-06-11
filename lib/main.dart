@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:waya_driver/functions/location_functions.dart';
 import 'package:waya_driver/screens/homepage.dart';
@@ -10,6 +12,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:waya_driver/sockets/sockets.dart';
+
+// Workmanager backWorkmanager = Workmanager();
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -25,6 +30,16 @@ Future<void> main() async {
 
   final NotificationService notificationService = NotificationService();
   await notificationService.initialize();
+
+  // Workmanager().initialize(
+  //   callbackDispatcher, // the callback function to run background tasks
+  //   isInDebugMode: true, // enable logging in debug mode
+  // );
+  // Workmanager().registerPeriodicTask(
+  //   "Task Ping Location", // unique name for the task
+  //   "Ping Location", // task name
+  //   frequency: const Duration(minutes: 15), // execute the task each 30 seconds
+  // );
 
   runApp(const MaterialApp(
     home: WApp(),
@@ -55,6 +70,7 @@ class _WAppState extends State<WApp> {
     });
   }
 
+  //TODO: MOVE THIS OUT OF HERE
   void navigateToScreenBasedOnPayload(Map<String, dynamic> data) {
     // Extract the necessary data from the payload and navigate to the appropriate screen
     if (data.containsKey('screen')) {
@@ -69,8 +85,7 @@ class _WAppState extends State<WApp> {
             builder: (context) => HomePage(data: data),
           ),
         );
-      }
-      else if (screen == 'riderequest') {
+      } else if (screen == 'riderequest') {
         // Extract additional data if needed
         int riderId = data['riderId'];
         String name = data['name'];
@@ -99,7 +114,6 @@ class _WAppState extends State<WApp> {
         );
       }
     }
-
   }
 
   @override
@@ -109,3 +123,14 @@ class _WAppState extends State<WApp> {
     );
   }
 }
+
+// void callbackDispatcher() {
+//   Workmanager().executeTask((taskName, inputData) async {
+//     DartPluginRegistrant.ensureInitialized();
+//     //use task name here
+//     if (taskName == "Ping Location") {
+//       locationPingServer();
+//     }
+//     return Future.value(true);
+//   });
+// }

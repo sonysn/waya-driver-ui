@@ -3,11 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:waya_driver/colorscheme.dart';
 
 class TransactionCard extends StatefulWidget {
-  final dynamic data;
   final double depositAmount;
   final dynamic depositDate;
   const TransactionCard(
-      {Key? key, this.data, required this.depositAmount, this.depositDate})
+      {Key? key, required this.depositAmount, this.depositDate})
       : super(key: key);
 
   @override
@@ -17,7 +16,7 @@ class TransactionCard extends StatefulWidget {
 class _TransactionCardState extends State<TransactionCard> {
   void formatDate(String dateString) {
     DateTime date = DateTime.parse(dateString);
-    DateFormat formatter = DateFormat('dd-MM-yyyy');
+    DateFormat formatter = DateFormat('MMM dd, yyyy');
     setState(() {
       depositDateFormatted = formatter.format(date);
     });
@@ -31,7 +30,6 @@ class _TransactionCardState extends State<TransactionCard> {
     formatDate(widget.depositDate);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,7 +41,7 @@ class _TransactionCardState extends State<TransactionCard> {
           BoxShadow(
             color: Colors.grey.withOpacity(0.3),
             blurRadius: 6,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -61,7 +59,7 @@ class _TransactionCardState extends State<TransactionCard> {
                       shape: BoxShape.circle,
                       color: Colors.green.withOpacity(0.2),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_circle_down,
                       color: Colors.green,
                       size: 24,
@@ -69,7 +67,7 @@ class _TransactionCardState extends State<TransactionCard> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    "Received",
+                    "Deposit",
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey[600],
@@ -80,7 +78,7 @@ class _TransactionCardState extends State<TransactionCard> {
               const SizedBox(height: 8),
               Text(
                 "₦${widget.depositAmount.toString()}",
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -98,7 +96,7 @@ class _TransactionCardState extends State<TransactionCard> {
                       shape: BoxShape.circle,
                       color: Colors.blue.withOpacity(0.2),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.calendar_today,
                       color: customPurple,
                       size: 24,
@@ -117,7 +115,7 @@ class _TransactionCardState extends State<TransactionCard> {
               const SizedBox(height: 8),
               Text(
                 depositDateFormatted!,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
