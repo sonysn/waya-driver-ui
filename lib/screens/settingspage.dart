@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:waya_driver/screens/passwordsettings.dart';
 import 'package:waya_driver/screens/privacypolicy.dart';
 import 'package:waya_driver/screens/vehicle.dart';
-import 'package:waya_driver/screens/privacypolicy.dart';
 import 'package:waya_driver/screens/aboutpage.dart';
-import '../main.dart';
 import 'package:url_launcher/url_launcher.dart';
 class SettingsPage extends StatefulWidget {
   dynamic data;
@@ -20,7 +18,7 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         elevation: 0,
-        title: Text(
+        title: const Text(
           'Settings',
           style: TextStyle(
             color: Colors.white,
@@ -51,8 +49,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
 
           ListTile(
-            leading: Icon(Icons.security,       color: Colors.black,),
-            title: Text('Security'),
+            leading: const Icon(Icons.security,       color: Colors.black,),
+            title: const Text('Security'),
             onTap: (){
               Navigator.push(context,
                   MaterialPageRoute(builder: (BuildContext context) {
@@ -63,8 +61,8 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.privacy_tip,       color: Colors.black,),
-            title: Text('Privacy Policy'),
+            leading: const Icon(Icons.privacy_tip,       color: Colors.black,),
+            title: const Text('Privacy Policy'),
             onTap: (){
               Navigator.push(context,
                   MaterialPageRoute(builder: (BuildContext context) {
@@ -76,8 +74,8 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
 
           ListTile(
-            leading: Icon(Icons.info,       color: Colors.black,),
-            title: Text('About'),
+            leading: const Icon(Icons.info,       color: Colors.black,),
+            title: const Text('About'),
             onTap: (){
               Navigator.push(context,
                   MaterialPageRoute(builder: (BuildContext context) {
@@ -88,8 +86,8 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.web,       color: Colors.black,),
-            title: Text('Website'),
+            leading: const Icon(Icons.web,       color: Colors.black,),
+            title: const Text('Website'),
             onTap: () {
               // Open the website link
                Example: launch('https://www.qunot.com');

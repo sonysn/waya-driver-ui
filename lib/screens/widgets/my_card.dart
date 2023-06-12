@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../colorscheme.dart';
-import '../../api/actions.dart';
+import 'package:waya_driver/colorscheme.dart';
+import 'package:waya_driver/api/actions.dart';
 import 'package:intl/intl.dart';
 
 class MyCard extends StatefulWidget {

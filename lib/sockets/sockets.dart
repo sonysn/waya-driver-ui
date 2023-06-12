@@ -1,15 +1,10 @@
-import 'dart:async';
-import '../../../colorscheme.dart';
+import 'package:waya_driver/colorscheme.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/constants/api_constants.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:waya_driver/functions/notification_service.dart';
-import 'package:waya_driver/main.dart';
 import 'package:waya_driver/screens/homepage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:waya_driver/screens/widgets/activeride.dart';
 class ConnectToServer {
   final int? id;
 
@@ -255,7 +250,7 @@ class RideRequestCard extends StatelessWidget {
 
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: customPurple,
+                    backgroundColor: customPurple,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -275,7 +270,7 @@ class RideRequestCard extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.grey[300],
+                    backgroundColor: Colors.grey[300],
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),

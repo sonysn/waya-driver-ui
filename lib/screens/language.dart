@@ -70,7 +70,7 @@ class LanguageSelectionPageState extends State<LanguageSelectionPage> {
 }
 
 class LanguageOption extends StatelessWidget {
-  const LanguageOption({
+  const LanguageOption({super.key, 
     required this.language,
     required this.isSelected,
     required this.onPressed,

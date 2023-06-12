@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'constants/size_config.dart';
 
 const customPurple = Color(0XFF251532);
 

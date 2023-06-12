@@ -1,4 +1,4 @@
-import '../../../colorscheme.dart';
+import 'package:waya_driver/colorscheme.dart';
 import 'package:flutter/material.dart';
 
 class DriverPrivacyPolicyPage extends StatelessWidget {
@@ -7,15 +7,15 @@ class DriverPrivacyPolicyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Driver Privacy Policy'),
+        title: const Text('Driver Privacy Policy'),
         backgroundColor: customPurple,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: const [
               Text(
                 'Information We Collect',
                 style: TextStyle(

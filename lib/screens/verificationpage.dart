@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../colorscheme.dart';
-import '/screens/signup.dart';
+import 'package:waya_driver/colorscheme.dart';
+import 'package:waya_driver/screens/signup.dart';
 
 class VerificationPage extends StatefulWidget {
   String phoneNumber;

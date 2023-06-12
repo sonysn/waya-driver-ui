@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:waya_driver/screens/passwordchanage.dart';
-import '../../../colorscheme.dart';
+import 'package:waya_driver/colorscheme.dart';
 
 class PasswordSettings extends StatefulWidget {
   const PasswordSettings({Key? key}) : super(key: key);
@@ -18,7 +18,7 @@ class _PasswordSettingsState extends State<PasswordSettings> {
         backgroundColor: customPurple,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Colors.white,
           ),
@@ -26,7 +26,7 @@ class _PasswordSettingsState extends State<PasswordSettings> {
             Navigator.pop(context);
           },
         ),
-        title: Text(
+        title: const Text(
           'Security',
           style: TextStyle(
             fontSize: 24,
@@ -37,12 +37,12 @@ class _PasswordSettingsState extends State<PasswordSettings> {
         centerTitle: true,
       ),
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'Change Password',
               style: TextStyle(
                 fontSize: 24,
@@ -51,26 +51,26 @@ class _PasswordSettingsState extends State<PasswordSettings> {
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return ChangePasswordPage();
+                      return const ChangePasswordPage();
                     },
                   ),
                 );
               },
               style: ElevatedButton.styleFrom(
-                primary: customPurple,
+                backgroundColor: customPurple,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                padding: EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 16),
               ),
-              child: Text(
+              child: const Text(
                 'Change Password',
                 style: TextStyle(
                   color: Colors.white,

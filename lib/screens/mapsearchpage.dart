@@ -9,8 +9,8 @@ class DestinationPage extends StatefulWidget {
 }
 
 class _DestinationPageState extends State<DestinationPage> {
-  TextEditingController _destinationController = TextEditingController();
-  TextEditingController _locationController = TextEditingController();
+  final TextEditingController _destinationController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +28,8 @@ class _DestinationPageState extends State<DestinationPage> {
             ),
           ),
         ),
-        title: Center(
-          child: const Text(
+        title: const Center(
+          child: Text(
             'Set Location',
             style: TextStyle(
               color: Colors.black, // Set app bar text color to black

@@ -42,7 +42,7 @@ class _EarningHistoryState extends State<EarningHistory> {
                 ),
               ),
               const SizedBox(width: 10),
-              Text(
+              const Text(
                 'Earning History',
                 style: TextStyle(
                   fontSize: 30,

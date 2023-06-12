@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:waya_driver/api/actions.dart';
-import 'package:waya_driver/screens/widgets/transaction_card.dart';
-import '../../../colorscheme.dart';
+import 'package:waya_driver/colorscheme.dart';
 import 'package:waya_driver/screens/bottom_nav.dart';
 class DriverWidget extends StatefulWidget {
   final dynamic data;
@@ -29,7 +28,7 @@ class _DriverWidgetState extends State<DriverWidget> {
     });
 
     // Simulating a delay of 2 seconds for the refresh process
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         _showDialog = false;
       });
@@ -115,7 +114,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                 _startRefreshing();
               },
               style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 backgroundColor: Colors.orangeAccent,
               ),
               child: const Text(
@@ -133,7 +132,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                 Navigator.of(context).pop(); // Close the dialog
               },
               style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 backgroundColor: Colors.grey,
               ),
               child: const Text(
@@ -180,7 +179,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                 driverCancelTrip(xindex: indexPos);
               },
               style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 backgroundColor: Colors.orangeAccent,
               ),
               child: const Text(
@@ -197,7 +196,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                 Navigator.of(context).pop(); // Close the dialog
               },
               style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 backgroundColor: Colors.grey,
               ),
               child: const Text(
@@ -221,7 +220,7 @@ class _DriverWidgetState extends State<DriverWidget> {
       children: [
         for (int index = 0; index < currentRidesArray.length; index++)
           Container(
-            margin: EdgeInsets.symmetric(vertical: 8.0),
+            margin: const EdgeInsets.symmetric(vertical: 8.0),
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
@@ -237,8 +236,8 @@ class _DriverWidgetState extends State<DriverWidget> {
                 children: [
                   Container(
                     padding:
-                    EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-                    decoration: BoxDecoration(
+                    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+                    decoration: const BoxDecoration(
                       border: Border(),
                     ),
                     child: Row(
@@ -253,7 +252,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                                 shape: BoxShape.circle,
                                 color: customPurple.withOpacity(0.1),
                               ),
-                              child: Icon(
+                              child: const Icon(
                                 Icons.phone,
                                 color: customPurple,
                                 size: 28,
@@ -265,19 +264,19 @@ class _DriverWidgetState extends State<DriverWidget> {
                             },
                           ),
                         ),
-                        SizedBox(width: 16.0),
+                        const SizedBox(width: 16.0),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.directions_car,
                                     color: Colors.black,
                                   ),
-                                  SizedBox(width: 8.0),
-                                  Expanded(
+                                  const SizedBox(width: 8.0),
+                                  const Expanded(
                                     child: Text(
                                       "Your Trip",
                                       style: TextStyle(
@@ -289,7 +288,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                                   ),
                                   Text(
                                     "₦ ${currentRidesArray[index]['fare']}",
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
                                       color: customPurple,
@@ -297,7 +296,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 8.0),
+                              const SizedBox(height: 8.0),
                               Row(
                                 children: [
                                   const Icon(
@@ -305,7 +304,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                                     color: Colors.black,
                                     size: 19,
                                   ),
-                                  SizedBox(width: 8.0),
+                                  const SizedBox(width: 8.0),
                                   Flexible(
                                     child: Text(
                                       currentRidesArray[index]
@@ -366,8 +365,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                                 borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(15),
                                 ),
-                              ),
-                              primary: Colors.orangeAccent,
+                              ), backgroundColor: Colors.orangeAccent,
                             ),
                             child: const Text(
                               "End",
@@ -389,10 +387,9 @@ class _DriverWidgetState extends State<DriverWidget> {
                                 borderRadius: BorderRadius.only(
                                   bottomRight: Radius.circular(15),
                                 ),
-                              ),
-                              primary: customPurple,
+                              ), backgroundColor: customPurple,
                             ),
-                            child: Text(
+                            child: const Text(
                               "Cancel",
                               style: TextStyle(
                                 fontSize: 18,
@@ -409,7 +406,7 @@ class _DriverWidgetState extends State<DriverWidget> {
               ),
             ),
           ),
-        SizedBox(height: 16.0),
+        const SizedBox(height: 16.0),
       ],
     );
   }

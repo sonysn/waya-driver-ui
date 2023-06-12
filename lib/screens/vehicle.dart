@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:waya_driver/api/actions.dart';
-import '../../../colorscheme.dart';
+import 'package:waya_driver/colorscheme.dart';
 class Vehicle extends StatefulWidget {
   dynamic data;
 
@@ -84,22 +84,22 @@ class _VehicleState extends State<Vehicle> {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
+            children: const [
+              Icon(
                 Icons.car_rental,
                 size: 80,
                 color: Colors.grey,
               ),
-              const SizedBox(height: 16),
-              const Text(
+              SizedBox(height: 16),
+              Text(
                 'No Vehicles Found',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 8),
-              const Text(
+              SizedBox(height: 8),
+              Text(
                 'You have no Registered vehicles',
                 style: TextStyle(
                   fontSize: 16,

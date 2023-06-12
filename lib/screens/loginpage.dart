@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
-import 'package:waya_driver/models/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:waya_driver/api/auth.dart';
-import '/screens/bottom_nav.dart';
-import '../colorscheme.dart';
+import 'package:waya_driver/screens/bottom_nav.dart';
+import 'package:waya_driver/colorscheme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -262,7 +260,7 @@ class _LoginPageState extends State<LoginPage> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                            primary: customPurple,
+                            backgroundColor: customPurple,
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(
                                 top: Radius.circular(20),

@@ -1,19 +1,16 @@
 import 'dart:async';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:waya_driver/api/auth.dart';
 import 'package:waya_driver/screens/loginpage.dart';
-import '/colorscheme.dart';
-import '/screens/bottom_nav.dart';
+import 'package:waya_driver/colorscheme.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:intl/intl.dart';
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class SignUp extends StatefulWidget {
@@ -473,7 +470,7 @@ class _SignUpState extends State<SignUp> {
                               ElevatedButton(
                                   onPressed: getImageFromCamera,
                                   style: ElevatedButton.styleFrom(
-                                      primary: customPurple,
+                                      backgroundColor: customPurple,
                                       shape: const RoundedRectangleBorder(
                                         borderRadius: BorderRadius.vertical(
                                           top: Radius.circular(20),
@@ -516,7 +513,7 @@ class _SignUpState extends State<SignUp> {
                                             BorderSide(color: Colors.black),
                                       ),
                                       filled: true,
-                                      focusedBorder: OutlineInputBorder(
+                                      focusedBorder: const OutlineInputBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(15)),
                                         borderSide:
@@ -557,7 +554,7 @@ class _SignUpState extends State<SignUp> {
                                             BorderSide(color: Colors.black),
                                       ),
                                       filled: true,
-                                      focusedBorder: OutlineInputBorder(
+                                      focusedBorder: const OutlineInputBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(15)),
                                         borderSide:
@@ -598,7 +595,7 @@ class _SignUpState extends State<SignUp> {
                                             BorderSide(color: Colors.black),
                                       ),
                                       filled: true,
-                                      focusedBorder: OutlineInputBorder(
+                                      focusedBorder: const OutlineInputBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(15)),
                                         borderSide:
@@ -1249,7 +1246,7 @@ class _SignUpState extends State<SignUp> {
                                 // signUp(firstname.text, lastname.text, password.text, widget.phoneNumber, email.text, homeAddress.text, dateController.text, _image, _licenseFile, _permitFile);
                               },
                               style: ElevatedButton.styleFrom(
-                                  primary: customPurple,
+                                  backgroundColor: customPurple,
                                   shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.vertical(
                                       top: Radius.circular(20),

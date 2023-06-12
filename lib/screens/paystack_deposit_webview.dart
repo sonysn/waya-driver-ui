@@ -4,7 +4,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 class DepositWebView extends StatefulWidget {
   final dynamic authorizationUrl;
 
-  DepositWebView({required this.authorizationUrl});
+  const DepositWebView({super.key, required this.authorizationUrl});
 
   @override
   _DepositWebViewState createState() => _DepositWebViewState();

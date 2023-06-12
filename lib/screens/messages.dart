@@ -14,7 +14,7 @@ class _MessagesPageState extends State<MessagesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Messages'),
+        title: const Text('Messages'),
         backgroundColor: Colors.black, // S
       ),
       body: messages.isNotEmpty ? buildMessagesList() : buildNoMessages(),
@@ -35,7 +35,7 @@ class _MessagesPageState extends State<MessagesPage> {
   }
 
   Widget buildNoMessages() {
-    return Center(
+    return const Center(
       child: Text(
         'You have no messages.',
         style: TextStyle(fontSize: 16),

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:waya_driver/api/payments.dart';
@@ -141,7 +140,7 @@ class _CashDepositPageState extends State<CashDepositPage> {
                 // Handle deposit button press
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.black,
+                backgroundColor: Colors.black,
                 textStyle: const TextStyle(fontSize: 20.0),
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 shape: RoundedRectangleBorder(
@@ -166,7 +165,7 @@ class _CashDepositPageState extends State<CashDepositPage> {
             TextSelection.fromPosition(TextPosition(offset: newText.length));
       },
       style: ElevatedButton.styleFrom(
-        primary: Colors.black,
+        backgroundColor: Colors.black,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(60.0)),
         ),

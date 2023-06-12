@@ -1,15 +1,10 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:waya_driver/functions/location_functions.dart';
 import 'package:waya_driver/screens/homepage.dart';
 import 'package:waya_driver/screens/splash_screen.dart';
-import 'functions/notification_service.dart';
-import 'screens/onboarding.dart';
-import 'package:flutter/services.dart';
-import 'package:workmanager/workmanager.dart';
+import 'package:waya_driver/functions/notification_service.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:waya_driver/firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:waya_driver/sockets/sockets.dart';
 

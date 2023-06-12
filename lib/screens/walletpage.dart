@@ -7,7 +7,7 @@ import 'package:waya_driver/screens/cash_deposit_page.dart';
 import 'package:waya_driver/screens/homepage.dart';
 import 'package:waya_driver/screens/transfers.dart';
 import 'package:waya_driver/sockets/sockets.dart';
-import '../../../colorscheme.dart';
+import 'package:waya_driver/colorscheme.dart';
 import 'package:waya_driver/screens/widgets/earning_card.dart';
 import 'package:waya_driver/screens/widgets/transaction_card.dart';
 import 'package:waya_driver/screens/transactionhistory.dart';
@@ -203,7 +203,7 @@ class _WalletPageState extends State<WalletPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       "Recent Earnings",
                       style: TextStyle(
                         fontSize: 20,
@@ -224,7 +224,7 @@ class _WalletPageState extends State<WalletPage> {
                           ),
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         "View all",
                         style: TextStyle(
                           color: customPurple,

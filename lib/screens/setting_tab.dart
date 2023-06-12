@@ -14,7 +14,6 @@ import 'package:waya_driver/screens/help.dart';
 import 'package:waya_driver/sockets/sockets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'loginpage.dart';
 
 class SettingTab extends StatefulWidget {
   final dynamic data;

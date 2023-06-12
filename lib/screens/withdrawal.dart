@@ -16,7 +16,7 @@ class CashWithdrawalPage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios_rounded,
             color: Colors.black,
           ),
@@ -24,7 +24,7 @@ class CashWithdrawalPage extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
-        title: Text(
+        title: const Text(
           'Cash Withdrawal',
           style: TextStyle(
             color: Colors.black,
@@ -34,37 +34,37 @@ class CashWithdrawalPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 16.0),
-              Text(
+              const SizedBox(height: 16.0),
+              const Text(
                 'Withdrawal Details',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextFormField(
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black, // Set text color to black
                 ),
                 cursorColor: Colors.black, // Set cursor color to black
                 decoration: InputDecoration(
                   labelText: 'Amount',
-                  labelStyle: TextStyle(
+                  labelStyle: const TextStyle(
                     color: Colors.black, // Set label color to black
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Colors.black, // Set border color to black when focused
                     ),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Colors.black, // Set border color to black
                     ),
                     borderRadius: BorderRadius.circular(8.0),
@@ -72,25 +72,25 @@ class CashWithdrawalPage extends StatelessWidget {
                 ),
                 keyboardType: TextInputType.number,
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextFormField(
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black, // Set text color to black
                 ),
                 cursorColor: Colors.black, // Set cursor color to black
                 decoration: InputDecoration(
                   labelText: 'Bank Name',
-                  labelStyle: TextStyle(
+                  labelStyle: const TextStyle(
                     color: Colors.black, // Set label color to black
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Colors.black, // Set border color to black when focused
                     ),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Colors.black, // Set border color to black
                     ),
                     borderRadius: BorderRadius.circular(8.0),
@@ -98,25 +98,25 @@ class CashWithdrawalPage extends StatelessWidget {
                 ),
                 keyboardType: TextInputType.text,
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextFormField(
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black, // Set text color to black
                 ),
                 cursorColor: Colors.black, // Set cursor color to black
                 decoration: InputDecoration(
                   labelText: 'Account Number',
-                  labelStyle: TextStyle(
+                  labelStyle: const TextStyle(
                     color: Colors.black, // Set label color to black
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Colors.black, // Set border color to black when focused
                     ),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Colors.black, // Set border color to black
                     ),
                     borderRadius: BorderRadius.circular(8.0),
@@ -124,25 +124,25 @@ class CashWithdrawalPage extends StatelessWidget {
                 ),
                 keyboardType: TextInputType.number,
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextFormField(
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black, // Set text color to black
                 ),
                 cursorColor: Colors.black, // Set cursor color to black
                 decoration: InputDecoration(
                   labelText: 'Account Holder Name',
-                  labelStyle: TextStyle(
+                  labelStyle: const TextStyle(
                     color: Colors.black, // Set label color to black
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Colors.black, // Set border color to black when focused
                     ),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Colors.black, // Set border color to black
                     ),
                     borderRadius: BorderRadius.circular(8.0),
@@ -150,13 +150,19 @@ class CashWithdrawalPage extends StatelessWidget {
                 ),
                 keyboardType: TextInputType.text,
               ),
-              SizedBox(height: 32.0),
+              const SizedBox(height: 32.0),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
                     // Perform withdrawal logic
                   },
-                  child: Padding(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black, // Use the desired color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32.0),
+                    ),
+                  ),
+                  child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
                     child: Text(
                       'Withdraw',
@@ -164,12 +170,6 @@ class CashWithdrawalPage extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0,
                       ),
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black, // Use the desired color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(32.0),
                     ),
                   ),
                 ),

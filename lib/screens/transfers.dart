@@ -1,11 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:waya_driver/api/actions.dart';
-import 'package:waya_driver/api/payments.dart';
-import 'package:waya_driver/screens/paystack_deposit_webview.dart';
-import '../colorscheme.dart';
+import 'package:waya_driver/colorscheme.dart';
 
 class TransferPage extends StatefulWidget {
   final dynamic phoneNumber;
@@ -55,7 +52,7 @@ class _TransferPageState extends State<TransferPage> {
                 _performTransfer();
               },
               style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 backgroundColor: Colors.orangeAccent,
               ),
               child: const Text(
@@ -72,7 +69,7 @@ class _TransferPageState extends State<TransferPage> {
                 Navigator.of(context).pop();
               },
               style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 backgroundColor:  customPurple,
               ),
               child: const Text(
@@ -204,8 +201,8 @@ class _TransferPageState extends State<TransferPage> {
                       borderRadius: BorderRadius.circular(32.0),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(
                         vertical: 16.0, horizontal: 32.0),
                     child: Text(
                       'Transfer Funds',

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/colorscheme.dart';
+import 'package:waya_driver/colorscheme.dart';
 
 import 'package:waya_driver/screens/resetpasswordcode.dart';
 class ForgotPasswordPage extends StatefulWidget {
@@ -40,7 +40,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     // Your password reset logic here...
 
     // Simulating a delay for demonstration purposes
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         _isLoading = false;
       });
@@ -53,19 +53,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Forgot Password'),
+        title: const Text('Forgot Password'),
         backgroundColor: customPurple,
       ),
       body: _isLoading
-          ? Center(
+          ? const Center(
         child: CircularProgressIndicator(),
       )
           : Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'Forgot Your Password?',
               style: TextStyle(
                 fontSize: 24,
@@ -73,13 +73,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 color: customPurple,
               ),
             ),
-            SizedBox(height: 20),
-            Divider(
+            const SizedBox(height: 20),
+            const Divider(
               thickness: 2,
               color: Colors.black,
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Enter your email address below to reset your password.',
               style: TextStyle(
                 fontSize: 16,
@@ -87,13 +87,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             TextField(
               controller: emailTextController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 hintText: 'Email Address',
-                contentPadding: EdgeInsets.all(15),
+                contentPadding: const EdgeInsets.all(15),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -109,12 +109,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return ResetPasswordCodePage();
+                        return const ResetPasswordCodePage();
                       },
                     ),
                   );
                 },
-                child: Text(
+                child: const Text(
                   'I have a code',
                   style: TextStyle(
                     color: Colors.black,
@@ -127,20 +127,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             ElevatedButton(
               onPressed: _resetPassword,
               style: ElevatedButton.styleFrom(
-                primary: customPurple,
+                backgroundColor: customPurple,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                minimumSize: Size(double.infinity, 50),
+                minimumSize: const Size(double.infinity, 50),
               ),
-              child: Text(
+              child: const Text(
                 'Reset Password',
                 style: TextStyle(
                   fontSize: 16,
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
           ],
         ),

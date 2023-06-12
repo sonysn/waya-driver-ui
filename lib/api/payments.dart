@@ -1,9 +1,6 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:waya_driver/constants/api_constants.dart';
-import 'package:waya_driver/models/auth.dart';
-import 'package:path/path.dart' as path;
 
 //todo base uri value here
 //var baseUri = 'http://192.168.100.43:3000';

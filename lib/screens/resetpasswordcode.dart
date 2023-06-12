@@ -40,20 +40,20 @@ class _ResetPasswordCodePageState extends State<ResetPasswordCodePage> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back,
                   size: 25,
                   color: Colors.black,
                 ),
               ),
-              SizedBox(height: 10),
-              Icon(
+              const SizedBox(height: 10),
+              const Icon(
                 Icons.lock,
                 size: 50,
                 color: customPurple,
               ),
-              SizedBox(height: 10),
-              Text(
+              const SizedBox(height: 10),
+              const Text(
                 'Enter Code',
                 style: TextStyle(
                   fontSize: 20,
@@ -62,7 +62,7 @@ class _ResetPasswordCodePageState extends State<ResetPasswordCodePage> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
@@ -74,10 +74,10 @@ class _ResetPasswordCodePageState extends State<ResetPasswordCodePage> {
                   ),
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               Expanded(
                 child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     childAspectRatio: 2.5,
                     crossAxisSpacing: 10,
@@ -98,7 +98,7 @@ class _ResetPasswordCodePageState extends State<ResetPasswordCodePage> {
                   },
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               SizedBox(
                 width: 250,
                 height: 45,
@@ -109,21 +109,21 @@ class _ResetPasswordCodePageState extends State<ResetPasswordCodePage> {
                       context,
                       MaterialPageRoute(
                         builder: (BuildContext context) {
-                          return NewPasswordPage();
+                          return const NewPasswordPage();
                         },
                       ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: customPurple,
-                    shape: RoundedRectangleBorder(
+                    shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(20),
                         bottom: Radius.circular(20),
                       ),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Verify',
                     style: TextStyle(
                       fontSize: 18,
@@ -133,7 +133,7 @@ class _ResetPasswordCodePageState extends State<ResetPasswordCodePage> {
                   ),
                 ),
               ),
-              SizedBox(height: 25),
+              const SizedBox(height: 25),
             ],
           ),
         ),
@@ -152,7 +152,7 @@ class _ResetPasswordCodePageState extends State<ResetPasswordCodePage> {
         ),
         child: Text(
           digit,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
             color: customPurple,
@@ -170,7 +170,7 @@ class _ResetPasswordCodePageState extends State<ResetPasswordCodePage> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Icon(
+        child: const Icon(
           Icons.backspace,
           size: 24,
           color: customPurple,
@@ -208,7 +208,7 @@ class VerificationCodeBox extends StatelessWidget {
   final ValueChanged<String> onDigitEntered;
   final VoidCallback onDeletePressed;
 
-  const VerificationCodeBox({
+  const VerificationCodeBox({super.key, 
     required this.value,
     required this.onDigitEntered,
     required this.onDeletePressed,
@@ -219,7 +219,7 @@ class VerificationCodeBox extends StatelessWidget {
     return Container(
       width: 60,
       height: 60,
-      margin: EdgeInsets.symmetric(horizontal: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
         borderRadius: BorderRadius.circular(10),
@@ -232,7 +232,7 @@ class VerificationCodeBox extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 value.isEmpty ? '' : '●',
-                style: TextStyle(fontSize: 24),
+                style: const TextStyle(fontSize: 24),
               ),
             ),
           ),

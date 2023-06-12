@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:waya_driver/screens/bookings.dart';
 import 'package:waya_driver/screens/mapspage.dart';
 import 'package:waya_driver/screens/setting_tab.dart';
 import 'package:waya_driver/screens/walletpage.dart';
-import '/colorscheme.dart';
-import 'homepage.dart';
+import 'package:waya_driver/colorscheme.dart';
+import 'package:waya_driver/screens/homepage.dart';
 
 class BottomNavPage extends StatefulWidget {
   dynamic data;
