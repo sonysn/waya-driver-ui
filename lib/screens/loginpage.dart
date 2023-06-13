@@ -142,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                   const Padding(
                     padding: EdgeInsets.only(left: 12, bottom: 10),
                     child: Text(
-                      'Login to your account',
+                      'Welcome Back',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 27,
@@ -162,19 +162,22 @@ class _LoginPageState extends State<LoginPage> {
                               FilteringTextInputFormatter.deny(RegExp(r'\s')),
                               // Disallow whitespace
                             ],
-                            decoration: const InputDecoration(
-                              hintText: 'Email or Phone',
-                              contentPadding: EdgeInsets.all(15),
+                            decoration: InputDecoration(
+                              hintText: 'Email or Phone Number',
+                              contentPadding: const EdgeInsets.all(15),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15)),
-                                borderSide: BorderSide(color: Colors.black),
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(color: Colors.white),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(color: Colors.orangeAccent),
                               ),
                               filled: true,
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15)),
-                                borderSide: BorderSide(color: Colors.yellow),
+                              fillColor: Colors.white,
+                              prefixIcon: const Icon(
+                                Icons.account_circle_outlined,
+                                color: Colors.black87,
                               ),
                             ),
                           ),
@@ -193,16 +196,19 @@ class _LoginPageState extends State<LoginPage> {
                           decoration: InputDecoration(
                             hintText: 'Password',
                             contentPadding: const EdgeInsets.all(15),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                              borderSide: BorderSide(color: Colors.black),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(color: Colors.white),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(color: Colors.orangeAccent),
                             ),
                             filled: true,
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                              borderSide: BorderSide(color: Colors.yellow),
+                            fillColor: Colors.white,
+                            prefixIcon: const Icon(
+                              Icons.lock,
+                              color: Colors.black87,
                             ),
                             suffixIcon: IconButton(
                               icon: Icon(
@@ -242,7 +248,7 @@ class _LoginPageState extends State<LoginPage> {
                           // }));
                           if (emailOrPhoneTextController.text == '' ||
                               passwordTextController.text == '') {
-                            _showSnackBar("Input your Login Details");
+                            _showSnackBar("Input your Login Details",);
                           }
                           if (emailOrPhoneTextController.text != '' &&
                               passwordTextController.text != '') {

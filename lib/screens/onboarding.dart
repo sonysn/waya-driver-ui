@@ -56,8 +56,9 @@ class OnboardingState extends State<Onboarding> {
                       const SizedBox(height: 10),
                       Text(
                         contents[i].title,
+                        textAlign: TextAlign.center,
                         style: const TextStyle(
-                          fontSize: 25,
+                          fontSize: 21,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

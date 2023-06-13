@@ -45,8 +45,8 @@ class _WelcomePageState extends State<WelcomePage> {
                       height: 200.0,
                     )),
                 const Text(
-                  "Welcome to Waya Driver",
-                  style: TextStyle(fontSize: 30, color: customPurple),
+                  "QuNot Driver: Your Drive Begins",  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 24,color: customPurple),
                 ),
                 const SizedBox(
                   height: 10,

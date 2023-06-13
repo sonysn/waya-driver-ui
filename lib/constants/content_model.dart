@@ -12,18 +12,15 @@ class OnboardingContent {
 
 List<OnboardingContent> contents = [
   OnboardingContent(
-    title: 'Qunot',
-    image: 'assets/images/onboard1.jpg',
-    description: "Welcome to Waya, the smart transportation app that simplifies your travel experience. With Waya, you can enjoy convenient and reliable rides at your fingertips, making commuting a breeze.",
-  ),
+      title: 'Welcome to QuNot',
+      image: 'assets/images/onboardingscreen1.png',
+      description: "Earn while you commute! With QuNot, you can turn your daily drive into an opportunity to pick up passengers heading in your direction. Start monetizing your travel time today!" ),
   OnboardingContent(
-    title: 'What we do',
-    image: 'assets/images/image1.jpg',
-    description: "Discover the world of Waya, where we connect you to a wide range of transportation options. From taxis and rideshares to bikes and scooters, we have it all. Say goodbye to waiting and hello to efficient journeys with Waya.",
-  ),
+      title:  "Pick up Passengers on Your Way",
+      image: 'assets/images/onboardingscreen2.jpg',
+      description: "Connect with passengers traveling in the same direction as you. Get matched with riders heading to destinations along your route. Increase your income and help commuters reach their destinations conveniently." ),
   OnboardingContent(
-    title: 'How we work',
-    image: 'assets/images/img.png',
-    description: "Experience the innovative approach of Waya. Our advanced technology seamlessly matches you with nearby drivers, ensuring quick and hassle-free rides. Join the Waya community and revolutionize the way you move around.",
-  ),
+      title: "Flexible and Reliable Earnings",
+      image: 'assets/images/onboardingscreen3.png',
+      description: "Set your own schedule and choose when and how many passengers you want to pick up. Enjoy the flexibility of earning extra income during your regular commute. QuNot provides a reliable platform for seamless transactions and secure payments." ),
 ];
