@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -12,12 +14,13 @@ import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/sockets/sockets.dart';
 import 'package:waya_driver/screens/widgets/activeride.dart';
 import 'package:http/http.dart' as http;
+// ignore: library_prefixes
 import 'package:geocoding/geocoding.dart' as locationGeocodingPackage;
 
 class HomePage extends StatefulWidget {
-  dynamic data;
+  final dynamic data;
 
-  HomePage({Key? key, this.data}) : super(key: key);
+  const HomePage({Key? key, required this.data}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -114,10 +117,18 @@ class _HomePageState extends State<HomePage> {
       }
 
       _connect();
-      await locationCallbacks(
-          id: widget.data.id,
-          verificationStatus: widget.data.verified,
-          driverDestPoint: p!);
+      if (p == null || p == []) {
+        await locationCallbacks(
+            id: widget.data.id,
+            verificationStatus: widget.data.verified,
+            driverDestPoint: []);
+      } else {
+        await locationCallbacks(
+            id: widget.data.id,
+            verificationStatus: widget.data.verified,
+            driverDestPoint: p);
+      }
+
       updateAvailability(1, widget.data.id);
       getCar();
       await setSwitchValue(onlineStatus);
@@ -355,7 +366,7 @@ class _HomePageState extends State<HomePage> {
                             locationCallbacks(
                                 id: widget.data.id,
                                 verificationStatus: widget.data.verified,
-                                driverDestPoint: p!);
+                                driverDestPoint: driverDestLatLng!);
                             updateAvailability(1, widget.data.id);
                             getCar();
                             locationPingServer();
