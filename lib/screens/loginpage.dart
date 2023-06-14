@@ -7,7 +7,7 @@ import 'package:waya_driver/screens/bottom_nav.dart';
 import 'package:waya_driver/colorscheme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
+import 'package:waya_driver/screens/forgotpassword.dart';
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -238,6 +238,29 @@ class _LoginPageState extends State<LoginPage> {
                   //     });
                   //   },
                   // ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        // Navigate to the forgot password page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) {
+                              return const ForgotPasswordPage();
+                            },
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
                   Center(
                     child: ElevatedButton(
                         onPressed: () async {
