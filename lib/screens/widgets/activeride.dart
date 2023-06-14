@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:url_launcher/url_launcher.dart';
 import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/colorscheme.dart';
@@ -10,8 +11,6 @@ class DriverWidget extends StatefulWidget {
 
   @override
   State<DriverWidget> createState() => _DriverWidgetState();
-
-
 }
 
 class _DriverWidgetState extends State<DriverWidget> {
@@ -197,6 +196,7 @@ class _DriverWidgetState extends State<DriverWidget> {
       },
     );
   }
+
   void refreshPage() {
     // Perform the necessary refresh operations here
     // For example, setState or call an API to update the page data
@@ -207,7 +207,6 @@ class _DriverWidgetState extends State<DriverWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         for (int index = 0; index < currentRidesArray.length; index++)
@@ -227,8 +226,8 @@ class _DriverWidgetState extends State<DriverWidget> {
               child: Column(
                 children: [
                   Container(
-                    padding:
-                    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16.0, horizontal: 24.0),
                     decoration: const BoxDecoration(
                       border: Border(),
                     ),
@@ -251,6 +250,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                               ),
                             ),
                             onPressed: () {
+                              // ignore: deprecated_member_use
                               launch(
                                   "tel:${currentRidesArray[index]['riderPhoneNumber']}");
                             },
@@ -300,7 +300,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                                   Flexible(
                                     child: Text(
                                       currentRidesArray[index]
-                                      ['pickUpLocation'],
+                                          ['pickUpLocation'],
                                       style: const TextStyle(
                                         fontSize: 15,
                                         color: Colors.black,
@@ -320,7 +320,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                                   Flexible(
                                     child: Text(
                                       currentRidesArray[index]
-                                      ['destinationLocation'],
+                                          ['destinationLocation'],
                                       style: const TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
@@ -357,7 +357,8 @@ class _DriverWidgetState extends State<DriverWidget> {
                                 borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(15),
                                 ),
-                              ), backgroundColor: Colors.orangeAccent,
+                              ),
+                              backgroundColor: Colors.orangeAccent,
                             ),
                             child: const Text(
                               "End",
@@ -379,7 +380,8 @@ class _DriverWidgetState extends State<DriverWidget> {
                                 borderRadius: BorderRadius.only(
                                   bottomRight: Radius.circular(15),
                                 ),
-                              ), backgroundColor: customPurple,
+                              ),
+                              backgroundColor: customPurple,
                             ),
                             child: const Text(
                               "Cancel",
