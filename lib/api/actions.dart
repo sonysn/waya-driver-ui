@@ -169,3 +169,11 @@ Future onRideCompleted(
   final data = response.statusCode;
   return data;
 }
+
+Future getRideHistory({required int driverID}) async {
+  final http.Response response =
+      await http.get(Uri.parse('$baseUri/$driverID/getDriverTripHistory'));
+  //final data = json.decode(response.body);
+  //print(data);
+  return response;
+}

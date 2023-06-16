@@ -1,21 +1,51 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class BookingPage extends StatefulWidget {
-  final dynamic data;
-  const BookingPage({Key? key, this.data}) : super(key: key);
+import 'package:flutter/material.dart';
+import 'package:waya_driver/api/actions.dart';
+import 'package:waya_driver/models/ride_history.dart';
+
+class RideHistoryPage extends StatefulWidget {
+  final dynamic driverID;
+  const RideHistoryPage({Key? key, this.driverID}) : super(key: key);
 
   @override
-  State<BookingPage> createState() => _BookingPageState();
+  State<RideHistoryPage> createState() => _RideHistoryPageState();
 }
 
-class _BookingPageState extends State<BookingPage>
+class _RideHistoryPageState extends State<RideHistoryPage>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
+  List<dynamic> ridesArray = [];
+
+  Future<void> getRides() async {
+    final response = await getRideHistory(driverID: widget.driverID);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      setState(() {
+        ridesArray = data.reversed.toList();
+      });
+      print(ridesArray);
+    }
+    // if (response.statusCode == 200) {
+    //   final data = json.decode(response.body) as List<dynamic>;
+    //   final reversedBookingList = data.reversed.toList();
+    //   final bookingList = reversedBookingList.asMap().entries.map((entry) {
+    //     //final index = entry.key;
+    //     final booking = entry.value;
+    //     return RideHistory.fromJson(booking);
+    //   }).toList();
+    //   setState(() {
+    //     ridesArray = bookingList.toList();
+    //   });
+    // }
+  }
 
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
     super.initState();
+    getRides();
   }
 
   @override

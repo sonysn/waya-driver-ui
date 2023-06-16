@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/api/auth.dart';
 import 'package:waya_driver/functions/location_functions.dart';
-import 'package:waya_driver/screens/bookings.dart';
+import 'package:waya_driver/screens/ride_history.dart';
 import 'package:waya_driver/screens/homepage.dart';
 import 'package:waya_driver/screens/legalpage.dart';
 import 'package:waya_driver/screens/settingspage.dart';
@@ -12,8 +12,8 @@ import 'package:waya_driver/screens/messages.dart';
 import 'package:waya_driver/screens/welcomepage.dart';
 import 'package:waya_driver/screens/help.dart';
 import 'package:waya_driver/sockets/sockets.dart';
+// ignore: depend_on_referenced_packages
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 class SettingTab extends StatefulWidget {
   final dynamic data;
@@ -146,7 +146,7 @@ class _SettingTabState extends State<SettingTab> {
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (BuildContext context) {
-                          return const BookingPage();
+                          return RideHistoryPage(driverID: widget.data.id);
                         }));
                       },
                     ),
@@ -207,20 +207,21 @@ class _SettingTabState extends State<SettingTab> {
                     title: Text("Help"),
                   ),
                 ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (BuildContext context) {
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (BuildContext context) {
                       return const LegalPage();
                     }));
-              },
-              child:const ListTile(
-                  leading: Icon(
-                    Icons.info_outline,
-                    color: Colors.black,
+                  },
+                  child: const ListTile(
+                    leading: Icon(
+                      Icons.info_outline,
+                      color: Colors.black,
+                    ),
+                    title: Text("Legal"),
                   ),
-                  title: Text("Legal"),
-                ),),
+                ),
                 GestureDetector(
                   onTap: () async {
                     SharedPreferences prefs =
