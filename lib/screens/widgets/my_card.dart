@@ -28,23 +28,21 @@ class MyCardState extends State<MyCard> {
     // If the event is a string, it checks whether it can be parsed as an int or a double, and formats it accordingly with commas or decimals.
     // Otherwise, it sets the account balance to the event string as
     widget.stream?.listen((event) {
-      if (event is String) {
-        if (int.tryParse(event) != null) {
-          setState(() {
-            accountBalance = NumberFormat('#,##0').format(int.parse(event));
-          });
-        } else if (double.tryParse(event) != null) {
-          setState(() {
-            accountBalance = double.parse(event)
-                .toStringAsFixed(2)
-                .replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                    (Match m) => '${m[1]},');
-          });
-        } else {
-          setState(() {
-            accountBalance = event;
-          });
-        }
+      if (int.tryParse(event) != null) {
+        setState(() {
+          accountBalance = NumberFormat('#,##0').format(int.parse(event));
+        });
+      } else if (double.tryParse(event) != null) {
+        setState(() {
+          accountBalance = double.parse(event)
+              .toStringAsFixed(2)
+              .replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                  (Match m) => '${m[1]},');
+        });
+      } else {
+        setState(() {
+          accountBalance = event;
+        });
       }
     });
   }
@@ -96,7 +94,7 @@ class MyCardState extends State<MyCard> {
                   const SizedBox(width: 70),
                 ],
               ),
-              Column(
+              const Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
               )
             ],
