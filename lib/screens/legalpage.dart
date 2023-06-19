@@ -10,12 +10,12 @@ class LegalPage extends StatelessWidget {
         title: const Text('Legal'),
         backgroundColor: customPurple,
       ),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Text(
                 'Terms of Service',
                 style: TextStyle(

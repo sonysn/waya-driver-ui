@@ -95,9 +95,9 @@ class _SettingTabState extends State<SettingTab> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     GestureDetector(
-                      child: Card(
+                      child: const Card(
                         color: Colors.white70,
-                        shape: const RoundedRectangleBorder(
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
                             top: Radius.circular(15),
                             bottom: Radius.circular(15),
@@ -108,7 +108,7 @@ class _SettingTabState extends State<SettingTab> {
                           width: 90,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Icon(Icons.settings),
                               Text('Settings')
                             ],
@@ -123,9 +123,9 @@ class _SettingTabState extends State<SettingTab> {
                       },
                     ),
                     GestureDetector(
-                      child: Card(
+                      child: const Card(
                         color: Colors.white70,
-                        shape: const RoundedRectangleBorder(
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
                             top: Radius.circular(15),
                             bottom: Radius.circular(15),
@@ -136,7 +136,7 @@ class _SettingTabState extends State<SettingTab> {
                           width: 90,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Icon(Icons.history),
                               Text('Trips')
                             ],
