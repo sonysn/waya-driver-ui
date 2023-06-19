@@ -2,7 +2,7 @@ import 'package:waya_driver/colorscheme.dart';
 import 'package:flutter/material.dart';
 
 class DriverPrivacyPolicyPage extends StatelessWidget {
-  const  DriverPrivacyPolicyPage({Key? key}) : super(key: key);
+  const DriverPrivacyPolicyPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,12 +10,12 @@ class DriverPrivacyPolicyPage extends StatelessWidget {
         title: const Text('Driver Privacy Policy'),
         backgroundColor: customPurple,
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: const [
               Text(
                 'Information We Collect',
                 style: TextStyle(
@@ -28,13 +28,17 @@ class DriverPrivacyPolicyPage extends StatelessWidget {
                 'We collect the following information from drivers who use our app:',
               ),
               SizedBox(height: 8.0),
-              Text('- Personal Information: This includes your name, contact information (such as email address and phone number), payment information, and profile information (including profile picture and user preferences).'),
+              Text(
+                  '- Personal Information: This includes your name, contact information (such as email address and phone number), payment information, and profile information (including profile picture and user preferences).'),
               SizedBox(height: 8.0),
-              Text('- Location Information: We collect your geolocation data to facilitate the provision of our services, such as matching you with riders and navigating to pick-up and drop-off locations.'),
+              Text(
+                  '- Location Information: We collect your geolocation data to facilitate the provision of our services, such as matching you with riders and navigating to pick-up and drop-off locations.'),
               SizedBox(height: 8.0),
-              Text('- Vehicle Information: We may collect details about the vehicle you use for providing transportation services through our app.'),
+              Text(
+                  '- Vehicle Information: We may collect details about the vehicle you use for providing transportation services through our app.'),
               SizedBox(height: 8.0),
-              Text('- Communication Data: We collect communications and interactions between drivers and riders for quality assurance purposes and to ensure a safe and reliable service.'),
+              Text(
+                  '- Communication Data: We collect communications and interactions between drivers and riders for quality assurance purposes and to ensure a safe and reliable service.'),
               SizedBox(height: 16.0),
               Text(
                 'How We Use Your Information',
@@ -48,13 +52,17 @@ class DriverPrivacyPolicyPage extends StatelessWidget {
                 'We may use the collected information for the following purposes:',
               ),
               SizedBox(height: 8.0),
-              Text('- To facilitate the matching of drivers with riders and the provision of transportation services.'),
+              Text(
+                  '- To facilitate the matching of drivers with riders and the provision of transportation services.'),
               SizedBox(height: 8.0),
-              Text('- To process and facilitate payment transactions between drivers and riders.'),
+              Text(
+                  '- To process and facilitate payment transactions between drivers and riders.'),
               SizedBox(height: 8.0),
-              Text('- To communicate with drivers regarding ride requests, updates, and support.'),
+              Text(
+                  '- To communicate with drivers regarding ride requests, updates, and support.'),
               SizedBox(height: 8.0),
-              Text('- To improve our app, services, and overall user experience.'),
+              Text(
+                  '- To improve our app, services, and overall user experience.'),
               SizedBox(height: 8.0),
               Text('- To comply with applicable laws and regulations.'),
               SizedBox(height: 16.0),
@@ -70,15 +78,20 @@ class DriverPrivacyPolicyPage extends StatelessWidget {
                 'We may share your personal information in the following circumstances:',
               ),
               SizedBox(height: 8.0),
-              Text('- With riders who have requested transportation services through our app, such as sharing your name and profile picture to facilitate identification.'),
+              Text(
+                  '- With riders who have requested transportation services through our app, such as sharing your name and profile picture to facilitate identification.'),
               SizedBox(height: 8.0),
-              Text('- With third-party service providers who assist us in delivering our services, such as payment processors and mapping/navigation providers.'),
+              Text(
+                  '- With third-party service providers who assist us in delivering our services, such as payment processors and mapping/navigation providers.'),
               SizedBox(height: 8.0),
-              Text('- With law enforcement agencies or government authorities as required by applicable laws or regulations.'),
+              Text(
+                  '- With law enforcement agencies or government authorities as required by applicable laws or regulations.'),
               SizedBox(height: 8.0),
-              Text('- In connection with a merger, acquisition, or sale of all or a portion of our business.'),
+              Text(
+                  '- In connection with a merger, acquisition, or sale of all or a portion of our business.'),
               SizedBox(height: 8.0),
-              Text('- With your consent or as otherwise disclosed at the time of data collection.'),
+              Text(
+                  '- With your consent or as otherwise disclosed at the time of data collection.'),
               SizedBox(height: 16.0),
               Text(
                 'Data Retention',
@@ -104,11 +117,14 @@ class DriverPrivacyPolicyPage extends StatelessWidget {
                 'As a driver using our app, you have certain rights and choices regarding the collection and use of your personal information. These may include:',
               ),
               SizedBox(height: 8.0),
-              Text('- The ability to access, update, or delete your personal information.'),
+              Text(
+                  '- The ability to access, update, or delete your personal information.'),
               SizedBox(height: 8.0),
-              Text('- The ability to modify your preferences and settings within the app.'),
+              Text(
+                  '- The ability to modify your preferences and settings within the app.'),
               SizedBox(height: 8.0),
-              Text('- The option to opt-out of certain data processing activities.'),
+              Text(
+                  '- The option to opt-out of certain data processing activities.'),
               SizedBox(height: 8.0),
               Text('- The right to withdraw your consent, where applicable.'),
               SizedBox(height: 16.0),

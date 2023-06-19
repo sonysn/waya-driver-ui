@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/colorscheme.dart';
-class Vehicle extends StatefulWidget {
-  dynamic data;
 
-  Vehicle({Key? key, this.data}) : super(key: key);
+class Vehicle extends StatefulWidget {
+  final dynamic data;
+
+  const Vehicle({Key? key, required this.data}) : super(key: key);
 
   @override
   State<Vehicle> createState() => _VehicleState();
@@ -39,77 +40,77 @@ class _VehicleState extends State<Vehicle> {
       ),
       body: itemList != null
           ? Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 10),
-            const Text(
-              'Your Cars',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Your Cars',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: itemList['result'].length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          elevation: 2,
+                          child: ListTile(
+                            title: Text(
+                              '${itemList['result'][index]['VEHICLE_MAKE']}, ${itemList['result'][index]['VEHICLE_MODEL']}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            subtitle: Text(
+                              itemList['result'][index]['VEHICLE_PLATE_NUMBER'],
+                            ),
+                            trailing: Text(
+                              itemList['result'][index]['VEHICLE_COLOUR'],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
-                itemCount: itemList['result'].length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    elevation: 2,
-                    child: ListTile(
-                      title: Text(
-                        '${itemList['result'][index]['VEHICLE_MAKE']}, ${itemList['result'][index]['VEHICLE_MODEL']}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      subtitle: Text(
-                        itemList['result'][index]['VEHICLE_PLATE_NUMBER'],
-                      ),
-                      trailing: Text(
-                        itemList['result'][index]['VEHICLE_COLOUR'],
+            )
+          : Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      Icons.car_rental,
+                      size: 80,
+                      color: Colors.grey,
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'No Vehicles Found',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  );
-                },
+                    SizedBox(height: 8),
+                    Text(
+                      'You have no Registered vehicles',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ],
-        ),
-      )
-          : Center(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.car_rental,
-                size: 80,
-                color: Colors.grey,
-              ),
-              SizedBox(height: 16),
-              Text(
-                'No Vehicles Found',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 8),
-              Text(
-                'You have no Registered vehicles',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

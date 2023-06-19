@@ -111,3 +111,30 @@ Future logOut(id) async {
     return 'logout failed';
   }
 }
+
+Future forgotPassword({required String emailOrphoneNumber}) async {
+  final http.Response response = await http.post(
+    Uri.parse('$baseUri${ApiConstants.forgotPasswordEndpoint}'),
+    headers: {"Content-Type": "application/json"},
+    body: jsonEncode(
+        {"email": emailOrphoneNumber, "phoneNumber": emailOrphoneNumber}),
+  );
+  return response;
+}
+
+Future resetPasswordFromForgotPassword(
+    {required String emailOrphoneNumber,
+    required String userToken,
+    required String newPassword}) async {
+  final http.Response response = await http.post(
+    Uri.parse('$baseUri${ApiConstants.verifyForgotPasswordChangeEndpoint}'),
+    headers: {"Content-Type": "application/json"},
+    body: jsonEncode({
+      "email": emailOrphoneNumber,
+      "phoneNumber": emailOrphoneNumber,
+      "userToken": userToken,
+      "newPassword": newPassword
+    }),
+  );
+  return response;
+}

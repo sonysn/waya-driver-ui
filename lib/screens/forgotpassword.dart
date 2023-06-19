@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:waya_driver/api/auth.dart';
 import 'package:waya_driver/colorscheme.dart';
 
 import 'package:waya_driver/screens/resetpasswordcode.dart';
+
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
 
@@ -10,12 +12,12 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-  TextEditingController emailTextController = TextEditingController();
+  TextEditingController emailOrPhoneTextController = TextEditingController();
   bool _isLoading = false;
 
   @override
   void dispose() {
-    emailTextController.dispose();
+    emailOrPhoneTextController.dispose();
     super.dispose();
   }
 
@@ -27,26 +29,57 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  void _resetPassword() {
+  void _nav({required String emailorPhone}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ResetPasswordCodePage(emailorPhone: emailorPhone),
+      ),
+    );
+  }
+
+  void _resetPassword() async {
     setState(() {
       _isLoading = true;
     });
-    // TODO: Implement your password reset logic here
-    // You can use the emailTextController.text to retrieve the entered email
+    // You can use the emailOrPhoneTextController.text to retrieve the entered email
     // and implement the necessary logic for resetting the password.
     // Once the password is reset, you can show a success message or navigate
     // to a different screen.
     // Example:
     // Your password reset logic here...
+    final response = await forgotPassword(
+        emailOrphoneNumber: emailOrPhoneTextController.text);
+    //
+    switch (response.statusCode) {
+      case 200:
+        _showSnackBar('Password reset email sent!');
+        setState(() {
+          _isLoading = false;
+        });
+        _nav(emailorPhone: emailOrPhoneTextController.text);
+        break;
+      case 404:
+        _showSnackBar('User not found!');
+        setState(() {
+          _isLoading = false;
+        });
+        break;
+      default:
+        _showSnackBar('Something went wrong!');
+        setState(() {
+          _isLoading = false;
+        });
+    }
 
-    // Simulating a delay for demonstration purposes
-    Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        _isLoading = false;
-      });
-      _showSnackBar('Password reset email sent!');
-      // Navigate to a different screen if needed
-    });
+    // // Simulating a delay for demonstration purposes
+    // Future.delayed(const Duration(seconds: 2), () {
+    //   setState(() {
+    //     _isLoading = false;
+    //   });
+    //   _showSnackBar('Password reset email sent!');
+    //   // Navigate to a different screen if needed
+    // });
   }
 
   @override
@@ -58,93 +91,93 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       ),
       body: _isLoading
           ? const Center(
-        child: CircularProgressIndicator(),
-      )
+              child: CircularProgressIndicator(),
+            )
           : Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Forgot Your Password?',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: customPurple,
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Divider(
-              thickness: 2,
-              color: Colors.black,
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Enter your email address below to reset your password.',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black54,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 40),
-            TextField(
-              controller: emailTextController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                hintText: 'Email Address',
-                contentPadding: const EdgeInsets.all(15),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-            const SizedBox(height: 5),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {
-                  // Navigate to the forgot password page
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return const ResetPasswordCodePage();
-                      },
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Forgot Your Password?',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: customPurple,
                     ),
-                  );
-                },
-                child: const Text(
-                  'I have a code',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
                   ),
-                ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Enter your email address below to reset your password.',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black54,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 40),
+                  TextField(
+                    controller: emailOrPhoneTextController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      hintText: 'Email Address or Phone Number',
+                      contentPadding: const EdgeInsets.all(15),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        // Navigate to the forgot password page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) {
+                              return ResetPasswordCodePage(
+                                  emailorPhone:
+                                      emailOrPhoneTextController.text);
+                            },
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'I have a code',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (emailOrPhoneTextController.text.isNotEmpty) {
+                        _resetPassword();
+                      } else {
+                        _showSnackBar(
+                            'Please enter your email or phone number');
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: customPurple,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    child: const Text(
+                      'Reset Password',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 5),
-            ElevatedButton(
-              onPressed: _resetPassword,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: customPurple,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                minimumSize: const Size(double.infinity, 50),
-              ),
-              child: const Text(
-                'Reset Password',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-          ],
-        ),
-      ),
     );
   }
 }

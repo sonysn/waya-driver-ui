@@ -137,8 +137,8 @@ class _WalletPageState extends State<WalletPage> {
                             ),
                           );
                         },
-                        child: const Column(
-                          children: [
+                        child: Column(
+                          children: const [
                             Icon(Icons.account_balance_wallet, size: 40),
                             SizedBox(height: 10),
                             Text("Deposit", style: TextStyle(fontSize: 16)),
@@ -163,8 +163,8 @@ class _WalletPageState extends State<WalletPage> {
                             ),
                           );
                         },
-                        child: const Column(
-                          children: [
+                        child: Column(
+                          children: const [
                             Icon(Icons.credit_card, size: 40),
                             SizedBox(height: 10),
                             Text("Withdraw", style: TextStyle(fontSize: 16)),
@@ -186,8 +186,8 @@ class _WalletPageState extends State<WalletPage> {
                             ),
                           );
                         },
-                        child: const Column(
-                          children: [
+                        child: Column(
+                          children: const [
                             Icon(Icons.send, size: 40),
                             SizedBox(height: 10),
                             Text("Transfer", style: TextStyle(fontSize: 16)),

@@ -142,9 +142,9 @@ class _TransactionHistoryState extends State<TransactionHistory>
                 child: Container(
                   padding: const EdgeInsets.only(top: 40),
                   margin: const EdgeInsets.symmetric(horizontal: 10),
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
+                    children: const [
                       // TODO: Implement the UI for History tab
                       // Replace the following placeholder widget
                       Center(
@@ -162,9 +162,9 @@ class _TransactionHistoryState extends State<TransactionHistory>
                 child: Container(
                   padding: const EdgeInsets.only(top: 40),
                   margin: const EdgeInsets.symmetric(horizontal: 10),
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
+                    children: const [
                       // TODO: Implement the UI for Driver Transfer History tab
                       // Replace the following placeholder widget
                       Center(

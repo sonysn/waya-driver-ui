@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:waya_driver/colorscheme.dart';
 import 'package:waya_driver/api/actions.dart';
+// ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 
 class MyCard extends StatefulWidget {
@@ -94,7 +95,7 @@ class MyCardState extends State<MyCard> {
                   const SizedBox(width: 70),
                 ],
               ),
-              const Column(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
               )
             ],

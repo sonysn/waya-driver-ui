@@ -12,11 +12,11 @@ class AboutPage extends StatelessWidget {
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
-        child: const Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 16.0),
-            Center(
+            const SizedBox(height: 16.0),
+            const Center(
               child: CircleAvatar(
                 backgroundColor: customPurple,
                 radius: 64.0,
@@ -27,48 +27,48 @@ class AboutPage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 16.0),
-            Text(
+            const SizedBox(height: 16.0),
+            const Text(
               'Qunot',
               style: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 8.0),
-            Text(
+            const SizedBox(height: 8.0),
+            const Text(
               'Version: 1.0.0',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 8.0),
-            Text(
+            const SizedBox(height: 8.0),
+            const Text(
               'Last updated: June 1, 2023',
             ),
-            SizedBox(height: 16.0),
-            Text(
+            const SizedBox(height: 16.0),
+            const Text(
               'About',
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 8.0),
-            Text(
+            const SizedBox(height: 8.0),
+            const Text(
               'Qunot is a leading transportation platform that connects riders and drivers seamlessly. Our mission is to provide safe, reliable, and convenient transportation services to individuals and communities worldwide.',
             ),
-            SizedBox(height: 16.0),
-            Text(
+            const SizedBox(height: 16.0),
+            const Text(
               'Contact Us',
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Row(
-              children: [
+              children: const [
                 Icon(Icons.email),
                 SizedBox(width: 8.0),
                 Text(
@@ -76,9 +76,9 @@ class AboutPage extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Row(
-              children: [
+              children: const [
                 Icon(Icons.public),
                 SizedBox(width: 8.0),
                 Text(

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:waya_driver/colorscheme.dart';
 import 'package:waya_driver/screens/newpassword.dart';
+
 class ResetPasswordCodePage extends StatefulWidget {
-  const ResetPasswordCodePage({Key? key}) : super(key: key);
+  final String emailorPhone;
+  const ResetPasswordCodePage({Key? key, required this.emailorPhone})
+      : super(key: key);
 
   @override
   State<ResetPasswordCodePage> createState() => _ResetPasswordCodePageState();
@@ -67,7 +70,7 @@ class _ResetPasswordCodePageState extends State<ResetPasswordCodePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
                   4,
-                      (index) => VerificationCodeBox(
+                  (index) => VerificationCodeBox(
                     value: code[index],
                     onDigitEntered: (digit) => updateCode(index, digit),
                     onDeletePressed: () => deleteCode(index),
@@ -109,7 +112,9 @@ class _ResetPasswordCodePageState extends State<ResetPasswordCodePage> {
                       context,
                       MaterialPageRoute(
                         builder: (BuildContext context) {
-                          return const NewPasswordPage();
+                          return NewPasswordPage(
+                              code: code.join(),
+                              emailorPhone: widget.emailorPhone);
                         },
                       ),
                     );
@@ -124,7 +129,7 @@ class _ResetPasswordCodePageState extends State<ResetPasswordCodePage> {
                     ),
                   ),
                   child: const Text(
-                    'Verify',
+                    'Next',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -198,17 +203,15 @@ class _ResetPasswordCodePageState extends State<ResetPasswordCodePage> {
       }
     }
   }
-
-
-
-  }
+}
 
 class VerificationCodeBox extends StatelessWidget {
   final String value;
   final ValueChanged<String> onDigitEntered;
   final VoidCallback onDeletePressed;
 
-  const VerificationCodeBox({super.key, 
+  const VerificationCodeBox({
+    super.key,
     required this.value,
     required this.onDigitEntered,
     required this.onDeletePressed,
@@ -236,7 +239,6 @@ class VerificationCodeBox extends StatelessWidget {
               ),
             ),
           ),
-
         ],
       ),
     );
