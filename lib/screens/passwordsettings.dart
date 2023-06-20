@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:waya_driver/screens/passwordchanage.dart';
 import 'package:waya_driver/colorscheme.dart';
+import 'package:waya_driver/screens/passwordchange.dart';
 
 class PasswordSettings extends StatefulWidget {
-  const PasswordSettings({Key? key}) : super(key: key);
+  final int driverID;
+  const PasswordSettings({Key? key, required this.driverID}) : super(key: key);
 
   @override
   State<PasswordSettings> createState() => _PasswordSettingsState();
@@ -58,7 +59,7 @@ class _PasswordSettingsState extends State<PasswordSettings> {
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return const ChangePasswordPage();
+                      return ChangePasswordPage(id: widget.driverID);
                     },
                   ),
                 );

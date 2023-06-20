@@ -460,193 +460,189 @@ class _HomePageState extends State<HomePage> {
                             }
                             // Handle pointer events as usual
                           },
-                          child: Container(
-                            child: Stack(
-                              children: [
-                                TextFormField(
-                                  controller:
-                                      driverDestinationLocationController,
-                                  onChanged: _fetchSuggestions,
-                                  textInputAction: TextInputAction.search,
-                                  decoration: InputDecoration(
-                                    hintText: 'Enter destination',
-                                    prefixIcon: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 20.0),
-                                      child: SizedBox(
-                                        width: 12.0,
-                                        height: 24.0,
-                                        child: Icon(
-                                          Icons.location_on,
-                                          color: onlineStatus
-                                              ? Colors.black
-                                              : Colors.orangeAccent,
-                                        ),
-                                      ),
-                                    ),
-                                    suffixIcon: GestureDetector(
-                                      onTap: () {
-                                        driverDestinationLocationController
-                                            .clear();
-                                        clearDriverDestData();
-                                      },
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 68.0),
-                                        child: Icon(
-                                          Icons.clear,
-                                          color: onlineStatus
-                                              ? Colors.black
-                                              : Colors.orangeAccent,
-                                        ),
-                                      ),
-                                    ),
-                                    fillColor: Colors.grey[150],
-                                    filled: true,
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 4.0),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                  ),
-                                  readOnly:
-                                      onlineStatus, // Make the TextFormField read-only when online
-                                  showCursor:
-                                      !onlineStatus, // Hide the cursor when online
-                                ),
-                                Positioned(
-                                  right: 0,
-                                  bottom: 0,
-                                  child: Container(
-                                    width: 60.0,
-                                    height: 63,
-                                    decoration: BoxDecoration(
-                                      color: onlineStatus
-                                          ? Colors.grey
-                                          : Colors.orangeAccent,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        if (onlineStatus ||
-                                            driverDestinationLocationController
-                                                .text.isEmpty) {
-                                          // Prevent button click when online or text field is empty
-                                          return;
-                                        }
-                                        await getDriverDestinationCoordinates(
-                                          address:
-                                              driverDestinationLocationController
-                                                  .text,
-                                        );
-                                        setLatLng();
-
-                                        setState(() {
-                                          isDestinationSet =
-                                              false; // Set the flag to true when the destination is set
-                                        });
-
-                                        // Show the flash message
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            duration: const Duration(
-                                                milliseconds: 500),
-                                            backgroundColor:
-                                                customPurple, // Custom purple background color
-                                            content: Row(
-                                              children: const [
-                                                Icon(Icons.check,
-                                                    color: Colors
-                                                        .orangeAccent), // Orange accent color
-                                                SizedBox(width: 8.0),
-                                                Text('Destination set',
-                                                    style: TextStyle(
-                                                        color: Colors.white)),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: const Center(
-                                        child: Text(
-                                          'OK',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                if (_suggestions.isNotEmpty)
-                                  Container(
-                                    margin: const EdgeInsets.only(top: 56.0),
+                          child: Stack(
+                            children: [
+                              TextFormField(
+                                controller: driverDestinationLocationController,
+                                onChanged: _fetchSuggestions,
+                                textInputAction: TextInputAction.search,
+                                decoration: InputDecoration(
+                                  hintText: 'Enter destination',
+                                  prefixIcon: Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.3),
-                                          spreadRadius: 2,
-                                          blurRadius: 5,
-                                          offset: const Offset(0, 3),
-                                        ),
-                                      ],
-                                    ),
-                                    constraints:
-                                        const BoxConstraints(maxHeight: 200),
-                                    child: ListView.builder(
-                                      itemCount: _suggestions.length,
-                                      itemBuilder: (context, index) {
-                                        return ListTile(
-                                          leading: const SizedBox(
-                                            width: 24.0,
-                                            height: 24.0,
-                                            child: Icon(Icons.location_on,
-                                                color: Colors.orangeAccent),
-                                          ),
-                                          title: Text(_suggestions[index]),
-                                          onTap: () {
-                                            driverDestinationLocationController
-                                                .text = _suggestions[index];
-                                            setState(() {
-                                              _suggestions = [];
-                                            });
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                duration: const Duration(
-                                                    milliseconds: 3000),
-                                                backgroundColor:
-                                                    customPurple, // Custom purple background color
-                                                content: Row(
-                                                  children: const [
-                                                    Icon(Icons.check,
-                                                        color: Colors
-                                                            .orangeAccent), // Orange accent color
-                                                    SizedBox(width: 8.0),
-                                                    Text(
-                                                        'Please press "OK" to set destination.',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white)),
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      },
+                                        vertical: 20.0),
+                                    child: SizedBox(
+                                      width: 12.0,
+                                      height: 24.0,
+                                      child: Icon(
+                                        Icons.location_on,
+                                        color: onlineStatus
+                                            ? Colors.black
+                                            : Colors.orangeAccent,
+                                      ),
                                     ),
                                   ),
-                              ],
-                            ),
+                                  suffixIcon: GestureDetector(
+                                    onTap: () {
+                                      driverDestinationLocationController
+                                          .clear();
+                                      clearDriverDestData();
+                                    },
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 68.0),
+                                      child: Icon(
+                                        Icons.clear,
+                                        color: onlineStatus
+                                            ? Colors.black
+                                            : Colors.orangeAccent,
+                                      ),
+                                    ),
+                                  ),
+                                  fillColor: Colors.grey[150],
+                                  filled: true,
+                                  contentPadding:
+                                      const EdgeInsets.symmetric(vertical: 4.0),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                ),
+                                readOnly:
+                                    onlineStatus, // Make the TextFormField read-only when online
+                                showCursor:
+                                    !onlineStatus, // Hide the cursor when online
+                              ),
+                              Positioned(
+                                right: 0,
+                                bottom: 0,
+                                child: Container(
+                                  width: 60.0,
+                                  height: 63,
+                                  decoration: BoxDecoration(
+                                    color: onlineStatus
+                                        ? Colors.grey
+                                        : Colors.orangeAccent,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      if (onlineStatus ||
+                                          driverDestinationLocationController
+                                              .text.isEmpty) {
+                                        // Prevent button click when online or text field is empty
+                                        return;
+                                      }
+                                      await getDriverDestinationCoordinates(
+                                        address:
+                                            driverDestinationLocationController
+                                                .text,
+                                      );
+                                      setLatLng();
+
+                                      setState(() {
+                                        isDestinationSet =
+                                            false; // Set the flag to true when the destination is set
+                                      });
+
+                                      // Show the flash message
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          duration:
+                                              const Duration(milliseconds: 500),
+                                          backgroundColor:
+                                              customPurple, // Custom purple background color
+                                          content: Row(
+                                            children: const [
+                                              Icon(Icons.check,
+                                                  color: Colors
+                                                      .orangeAccent), // Orange accent color
+                                              SizedBox(width: 8.0),
+                                              Text('Destination set',
+                                                  style: TextStyle(
+                                                      color: Colors.white)),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: const Center(
+                                      child: Text(
+                                        'OK',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              if (_suggestions.isNotEmpty)
+                                Container(
+                                  margin: const EdgeInsets.only(top: 56.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.3),
+                                        spreadRadius: 2,
+                                        blurRadius: 5,
+                                        offset: const Offset(0, 3),
+                                      ),
+                                    ],
+                                  ),
+                                  constraints:
+                                      const BoxConstraints(maxHeight: 200),
+                                  child: ListView.builder(
+                                    itemCount: _suggestions.length,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        leading: const SizedBox(
+                                          width: 24.0,
+                                          height: 24.0,
+                                          child: Icon(Icons.location_on,
+                                              color: Colors.orangeAccent),
+                                        ),
+                                        title: Text(_suggestions[index]),
+                                        onTap: () {
+                                          driverDestinationLocationController
+                                              .text = _suggestions[index];
+                                          setState(() {
+                                            _suggestions = [];
+                                          });
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              duration: const Duration(
+                                                  milliseconds: 3000),
+                                              backgroundColor:
+                                                  customPurple, // Custom purple background color
+                                              content: Row(
+                                                children: const [
+                                                  Icon(Icons.check,
+                                                      color: Colors
+                                                          .orangeAccent), // Orange accent color
+                                                  SizedBox(width: 8.0),
+                                                  Text(
+                                                      'Please press "OK" to set destination.',
+                                                      style: TextStyle(
+                                                          color: Colors.white)),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
                       ),

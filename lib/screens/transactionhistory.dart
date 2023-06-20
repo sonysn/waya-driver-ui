@@ -37,6 +37,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
     super.dispose();
   }
 
+  // ignore: unused_element
   Future<void> _refreshData() async {
     // Implement your refresh logic here
     // For example, fetch updated transaction data from an API

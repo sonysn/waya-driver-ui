@@ -1176,6 +1176,7 @@ class _SignUpState extends State<SignUp> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
+                                  // ignore: unnecessary_null_comparison
                                   _pickLicenseFile != null
                                       ? _buildSelectedLicenseFile()
                                       : Container(),
@@ -1207,6 +1208,7 @@ class _SignUpState extends State<SignUp> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
+                                  // ignore: unnecessary_null_comparison
                                   _pickPermitFile != null
                                       ? _buildSelectedPermitFile()
                                       : Container(),

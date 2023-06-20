@@ -5,6 +5,7 @@ import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/constants/api_constants.dart';
 import 'package:waya_driver/screens/homepage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 class ConnectToServer {
   final int? id;
 
@@ -247,7 +248,6 @@ class RideRequestCard extends StatelessWidget {
                         dropoffLocationPostion: dropoffLocationPostion,
                         fare: fare);
                     Navigator.pop(context);
-
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: customPurple,

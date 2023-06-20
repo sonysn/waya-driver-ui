@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/colorscheme.dart';
 
@@ -16,7 +16,7 @@ class TransferPage extends StatefulWidget {
 class _TransferPageState extends State<TransferPage> {
   final TextEditingController _cashTransferController = TextEditingController();
   final TextEditingController _driverRecipientController =
-  TextEditingController();
+      TextEditingController();
   Timer? _debounceTimer; // Timer for debounce delay
 
   void _transfer() {
@@ -70,7 +70,7 @@ class _TransferPageState extends State<TransferPage> {
               },
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                backgroundColor:  customPurple,
+                backgroundColor: customPurple,
               ),
               child: const Text(
                 'No',
@@ -86,7 +86,6 @@ class _TransferPageState extends State<TransferPage> {
       },
     );
   }
-
 
   void _performTransfer() async {
     final response = await transfer(
@@ -111,10 +110,11 @@ class _TransferPageState extends State<TransferPage> {
     super.dispose();
   }
 
-  String _formatNumber(int number) {
-    final formatter = NumberFormat("#,###,###,###");
-    return formatter.format(number);
-  }
+  //TODO: CHECK THE USE OF THIS
+  // String _formatNumber(int number) {
+  //   final formatter = NumberFormat("#,###,###,###");
+  //   return formatter.format(number);
+  // }
 
   String _removeComma(String text) {
     return text.replaceAll(',', '');
@@ -202,8 +202,8 @@ class _TransferPageState extends State<TransferPage> {
                     ),
                   ),
                   child: const Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 16.0, horizontal: 32.0),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
                     child: Text(
                       'Transfer Funds',
                       style: TextStyle(

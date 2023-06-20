@@ -1,16 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:waya_driver/api/auth.dart';
 import 'package:waya_driver/colorscheme.dart';
+
 class ChangePasswordPage extends StatefulWidget {
-  const ChangePasswordPage({super.key});
+  final int id;
+  const ChangePasswordPage({super.key, required this.id});
 
   @override
   ChangePasswordPageState createState() => ChangePasswordPageState();
 }
 
 class ChangePasswordPageState extends State<ChangePasswordPage> {
-  final TextEditingController _currentPasswordController = TextEditingController();
+  final TextEditingController _currentPasswordController =
+      TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  Future changePasswordinPage() async {
+    final response = await changePassword(
+        id: widget.id,
+        newPassword: _newPasswordController.text,
+        oldPassword: _currentPasswordController.text);
+
+    switch (response.statusCode) {
+      case 200:
+        _showSnackBar('Password changed successfully!');
+        break;
+      case 401:
+        _showSnackBar('Your current password is incorrect!');
+        break;
+      case 500:
+        _showSnackBar('Something went wrong!');
+        break;
+      default:
+        _showSnackBar('Something went wrong!');
+    }
+  }
+
+  void _showSnackBar(String message) {
+    final snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +72,8 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                   labelStyle: const TextStyle(
                     color: customPurple,
                   ),
-                  prefixIcon: const Icon(Icons.lock, color: Colors.orangeAccent),
+                  prefixIcon:
+                      const Icon(Icons.lock, color: Colors.orangeAccent),
                   filled: true,
                   fillColor: Colors.grey[200],
                   border: OutlineInputBorder(
@@ -66,7 +98,8 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                   labelStyle: const TextStyle(
                     color: customPurple,
                   ),
-                  prefixIcon: const Icon(Icons.lock, color: Colors.orangeAccent),
+                  prefixIcon:
+                      const Icon(Icons.lock, color: Colors.orangeAccent),
                   filled: true,
                   fillColor: Colors.grey[200],
                   border: OutlineInputBorder(
@@ -91,7 +124,8 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                   labelStyle: const TextStyle(
                     color: customPurple,
                   ),
-                  prefixIcon: const Icon(Icons.lock, color: Colors.orangeAccent),
+                  prefixIcon:
+                      const Icon(Icons.lock, color: Colors.orangeAccent),
                   filled: true,
                   fillColor: Colors.grey[200],
                   border: OutlineInputBorder(
@@ -113,10 +147,23 @@ class ChangePasswordPageState extends State<ChangePasswordPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // TODO: Perform password change logic
+                    if (_newPasswordController.text !=
+                        _confirmPasswordController.text) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Passwords do not match'),
+                      ));
+                    } else {
+                      changePasswordinPage();
+                      setState(() {
+                        _confirmPasswordController.clear();
+                        _newPasswordController.clear();
+                        _currentPasswordController.clear();
+                      });
+                    }
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, backgroundColor: customPurple,
+                    foregroundColor: Colors.white,
+                    backgroundColor: customPurple,
                     padding: const EdgeInsets.all(16.0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),

@@ -100,7 +100,7 @@ Future signUp(
   }
 }
 
-Future logOut(id) async {
+Future logOut({required int id}) async {
   final http.Response response = await http.post(
       Uri.parse('$baseUri${ApiConstants.logoutEndpoint}'),
       headers: {"Content-Type": "application/json"},
@@ -110,6 +110,22 @@ Future logOut(id) async {
   } else {
     return 'logout failed';
   }
+}
+
+Future changePassword(
+    {required int id,
+    required String newPassword,
+    required String oldPassword}) async {
+  final http.Response response = await http.post(
+    Uri.parse('$baseUri${ApiConstants.changePasswordEndpoint}'),
+    headers: {"Content-Type": "application/json"},
+    body: jsonEncode({
+      "driverId": id,
+      "newPassword": newPassword,
+      "oldPassword": oldPassword
+    }),
+  );
+  return response;
 }
 
 Future forgotPassword({required String emailOrphoneNumber}) async {

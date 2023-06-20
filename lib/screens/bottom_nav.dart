@@ -6,9 +6,9 @@ import 'package:waya_driver/colorscheme.dart';
 import 'package:waya_driver/screens/homepage.dart';
 
 class BottomNavPage extends StatefulWidget {
-  dynamic data;
+  final dynamic data;
 
-  BottomNavPage({Key? key, this.data}) : super(key: key);
+  const BottomNavPage({Key? key, required this.data}) : super(key: key);
 
   @override
   State<BottomNavPage> createState() => _BottomNavPageState();

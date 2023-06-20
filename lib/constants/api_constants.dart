@@ -17,6 +17,7 @@ class ApiConstants {
   static String driverGetCurrentRidesEndpoint = '/driverGetCurrentRides';
   static String driverCancelRideEndpoint = '/onDriverCancelledRide';
   static String driverOnRideCompleteEndpoint = '/driverOnRideComplete';
+  static String changePasswordEndpoint = '/driverchangepassword';
   static String forgotPasswordEndpoint = '/driverForgotPassword';
   static String verifyForgotPasswordChangeEndpoint =
       '/driverVerifyForgotPasswordChange';

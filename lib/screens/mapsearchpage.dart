@@ -5,11 +5,14 @@ class DestinationPage extends StatefulWidget {
   const DestinationPage({Key? key}) : super(key: key);
 
   @override
-  _DestinationPageState createState() => _DestinationPageState();
+  DestinationPageState createState() => DestinationPageState();
 }
 
-class _DestinationPageState extends State<DestinationPage> {
+class DestinationPageState extends State<DestinationPage> {
+  //TODO: remove ignore: unused_field when this is used
+  // ignore: unused_field
   final TextEditingController _destinationController = TextEditingController();
+  // ignore: unused_field
   final TextEditingController _locationController = TextEditingController();
 
   @override
@@ -75,7 +78,8 @@ class _DestinationPageState extends State<DestinationPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16.0), // Add spacing between the text fields
+                  const SizedBox(
+                      height: 16.0), // Add spacing between the text fields
                   TextFormField(
                     onChanged: (text) {},
                     textInputAction: TextInputAction.search,
@@ -121,7 +125,8 @@ class _DestinationPageState extends State<DestinationPage> {
                           'Use My Current Location',
                           style: TextStyle(
                             fontSize: 16.0, // Set font size to 16
-                            fontWeight: FontWeight.bold, // Set font weight to bold
+                            fontWeight:
+                                FontWeight.bold, // Set font weight to bold
                             color: Colors.black, // Set text color to black
                           ),
                         ),

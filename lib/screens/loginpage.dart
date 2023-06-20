@@ -8,6 +8,7 @@ import 'package:waya_driver/colorscheme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:waya_driver/screens/forgotpassword.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -85,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
 
   TextEditingController emailOrPhoneTextController = TextEditingController();
   TextEditingController passwordTextController = TextEditingController();
-  late FirebaseMessaging _firebaseDeviceToken;
+  // late FirebaseMessaging _firebaseDeviceToken;
   String? token;
   bool val = false;
   bool _passwordVisible = false;
@@ -167,11 +168,13 @@ class _LoginPageState extends State<LoginPage> {
                               contentPadding: const EdgeInsets.all(15),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(color: Colors.white),
+                                borderSide:
+                                    const BorderSide(color: Colors.white),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(color: Colors.orangeAccent),
+                                borderSide: const BorderSide(
+                                    color: Colors.orangeAccent),
                               ),
                               filled: true,
                               fillColor: Colors.white,
@@ -202,7 +205,8 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
-                              borderSide: const BorderSide(color: Colors.orangeAccent),
+                              borderSide:
+                                  const BorderSide(color: Colors.orangeAccent),
                             ),
                             filled: true,
                             fillColor: Colors.white,
@@ -271,7 +275,9 @@ class _LoginPageState extends State<LoginPage> {
                           // }));
                           if (emailOrPhoneTextController.text == '' ||
                               passwordTextController.text == '') {
-                            _showSnackBar("Input your Login Details",);
+                            _showSnackBar(
+                              "Input your Login Details",
+                            );
                           }
                           if (emailOrPhoneTextController.text != '' &&
                               passwordTextController.text != '') {

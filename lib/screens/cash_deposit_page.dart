@@ -16,6 +16,7 @@ class CashDepositPage extends StatefulWidget {
 }
 
 class _CashDepositPageState extends State<CashDepositPage> {
+  // ignore: unused_field
   bool _isLoading = false;
   String? _authorizationUrl;
 
@@ -29,6 +30,7 @@ class _CashDepositPageState extends State<CashDepositPage> {
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+  // ignore: unused_element
   void _navigateToDepositWebView(authorizationUrl) {
     navigatorKey.currentState?.push(MaterialPageRoute(
       builder: (context) => DepositWebView(authorizationUrl: authorizationUrl),
@@ -76,15 +78,15 @@ class _CashDepositPageState extends State<CashDepositPage> {
     }
   }
 
-  void _deleteLastCharacter() {
-    final text = _cashDepositController.text;
-    if (text.isNotEmpty) {
-      final newText = text.substring(0, text.length - 1);
-      _cashDepositController.text = newText;
-      _cashDepositController.selection =
-          TextSelection.fromPosition(TextPosition(offset: newText.length));
-    }
-  }
+  // void _deleteLastCharacter() {
+  //   final text = _cashDepositController.text;
+  //   if (text.isNotEmpty) {
+  //     final newText = text.substring(0, text.length - 1);
+  //     _cashDepositController.text = newText;
+  //     _cashDepositController.selection =
+  //         TextSelection.fromPosition(TextPosition(offset: newText.length));
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -155,6 +157,8 @@ class _CashDepositPageState extends State<CashDepositPage> {
     );
   }
 
+  //TODO: CHECK WHAT THIS DOES
+  // ignore: unused_element
   Widget _buildNumberButton(String label) {
     return ElevatedButton(
       onPressed: () {

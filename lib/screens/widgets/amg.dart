@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/colorscheme.dart';
-import 'package:waya_driver/screens/bottom_nav.dart';
+// import 'package:waya_driver/screens/bottom_nav.dart';
+
 class DriverWidget extends StatefulWidget {
   final dynamic data;
 
@@ -20,25 +21,30 @@ class _DriverWidgetState extends State<DriverWidget> {
     });
     print(currentRidesArray);
   }
+
+  //TODO: remove ignore: unused_field and prefer_final_fields when this is used
+  // ignore: unused_field, prefer_final_fields
   bool _showDialog = false;
 
-  void _startRefreshing() {
-    setState(() {
-      _showDialog = true;
-    });
+  //TODO: LOOK AT THIS
+  // void _startRefreshing() {
+  //   setState(() {
+  //     _showDialog = true;
+  //   });
 
-    // Simulating a delay of 2 seconds for the refresh process
-    Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        _showDialog = false;
-      });
-      // Once the refresh is complete, navigate to the homepage
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => BottomNavPage()),
-      );
-    });
-  }
+  //   // Simulating a delay of 2 seconds for the refresh process
+  //   Future.delayed(const Duration(seconds: 2), () {
+  //     setState(() {
+  //       _showDialog = false;
+  //     });
+  //     // Once the refresh is complete, navigate to the homepage
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => BottomNavPage()),
+  //     );
+  //   });
+  // }
+
   Future driverCancelTrip({required int xindex}) async {
     final response = await onDriverCancelRide(
         driverID: widget.data.id,
@@ -111,7 +117,8 @@ class _DriverWidgetState extends State<DriverWidget> {
                 // Perform the end trip action
                 driverEndTrip(xindex: indexPos);
                 // Start the refreshing process
-                _startRefreshing();
+                //TODO: LOOK AT THIS
+                //_startRefreshing();
               },
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -126,7 +133,6 @@ class _DriverWidgetState extends State<DriverWidget> {
                 ),
               ),
             ),
-
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
@@ -235,8 +241,8 @@ class _DriverWidgetState extends State<DriverWidget> {
               child: Column(
                 children: [
                   Container(
-                    padding:
-                    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16.0, horizontal: 24.0),
                     decoration: const BoxDecoration(
                       border: Border(),
                     ),
@@ -259,6 +265,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                               ),
                             ),
                             onPressed: () {
+                              // ignore: deprecated_member_use
                               launch(
                                   "tel:${currentRidesArray[index]['riderPhoneNumber']}");
                             },
@@ -308,7 +315,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                                   Flexible(
                                     child: Text(
                                       currentRidesArray[index]
-                                      ['pickUpLocation'],
+                                          ['pickUpLocation'],
                                       style: const TextStyle(
                                         fontSize: 15,
                                         color: Colors.black,
@@ -328,7 +335,7 @@ class _DriverWidgetState extends State<DriverWidget> {
                                   Flexible(
                                     child: Text(
                                       currentRidesArray[index]
-                                      ['destinationLocation'],
+                                          ['destinationLocation'],
                                       style: const TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
@@ -365,7 +372,8 @@ class _DriverWidgetState extends State<DriverWidget> {
                                 borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(15),
                                 ),
-                              ), backgroundColor: Colors.orangeAccent,
+                              ),
+                              backgroundColor: Colors.orangeAccent,
                             ),
                             child: const Text(
                               "End",
@@ -387,7 +395,8 @@ class _DriverWidgetState extends State<DriverWidget> {
                                 borderRadius: BorderRadius.only(
                                   bottomRight: Radius.circular(15),
                                 ),
-                              ), backgroundColor: customPurple,
+                              ),
+                              backgroundColor: customPurple,
                             ),
                             child: const Text(
                               "Cancel",

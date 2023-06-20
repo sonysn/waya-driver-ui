@@ -7,10 +7,11 @@ class DepositWebView extends StatefulWidget {
   const DepositWebView({super.key, required this.authorizationUrl});
 
   @override
-  _DepositWebViewState createState() => _DepositWebViewState();
+  DepositWebViewState createState() => DepositWebViewState();
 }
 
-class _DepositWebViewState extends State<DepositWebView> {
+class DepositWebViewState extends State<DepositWebView> {
+  // ignore: unused_field
   late InAppWebViewController _controller;
   bool _isLoading = true;
 
@@ -36,15 +37,15 @@ class _DepositWebViewState extends State<DepositWebView> {
                   _controller = controller;
                 },
               ),
-        GestureDetector(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-        ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                ),
+              ),
               if (_isLoading)
                 Container(
                   color: Colors.white,

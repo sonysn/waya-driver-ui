@@ -246,7 +246,7 @@ class _SettingTabState extends State<SettingTab> {
 
                     logout() async {
                       try {
-                        final response = await logOut(widget.data.id);
+                        final response = await logOut(id: widget.data.id);
                         if (response == 'logout success') {
                           await cancelLocationCallbacks();
                           await ConnectToServer().disconnect();

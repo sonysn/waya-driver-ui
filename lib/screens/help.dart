@@ -43,6 +43,8 @@ class HelpPageState extends State<HelpPage> {
 
   void _openWebsite() {
     // Add your website URL here
+    //TODO: remove ignore: unused_local_variable when this is used
+    // ignore: unused_local_variable
     String websiteUrl = 'https://www.example.com';
 
     // Open the website URL in a web browser
