@@ -1,5 +1,8 @@
+// ignore_for_file: depend_on_referenced_packages
 
 import 'package:flutter/material.dart';
+// ignore: unused_import
+import 'package:flutter/services.dart';
 import 'package:waya_driver/screens/homepage.dart';
 import 'package:waya_driver/screens/splash_screen.dart';
 import 'package:waya_driver/functions/notification_service.dart';
@@ -25,6 +28,8 @@ Future<void> main() async {
 
   final NotificationService notificationService = NotificationService();
   await notificationService.initialize();
+
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
   // Workmanager().initialize(
   //   callbackDispatcher, // the callback function to run background tasks

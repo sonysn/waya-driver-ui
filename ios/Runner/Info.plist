@@ -63,5 +63,7 @@
     <false/>
     <key>FirebaseMessagingAutoInitEnabled</key>
     <false/>
+	<key>FLTEnableImpeller</key>
+	<false/>
 </dict>
 </plist>
