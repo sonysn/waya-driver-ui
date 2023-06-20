@@ -83,9 +83,9 @@ class _VehicleState extends State<Vehicle> {
           : Center(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Icon(
                       Icons.car_rental,
                       size: 80,

@@ -10,12 +10,12 @@ class DriverPrivacyPolicyPage extends StatelessWidget {
         title: const Text('Driver Privacy Policy'),
         backgroundColor: customPurple,
       ),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Text(
                 'Information We Collect',
                 style: TextStyle(

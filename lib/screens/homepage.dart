@@ -284,12 +284,12 @@ class _HomePageState extends State<HomePage> {
                   DateTime.now().difference(_lastPressedAt!) >
                       const Duration(seconds: 2)) {
                 // show a toast or snackbar to inform the user to press back again to exit
-                SnackBar(
-                  duration: const Duration(milliseconds: 1000),
+                const SnackBar(
+                  duration: Duration(milliseconds: 1000),
                   backgroundColor:
                       customPurple, // Custom purple background color
                   content: Row(
-                    children: const [
+                    children: [
                       Icon(Icons.not_interested,
                           color: Colors.orangeAccent), // Orange accent color
                       SizedBox(width: 8.0),
@@ -549,13 +549,13 @@ class _HomePageState extends State<HomePage> {
                                       // Show the flash message
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
-                                        SnackBar(
+                                        const SnackBar(
                                           duration:
-                                              const Duration(milliseconds: 500),
+                                              Duration(milliseconds: 500),
                                           backgroundColor:
                                               customPurple, // Custom purple background color
                                           content: Row(
-                                            children: const [
+                                            children: [
                                               Icon(Icons.check,
                                                   color: Colors
                                                       .orangeAccent), // Orange accent color
@@ -618,13 +618,13 @@ class _HomePageState extends State<HomePage> {
                                           });
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
-                                            SnackBar(
-                                              duration: const Duration(
+                                            const SnackBar(
+                                              duration: Duration(
                                                   milliseconds: 3000),
                                               backgroundColor:
                                                   customPurple, // Custom purple background color
                                               content: Row(
-                                                children: const [
+                                                children: [
                                                   Icon(Icons.check,
                                                       color: Colors
                                                           .orangeAccent), // Orange accent color

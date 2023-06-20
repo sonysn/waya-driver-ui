@@ -96,7 +96,7 @@ class MyCardState extends State<MyCard> {
                   const SizedBox(width: 70),
                 ],
               ),
-              Column(
+              const Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
               )
             ],
