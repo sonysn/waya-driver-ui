@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:waya_driver/screens/onboarding.dart';
+// ignore: depend_on_referenced_packages
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:waya_driver/api/auth.dart';
 import 'package:waya_driver/screens/bottom_nav.dart';
