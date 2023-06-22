@@ -108,10 +108,7 @@ class _SettingTabState extends State<SettingTab> {
                           width: 90,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.settings),
-                              Text('Settings')
-                            ],
+                            children: [Icon(Icons.settings), Text('Settings')],
                           ),
                         ),
                       ),
@@ -136,10 +133,7 @@ class _SettingTabState extends State<SettingTab> {
                           width: 90,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.history),
-                              Text('Trips')
-                            ],
+                            children: [Icon(Icons.history), Text('Trips')],
                           ),
                         ),
                       ),
@@ -250,7 +244,8 @@ class _SettingTabState extends State<SettingTab> {
                         if (response == 'logout success') {
                           await cancelLocationCallbacks();
                           await ConnectToServer().disconnect();
-                          await updateAvailability(0, widget.data.id);
+                          await updateAvailability(
+                              availability: 0, id: widget.data.id);
                           // Remove the content of emailOrPhone and password
                           await prefs.remove('emailOrPhone');
                           await prefs.remove('password');

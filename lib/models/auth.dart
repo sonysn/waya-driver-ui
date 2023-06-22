@@ -1,5 +1,5 @@
 class Data {
-  final String token;
+  final String authToken;
   final int id;
   final String firstName;
   final String lastName;
@@ -13,7 +13,7 @@ class Data {
   final double accountBalance;
 
   Data(
-      {required this.token,
+      {required this.authToken,
       required this.id,
       required this.firstName,
       required this.lastName,
@@ -29,7 +29,7 @@ class Data {
   factory Data.fromJson(Map<String, dynamic> json) {
     //print(json['result'][0]['ID']);
     return Data(
-        token: json['token'],
+        authToken: json['token'],
         id: json['result'][0]['ID'],
         firstName: json['result'][0]['FIRST_NAME'],
         lastName: json['result'][0]['LAST_NAME'],

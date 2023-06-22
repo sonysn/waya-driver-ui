@@ -16,7 +16,10 @@ class SignInResponse {
   SignInResponse(this.data, this.statusCode, this.body);
 }
 
-Future signIn(emailOrPhone, password, deviceID) async {
+Future signIn(
+    {required String emailOrPhone,
+    required String password,
+    required String deviceID}) async {
   final http.Response response =
       await http.post(Uri.parse('$baseUri${ApiConstants.signInEndpoint}'),
           headers: {"Content-Type": "application/json"},
@@ -36,17 +39,17 @@ Future signIn(emailOrPhone, password, deviceID) async {
 }
 
 Future signUp(
-    {required firstname,
-    required lastname,
-    required password,
-    required phoneNumber,
-    required email,
-    required address,
+    {required String firstname,
+    required String lastname,
+    required String password,
+    required String phoneNumber,
+    required String email,
+    required String address,
     required dob,
-    required vehicleMake,
-    required vehicleModel,
-    required vehicleColour,
-    required vehicleBodytype,
+    required String vehicleMake,
+    required String vehicleModel,
+    required String vehicleColour,
+    required String vehicleBodytype,
     required vehicleYear,
     required vehiclePlateNumber,
     required profilePhoto,

@@ -43,7 +43,8 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   Future _getAccountBalance() async {
-    final response = await getBalance(widget.data.id, widget.data.phoneNumber);
+    final response =
+        await getBalance(id: widget.data.id, phone: widget.data.phoneNumber);
     debugPrint(response);
     _streamController.add(response);
   }

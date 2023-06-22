@@ -75,7 +75,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future getCar() async {
-    final res = await getDriverCars(widget.data.id, widget.data.token);
+    final res =
+        await getDriverCars(id: widget.data.id, token: widget.data.authToken);
     setState(() {
       vehicleName =
           "${res['result'][0]['VEHICLE_MAKE']}, ${res['result'][0]['VEHICLE_MODEL']}";
@@ -129,7 +130,7 @@ class _HomePageState extends State<HomePage> {
             driverDestPoint: p);
       }
 
-      updateAvailability(1, widget.data.id);
+      updateAvailability(availability: 1, id: widget.data.id);
       getCar();
       await setSwitchValue(onlineStatus);
       timedPing();
@@ -363,7 +364,8 @@ class _HomePageState extends State<HomePage> {
                                 id: widget.data.id,
                                 verificationStatus: widget.data.verified,
                                 driverDestPoint: driverDestLatLng!);
-                            updateAvailability(1, widget.data.id);
+                            updateAvailability(
+                                availability: 1, id: widget.data.id);
                             getCar();
                             locationPingServer();
                             await setSwitchValue(onlineStatus);
@@ -372,7 +374,8 @@ class _HomePageState extends State<HomePage> {
                             // ... offline status logic ...
                             cancelLocationCallbacks();
                             ConnectToServer().disconnect();
-                            updateAvailability(0, widget.data.id);
+                            updateAvailability(
+                                availability: 0, id: widget.data.id);
                             await setSwitchValue(onlineStatus);
                             locationPingServer();
                           }
@@ -550,8 +553,7 @@ class _HomePageState extends State<HomePage> {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         const SnackBar(
-                                          duration:
-                                              Duration(milliseconds: 500),
+                                          duration: Duration(milliseconds: 500),
                                           backgroundColor:
                                               customPurple, // Custom purple background color
                                           content: Row(
@@ -619,8 +621,8 @@ class _HomePageState extends State<HomePage> {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             const SnackBar(
-                                              duration: Duration(
-                                                  milliseconds: 3000),
+                                              duration:
+                                                  Duration(milliseconds: 3000),
                                               backgroundColor:
                                                   customPurple, // Custom purple background color
                                               content: Row(

@@ -10,7 +10,7 @@ import 'package:waya_driver/constants/api_constants.dart';
 var baseUri = 'https://waya-api.onrender.com';
 
 //availability is a bool returns 1 or 0
-Future updateAvailability(availability, id) async {
+Future updateAvailability({required int availability, required int id}) async {
   final http.Response response = await http.post(
       Uri.parse('$baseUri${ApiConstants.updateAvailabilityEndpoint}'),
       headers: {"Content-Type": "application/json"},
@@ -21,7 +21,7 @@ Future updateAvailability(availability, id) async {
   return response.statusCode;
 }
 
-Future getDriverCars(id, token) async {
+Future getDriverCars({required int id, required String token}) async {
   final http.Response response = await http
       .get(Uri.parse('$baseUri/$id${ApiConstants.getDriverCars}'), headers: {
     "Content-Type": "application/json",
@@ -32,7 +32,7 @@ Future getDriverCars(id, token) async {
   return data;
 }
 
-Future getBalance(id, phone) async {
+Future getBalance({required int id, required String phone}) async {
   final http.Response response =
       await http.post(Uri.parse('$baseUri${ApiConstants.getBalanceEndpoint}'),
           headers: {
