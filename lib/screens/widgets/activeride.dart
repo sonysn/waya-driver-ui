@@ -15,7 +15,8 @@ class DriverWidget extends StatefulWidget {
 
 class _DriverWidgetState extends State<DriverWidget> {
   Future<void> getCurrentRides() async {
-    final response = await driverGetCurrentRides(driverID: widget.data.id);
+    final response = await driverGetCurrentRides(
+        driverID: widget.data.id, authBearer: widget.data.authToken);
     setState(() {
       currentRidesArray = response;
     });
@@ -25,6 +26,7 @@ class _DriverWidgetState extends State<DriverWidget> {
   Future driverCancelTrip({required int xindex}) async {
     final response = await onDriverCancelRide(
         driverID: widget.data.id,
+        authBearer: widget.data.authToken,
         riderID: currentRidesArray[xindex]['riderID'],
         dbObjectID: currentRidesArray[xindex]['objectId']);
     if (response == 200) {
@@ -35,6 +37,7 @@ class _DriverWidgetState extends State<DriverWidget> {
   Future driverEndTrip({required int xindex}) async {
     final response = await onRideCompleted(
         driverID: widget.data.id,
+        authBearer: widget.data.authToken,
         riderID: currentRidesArray[xindex]['riderID'],
         dbObjectID: currentRidesArray[xindex]['objectId']);
     if (response == 200) {

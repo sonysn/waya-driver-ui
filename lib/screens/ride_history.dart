@@ -9,8 +9,11 @@ import 'package:intl/intl.dart';
 
 //TODO: ADD A SPINNER WHILE WAITING FOR DATA TO FETCH
 class RideHistoryPage extends StatefulWidget {
-  final dynamic driverID;
-  const RideHistoryPage({Key? key, this.driverID}) : super(key: key);
+  final int driverID;
+  final String authToken;
+  const RideHistoryPage(
+      {Key? key, required this.driverID, required this.authToken})
+      : super(key: key);
 
   @override
   State<RideHistoryPage> createState() => RideHistoryPageState();
@@ -25,7 +28,8 @@ class RideHistoryPageState extends State<RideHistoryPage>
   List<dynamic> cancelledRides = [];
 
   Future<void> getRides({required int driverID}) async {
-    final response = await getRideHistory(driverID: driverID);
+    final response =
+        await getRideHistory(driverID: driverID, authBearer: widget.authToken);
 
     // if (response.statusCode == 200) {
     //   final data = json.decode(response.body);
@@ -166,6 +170,7 @@ class ActivePage extends StatelessWidget {
                     ],
                   )
                 : ListView.builder(
+                    physics: const BouncingScrollPhysics(),
                     itemCount: data.length,
                     itemBuilder: (context, index) {
                       // Map<String, dynamic> rideData =
@@ -293,6 +298,7 @@ class CompletedPage extends StatelessWidget {
                     ],
                   )
                 : ListView.builder(
+                    physics: const BouncingScrollPhysics(),
                     itemCount: data.length,
                     itemBuilder: (context, index) {
                       // Map<String, dynamic> rideData =
@@ -422,6 +428,7 @@ class CancelledPage extends StatelessWidget {
                     ],
                   )
                 : ListView.builder(
+                    physics: const BouncingScrollPhysics(),
                     itemCount: data.length,
                     itemBuilder: (context, index) {
                       // Map<String, dynamic> rideData =

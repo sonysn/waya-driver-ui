@@ -33,7 +33,10 @@ class _SplashScreenState extends State<SplashScreen> {
     if (emailOrPhone != null && password != null) {
       try {
         // if email/phone and password exist, sign in and navigate to BottomNavPage after a 3 second delay
-        final response = await signIn(emailOrPhone, password, deviceID);
+        final response = await signIn(
+            emailOrPhone: emailOrPhone,
+            password: password,
+            deviceID: deviceID!);
         Timer(const Duration(seconds: 3), () {
           if (response.data != null) {
             Navigator.pushReplacement(

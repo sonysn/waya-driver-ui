@@ -5,9 +5,11 @@ import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/colorscheme.dart';
 
 class TransferPage extends StatefulWidget {
-  final dynamic phoneNumber;
-
-  const TransferPage({Key? key, required this.phoneNumber}) : super(key: key);
+  final String phoneNumber;
+  final String authToken;
+  const TransferPage(
+      {Key? key, required this.phoneNumber, required this.authToken})
+      : super(key: key);
 
   @override
   State<TransferPage> createState() => _TransferPageState();
@@ -92,6 +94,7 @@ class _TransferPageState extends State<TransferPage> {
       ("+${_removeComma(_cashTransferController.text)}"),
       _driverRecipientController.text,
       widget.phoneNumber,
+      widget.authToken,
     );
 
     ScaffoldMessenger.of(context).showSnackBar(
