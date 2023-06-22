@@ -17,8 +17,10 @@ class MyCard extends StatefulWidget {
 class MyCardState extends State<MyCard> {
   void getAccountBalance() async {
     // ignore: unused_local_variable
-    final response =
-        getBalance(id: widget.data.id, phone: widget.data.phoneNumber);
+    final response = getBalance(
+        id: widget.data.id,
+        phone: widget.data.phoneNumber,
+        authBearer: widget.data.authToken);
   }
 
   dynamic accountBalance;

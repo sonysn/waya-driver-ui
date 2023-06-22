@@ -75,8 +75,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future getCar() async {
-    final res =
-        await getDriverCars(id: widget.data.id, token: widget.data.authToken);
+    final res = await getDriverCars(
+        id: widget.data.id, authBearer: widget.data.authToken);
     setState(() {
       vehicleName =
           "${res['result'][0]['VEHICLE_MAKE']}, ${res['result'][0]['VEHICLE_MODEL']}";
@@ -138,7 +138,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> getCurrentRides() async {
-    final response = await driverGetCurrentRides(driverID: widget.data.id);
+    final response = await driverGetCurrentRides(
+        driverID: widget.data.id, authBearer: widget.data.authToken);
     setState(() {
       // currentRidesArray.add(response);
       currentRidesArray = response;
@@ -305,7 +306,7 @@ class _HomePageState extends State<HomePage> {
               return true; // allow the app to close
             },
             child: Scaffold(
-              body: ListView(children: [
+              body: ListView(physics: const BouncingScrollPhysics(), children: [
                 Container(
                   padding: const EdgeInsets.only(top: 15),
                   margin: const EdgeInsets.symmetric(horizontal: 10),

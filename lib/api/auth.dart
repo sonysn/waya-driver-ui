@@ -103,10 +103,13 @@ Future signUp(
   }
 }
 
-Future logOut({required int id}) async {
+Future logOut({required int id, required String authBearer}) async {
   final http.Response response = await http.post(
       Uri.parse('$baseUri${ApiConstants.logoutEndpoint}'),
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'Bearer $authBearer'
+      },
       body: jsonEncode({"id": id}));
   if (response.statusCode == 200) {
     return 'logout success';
@@ -118,10 +121,14 @@ Future logOut({required int id}) async {
 Future changePassword(
     {required int id,
     required String newPassword,
-    required String oldPassword}) async {
+    required String oldPassword,
+    required String authBearer}) async {
   final http.Response response = await http.post(
     Uri.parse('$baseUri${ApiConstants.changePasswordEndpoint}'),
-    headers: {"Content-Type": "application/json"},
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": 'Bearer $authBearer'
+    },
     body: jsonEncode({
       "driverId": id,
       "newPassword": newPassword,

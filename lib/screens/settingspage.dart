@@ -54,7 +54,8 @@ class _SettingsPageState extends State<SettingsPage> {
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (BuildContext context) {
-                return PasswordSettings(driverID: widget.data.id);
+                return PasswordSettings(
+                    driverID: widget.data.id, authToken: widget.data.authToken);
               }));
             },
           ),

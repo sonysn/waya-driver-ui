@@ -4,7 +4,10 @@ import 'package:waya_driver/screens/passwordchange.dart';
 
 class PasswordSettings extends StatefulWidget {
   final int driverID;
-  const PasswordSettings({Key? key, required this.driverID}) : super(key: key);
+  final String authToken;
+  const PasswordSettings(
+      {Key? key, required this.driverID, required this.authToken})
+      : super(key: key);
 
   @override
   State<PasswordSettings> createState() => _PasswordSettingsState();
@@ -59,7 +62,8 @@ class _PasswordSettingsState extends State<PasswordSettings> {
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return ChangePasswordPage(id: widget.driverID);
+                      return ChangePasswordPage(
+                          id: widget.driverID, authToken: widget.authToken);
                     },
                   ),
                 );
