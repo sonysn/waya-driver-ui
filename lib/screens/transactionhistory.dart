@@ -14,7 +14,7 @@ class TransactionHistory extends StatefulWidget {
   State<TransactionHistory> createState() => _TransactionHistoryState();
 }
 
-//TODO: WITHDRAW HISTORY AND DRIVER TRANSFER HISTORY
+//TODO: WITHDRAW HISTORY
 class _TransactionHistoryState extends State<TransactionHistory>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
@@ -24,7 +24,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     setState(() {
       reversedTransactions = widget.transactions.reversed.toList();
       reversedEarnings = widget.earnings; //earnings are already reversed
@@ -78,7 +78,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
             tabs: const [
               Tab(text: 'Deposit History'),
               Tab(text: 'Withdrawal History'),
-              Tab(text: 'Driver Transfer History'),
+              //Tab(text: 'Driver Transfer History'),
               Tab(text: 'Money Received History'),
             ],
           ),
@@ -102,6 +102,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
             controller: _tabController,
             children: [
               SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Container(
                   padding: const EdgeInsets.only(top: 40),
                   margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -140,6 +141,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
               ),
               // User Transfer History Tab
               SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Container(
                   padding: const EdgeInsets.only(top: 40),
                   margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -159,27 +161,29 @@ class _TransactionHistoryState extends State<TransactionHistory>
                 ),
               ),
               // Driver Transfer History Tab
-              SingleChildScrollView(
-                child: Container(
-                  padding: const EdgeInsets.only(top: 40),
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  child: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // TODO: Implement the UI for Driver Transfer History tab
-                      // Replace the following placeholder widget
-                      Center(
-                        child: Text(
-                          'Driver Transfer History',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              // SingleChildScrollView(
+              //   physics: const BouncingScrollPhysics(),
+              //   child: Container(
+              //     padding: const EdgeInsets.only(top: 40),
+              //     margin: const EdgeInsets.symmetric(horizontal: 10),
+              //     child: const Column(
+              //       crossAxisAlignment: CrossAxisAlignment.center,
+              //       children: [
+              //         // TODO: Implement the UI for Driver Transfer History tab
+              //         // Replace the following placeholder widget
+              //         Center(
+              //           child: Text(
+              //             'Driver Transfer History',
+              //             style: TextStyle(fontSize: 20),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
               // Money Received History Tab
               SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Container(
                   padding: const EdgeInsets.only(top: 40),
                   margin: const EdgeInsets.symmetric(horizontal: 10),

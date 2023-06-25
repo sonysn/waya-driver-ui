@@ -43,13 +43,17 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   Future _getAccountBalance() async {
-    final response = await getBalance(widget.data.id, widget.data.phoneNumber);
+    final response = await getBalance(
+        id: widget.data.id,
+        phone: widget.data.phoneNumber,
+        authBearer: widget.data.authToken);
     debugPrint(response);
     _streamController.add(response);
   }
 
   Future _getEarnings() async {
-    final response = await getRidersTransfers(driverID: widget.data.id);
+    final response = await getRidersTransfers(
+        driverID: widget.data.id, authBearer: widget.data.authToken);
     //print(response);
     setState(() {
       earnings.addAll(response);
@@ -59,7 +63,8 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   Future _getDepositTransactions() async {
-    final response = await getDepositHistory(driverID: widget.data.id);
+    final response = await getDepositHistory(
+        driverID: widget.data.id, authBearer: widget.data.authToken);
     //print(response);
     setState(() {
       transactions.addAll(response);
@@ -79,6 +84,10 @@ class _WalletPageState extends State<WalletPage> {
   @override
   void dispose() {
     _streamController.close();
+    earnings.clear();
+    transactions.clear();
+    reversedEarnings.clear();
+    reversedTransactions.clear();
     super.dispose();
   }
 
@@ -88,7 +97,7 @@ class _WalletPageState extends State<WalletPage> {
       body: RefreshIndicator(
         onRefresh: _getAccountBalance,
         child: SingleChildScrollView(
-          physics: const ClampingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
@@ -100,7 +109,7 @@ class _WalletPageState extends State<WalletPage> {
                 SizedBox(
                   height: 180,
                   child: ListView.separated(
-                    physics: const ClampingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     separatorBuilder: (context, index) {
                       return const SizedBox(
                         width: 8,
@@ -129,10 +138,10 @@ class _WalletPageState extends State<WalletPage> {
                             MaterialPageRoute(
                               builder: (BuildContext context) {
                                 return CashDepositPage(
-                                  id: widget.data.id,
-                                  phone: widget.data.phoneNumber,
-                                  email: widget.data.email,
-                                );
+                                    id: widget.data.id,
+                                    phone: widget.data.phoneNumber,
+                                    email: widget.data.email,
+                                    authToken: widget.data.authToken);
                               },
                             ),
                           );
@@ -181,7 +190,8 @@ class _WalletPageState extends State<WalletPage> {
                             MaterialPageRoute(
                               builder: (BuildContext context) {
                                 return TransferPage(
-                                    phoneNumber: widget.data.phoneNumber);
+                                    phoneNumber: widget.data.phoneNumber,
+                                    authToken: widget.data.authToken);
                               },
                             ),
                           );

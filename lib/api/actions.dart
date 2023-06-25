@@ -10,7 +10,7 @@ import 'package:waya_driver/constants/api_constants.dart';
 var baseUri = 'https://waya-api.onrender.com';
 
 //availability is a bool returns 1 or 0
-Future updateAvailability(availability, id) async {
+Future updateAvailability({required int availability, required int id}) async {
   final http.Response response = await http.post(
       Uri.parse('$baseUri${ApiConstants.updateAvailabilityEndpoint}'),
       headers: {"Content-Type": "application/json"},
@@ -21,37 +21,42 @@ Future updateAvailability(availability, id) async {
   return response.statusCode;
 }
 
-Future getDriverCars(id, token) async {
+Future getDriverCars({required int id, required String authBearer}) async {
   final http.Response response = await http
       .get(Uri.parse('$baseUri/$id${ApiConstants.getDriverCars}'), headers: {
     "Content-Type": "application/json",
-    "Authorization": 'Bearer $token'
+    "Authorization": 'Bearer $authBearer'
   });
   final data = await jsonDecode(response.body);
   //print(data['result'].length);
   return data;
 }
 
-Future getBalance(id, phone) async {
-  final http.Response response =
-      await http.post(Uri.parse('$baseUri${ApiConstants.getBalanceEndpoint}'),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: json.encode({
-            'id': id,
-            'phoneNumber': phone,
-          }));
+Future getBalance(
+    {required int id,
+    required String phone,
+    required String authBearer}) async {
+  final http.Response response = await http.post(
+      Uri.parse('$baseUri${ApiConstants.getBalanceEndpoint}'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'Bearer $authBearer'
+      },
+      body: json.encode({
+        'id': id,
+        'phoneNumber': phone,
+      }));
   final data = json.decode(response.body);
   final d = data['balance'].toString();
   return d;
 }
 
-Future transfer(amount, receivingNum, sendingNum) async {
+Future transfer(amount, receivingNum, sendingNum, authBearer) async {
   final http.Response response = await http.post(
       Uri.parse('$baseUri${ApiConstants.transferToOtherDrivers}'),
       headers: {
         "Content-Type": "application/json",
+        "Authorization": 'Bearer $authBearer'
       },
       body: json.encode({
         'amountToBeTransferred': amount,
@@ -96,9 +101,7 @@ Future acceptRide(
 
   final http.Response response = await http.post(
       Uri.parse('$baseUri${ApiConstants.driverAcceptRideEndpoint}'),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: {"Content-Type": "application/json"},
       body: json.encode({
         'riderID': riderId,
         'riderPhoneNumber': riderPhoneNumber,
@@ -129,12 +132,14 @@ Future locationPing(
           .encode({'locationPoint': locationPoint, 'timeStamp': timeStamp}));
 }
 
-Future driverGetCurrentRides({required int driverID}) async {
+Future driverGetCurrentRides(
+    {required int driverID, required String authBearer}) async {
   final http.Response response = await http.get(
       Uri.parse(
           '$baseUri/$driverID${ApiConstants.driverGetCurrentRidesEndpoint}'),
       headers: {
         "Content-Type": "application/json",
+        "Authorization": 'Bearer $authBearer'
       });
   final data = await jsonDecode(response.body);
   return data;
@@ -144,11 +149,13 @@ Future driverGetCurrentRides({required int driverID}) async {
 Future onDriverCancelRide(
     {required int driverID,
     required int riderID,
-    required String dbObjectID}) async {
+    required String dbObjectID,
+    required String authBearer}) async {
   final http.Response response = await http.post(
       Uri.parse('$baseUri/$driverID${ApiConstants.driverCancelRideEndpoint}'),
       headers: {
         "Content-Type": "application/json",
+        "Authorization": 'Bearer $authBearer'
       },
       body: json.encode({'riderID': riderID, 'objectID': dbObjectID}));
   final data = response.statusCode;
@@ -158,11 +165,13 @@ Future onDriverCancelRide(
 Future onRideCompleted(
     {required int driverID,
     required int riderID,
-    required String dbObjectID}) async {
+    required String dbObjectID,
+    required String authBearer}) async {
   final http.Response response = await http.post(
       Uri.parse('$baseUri${ApiConstants.driverOnRideCompleteEndpoint}'),
       headers: {
         "Content-Type": "application/json",
+        "Authorization": 'Bearer $authBearer'
       },
       body: json.encode(
           {'driverID': driverID, 'riderID': riderID, 'objectID': dbObjectID}));
@@ -170,9 +179,13 @@ Future onRideCompleted(
   return data;
 }
 
-Future getRideHistory({required int driverID}) async {
-  final http.Response response =
-      await http.get(Uri.parse('$baseUri/$driverID/getDriverTripHistory'));
+Future getRideHistory(
+    {required int driverID, required String authBearer}) async {
+  final http.Response response = await http
+      .get(Uri.parse('$baseUri/$driverID/getDriverTripHistory'), headers: {
+    "Content-Type": "application/json",
+    "Authorization": 'Bearer $authBearer'
+  });
   //final data = json.decode(response.body);
   //print(data);
   return response;

@@ -16,7 +16,10 @@ class SignInResponse {
   SignInResponse(this.data, this.statusCode, this.body);
 }
 
-Future signIn(emailOrPhone, password, deviceID) async {
+Future signIn(
+    {required String emailOrPhone,
+    required String password,
+    required String deviceID}) async {
   final http.Response response =
       await http.post(Uri.parse('$baseUri${ApiConstants.signInEndpoint}'),
           headers: {"Content-Type": "application/json"},
@@ -36,17 +39,17 @@ Future signIn(emailOrPhone, password, deviceID) async {
 }
 
 Future signUp(
-    {required firstname,
-    required lastname,
-    required password,
-    required phoneNumber,
-    required email,
-    required address,
+    {required String firstname,
+    required String lastname,
+    required String password,
+    required String phoneNumber,
+    required String email,
+    required String address,
     required dob,
-    required vehicleMake,
-    required vehicleModel,
-    required vehicleColour,
-    required vehicleBodytype,
+    required String vehicleMake,
+    required String vehicleModel,
+    required String vehicleColour,
+    required String vehicleBodytype,
     required vehicleYear,
     required vehiclePlateNumber,
     required profilePhoto,
@@ -100,10 +103,13 @@ Future signUp(
   }
 }
 
-Future logOut({required int id}) async {
+Future logOut({required int id, required String authBearer}) async {
   final http.Response response = await http.post(
       Uri.parse('$baseUri${ApiConstants.logoutEndpoint}'),
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'Bearer $authBearer'
+      },
       body: jsonEncode({"id": id}));
   if (response.statusCode == 200) {
     return 'logout success';
@@ -115,10 +121,14 @@ Future logOut({required int id}) async {
 Future changePassword(
     {required int id,
     required String newPassword,
-    required String oldPassword}) async {
+    required String oldPassword,
+    required String authBearer}) async {
   final http.Response response = await http.post(
     Uri.parse('$baseUri${ApiConstants.changePasswordEndpoint}'),
-    headers: {"Content-Type": "application/json"},
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": 'Bearer $authBearer'
+    },
     body: jsonEncode({
       "driverId": id,
       "newPassword": newPassword,

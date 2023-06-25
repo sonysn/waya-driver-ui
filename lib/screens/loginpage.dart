@@ -17,15 +17,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool hasGetter(dynamic object, String getterName) {
-    try {
-      // Try to access the getter and check if it throws an exception
-      object.noSuchMethod(Invocation.getter(Symbol(getterName)));
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
+  // bool hasGetter(dynamic object, String getterName) {
+  //   try {
+  //     // Try to access the getter and check if it throws an exception
+  //     object.noSuchMethod(Invocation.getter(Symbol(getterName)));
+  //     return true;
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
 
   dynamic _serverResponse() async {
     setState(() {
@@ -33,7 +33,9 @@ class _LoginPageState extends State<LoginPage> {
     });
     try {
       final response = await signIn(
-          emailOrPhoneTextController.text, passwordTextController.text, token);
+          emailOrPhone: emailOrPhoneTextController.text,
+          password: passwordTextController.text,
+          deviceID: firebaseDeviceID!);
 
       if (response.statusCode == 200) {
         setState(() {
@@ -87,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailOrPhoneTextController = TextEditingController();
   TextEditingController passwordTextController = TextEditingController();
   // late FirebaseMessaging _firebaseDeviceToken;
-  String? token;
+  String? firebaseDeviceID;
   bool val = false;
   bool _passwordVisible = false;
   bool _rememberMe = true;
@@ -100,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
     _loadCredentials();
     FirebaseMessaging.instance.getToken().then((devToken) {
       setState(() {
-        token = devToken;
+        firebaseDeviceID = devToken;
       });
     });
   }
@@ -289,7 +291,8 @@ class _LoginPageState extends State<LoginPage> {
                                   emailOrPhoneTextController.text);
                               await prefs.setString(
                                   'password', passwordTextController.text);
-                              await prefs.setString('deviceID', token!);
+                              await prefs.setString(
+                                  'deviceID', firebaseDeviceID!);
                             }
                             //print(_futureData);
                           }
