@@ -11,6 +11,7 @@ class LegalPage extends StatelessWidget {
         backgroundColor: customPurple,
       ),
       body: const SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Column(

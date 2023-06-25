@@ -70,6 +70,7 @@ class HelpPageState extends State<HelpPage> {
         children: [
           Expanded(
             child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
               itemCount: faqItems.length,
               itemBuilder: (context, index) {
                 return ExpansionTile(

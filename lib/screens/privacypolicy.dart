@@ -11,6 +11,7 @@ class DriverPrivacyPolicyPage extends StatelessWidget {
         backgroundColor: customPurple,
       ),
       body: const SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Column(

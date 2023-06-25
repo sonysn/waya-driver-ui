@@ -95,6 +95,8 @@ class _WalletPageState extends State<WalletPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: RefreshIndicator(
+        backgroundColor: customPurple,
+        color: Colors.orangeAccent,
         onRefresh: _getAccountBalance,
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
