@@ -119,6 +119,7 @@ Future acceptRide(
         'dropoffLocationPosition': dropoffLocationPostion,
         'fare': fare,
       }));
+  return response.statusCode;
 }
 
 Future locationPing(
