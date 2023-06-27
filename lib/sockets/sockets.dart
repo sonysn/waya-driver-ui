@@ -11,6 +11,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class ConnectToServer {
   final int? id;
 
+
   ConnectToServer({this.id});
 
   // //
@@ -121,6 +122,7 @@ class RideRequestCard extends StatefulWidget {
   final String riderPhoneNumber;
   final List pickupLocationPosition;
   final List dropoffLocationPostion;
+  final VoidCallback? onRefreshHomePage;
 
   const RideRequestCard({
     Key? key,
@@ -132,6 +134,7 @@ class RideRequestCard extends StatefulWidget {
     required this.riderPhoneNumber,
     required this.pickupLocationPosition,
     required this.dropoffLocationPostion,
+    this.onRefreshHomePage
   }) : super(key: key);
 
   @override
@@ -279,7 +282,7 @@ class _RideRequestCardState extends State<RideRequestCard> {
                                 widget.pickupLocationPosition,
                             dropoffLocationPostion:
                                 widget.dropoffLocationPostion,
-                            fare: widget.fare);
+                            fare: widget.fare);widget.onRefreshHomePage?.call();
                         if (response == 404) {
                           //TODO: DESIGN THIS
                           ScaffoldMessenger.of(context)

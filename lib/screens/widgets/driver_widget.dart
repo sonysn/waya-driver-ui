@@ -7,8 +7,9 @@ import 'package:waya_driver/colorscheme.dart';
 class DriverWidget extends StatefulWidget {
   final dynamic data;
   final int refreshCount;
+  final VoidCallback? onRefreshHomePage;
 
-  const DriverWidget({Key? key, this.data, required this.refreshCount}) : super(key: key);
+  const DriverWidget({Key? key, this.data, required this.refreshCount,  this.onRefreshHomePage,}) : super(key: key);
 
   @override
   State<DriverWidget> createState() => DriverWidgetState();
@@ -97,7 +98,7 @@ class DriverWidgetState extends State<DriverWidget> {
               onPressed: () async {
                 Navigator.of(context).pop(); // Close the dialog
                 // Perform the end trip action
-                await driverEndTrip(xindex: indexPos); getCurrentRides();
+                await driverEndTrip(xindex: indexPos);
                 // Refresh the rides list
               },
               style: TextButton.styleFrom(
@@ -162,7 +163,7 @@ class DriverWidgetState extends State<DriverWidget> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 // Perform the cancel trip action
-                driverCancelTrip(xindex: indexPos); getCurrentRides();
+                driverCancelTrip(xindex: indexPos); widget.onRefreshHomePage?.call();
               },
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
