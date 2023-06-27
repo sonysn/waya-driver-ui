@@ -12,7 +12,7 @@ import 'package:waya_driver/functions/notification_service.dart';
 import 'package:waya_driver/colorscheme.dart';
 import 'package:waya_driver/api/actions.dart';
 import 'package:waya_driver/sockets/sockets.dart';
-import 'package:waya_driver/screens/widgets/activeride.dart';
+import 'package:waya_driver/screens/widgets/driver_widget.dart';
 import 'package:http/http.dart' as http;
 // ignore: library_prefixes
 import 'package:geocoding/geocoding.dart' as locationGeocodingPackage;
@@ -37,6 +37,9 @@ int? driverID;
 bool onlineStatus = false;
 
 class _HomePageState extends State<HomePage> {
+
+
+
   void findLoc() async {
     Location location = Location();
 
@@ -158,6 +161,17 @@ class _HomePageState extends State<HomePage> {
       // print(data['KEY']);
     }
   }
+  int refreshCount = 0;
+
+  Future<void> refreshHomePage() async {
+    // Simulate an asynchronous operation
+    await Future.delayed(Duration(seconds: 1));
+
+    setState(() {
+      refreshCount++;
+    });
+  }
+
 
   Future<void> _fetchSuggestions(String input) async {
     String apiKey = gApiKey!; // Replace with your own API key
@@ -264,9 +278,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future _refreshItems() async {
-    await getCurrentRides();
-  }
 
   @override
   void dispose() {
@@ -279,7 +290,7 @@ class _HomePageState extends State<HomePage> {
     return RefreshIndicator(
         color: Colors.orangeAccent,
         backgroundColor: customPurple,
-        onRefresh: _refreshItems,
+        onRefresh: refreshHomePage,
         child: WillPopScope(
             onWillPop: () async {
               if (_lastPressedAt == null ||
@@ -732,6 +743,14 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(
                         height: 20,
                       ),
+
+                      DriverWidget(
+                        data: widget.data,
+                        refreshCount: refreshCount,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height / 6,
                         child: Card(
@@ -770,12 +789,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      DriverWidget(
-                        data: widget.data,
-                      ),
+
                     ],
                   ),
                 ),

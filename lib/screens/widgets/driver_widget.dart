@@ -6,14 +6,15 @@ import 'package:waya_driver/colorscheme.dart';
 
 class DriverWidget extends StatefulWidget {
   final dynamic data;
+  final int refreshCount;
 
-  const DriverWidget({Key? key, this.data}) : super(key: key);
+  const DriverWidget({Key? key, this.data, required this.refreshCount}) : super(key: key);
 
   @override
-  State<DriverWidget> createState() => _DriverWidgetState();
+  State<DriverWidget> createState() => DriverWidgetState();
 }
 
-class _DriverWidgetState extends State<DriverWidget> {
+class DriverWidgetState extends State<DriverWidget> {
   Future<void> getCurrentRides() async {
     final response = await driverGetCurrentRides(
         driverID: widget.data.id, authBearer: widget.data.authToken);
@@ -96,7 +97,7 @@ class _DriverWidgetState extends State<DriverWidget> {
               onPressed: () async {
                 Navigator.of(context).pop(); // Close the dialog
                 // Perform the end trip action
-                await driverEndTrip(xindex: indexPos);
+                await driverEndTrip(xindex: indexPos); getCurrentRides();
                 // Refresh the rides list
               },
               style: TextButton.styleFrom(
@@ -161,7 +162,7 @@ class _DriverWidgetState extends State<DriverWidget> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 // Perform the cancel trip action
-                driverCancelTrip(xindex: indexPos);
+                driverCancelTrip(xindex: indexPos); getCurrentRides();
               },
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -200,12 +201,12 @@ class _DriverWidgetState extends State<DriverWidget> {
     );
   }
 
-  void refreshPage() {
-    // Perform the necessary refresh operations here
-    // For example, setState or call an API to update the page data
-    setState(() {
-      // Update the necessary data in the page
-    });
+  @override
+  void didUpdateWidget(covariant DriverWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.refreshCount != oldWidget.refreshCount) {
+      getCurrentRides();
+    }
   }
 
   @override

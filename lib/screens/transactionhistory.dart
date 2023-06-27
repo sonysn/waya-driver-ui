@@ -152,7 +152,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
                       // Replace the following placeholder widget
                       Center(
                         child: Text(
-                          'Withdrawal History',
+                          'No Withdrawals',
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
@@ -193,7 +193,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
                       widget.earnings.isEmpty
                           ? const Center(
                               child: Text(
-                                'Money Received History',
+                                'No Money Received',
                                 style: TextStyle(fontSize: 20),
                               ),
                             )

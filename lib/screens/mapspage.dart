@@ -3,7 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:waya_driver/screens/homepage.dart';
 import 'package:waya_driver/sockets/sockets.dart';
-
+import 'package:waya_driver/colorscheme.dart';
 class MapsPage extends StatefulWidget {
   final int driverID;
   const MapsPage({Key? key, required this.driverID}) : super(key: key);
@@ -107,12 +107,12 @@ class _MapsPageState extends State<MapsPage> {
                       findLoc();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
+                      backgroundColor: customPurple,
                       shape: const CircleBorder(),
                       padding: const EdgeInsets.all(8),
                     ),
                     child:
-                    const Icon(Icons.gps_fixed, color: Colors.black)),
+                    const Icon(Icons.gps_fixed, color: Colors.orangeAccent)),
               ),
             ),
           ]),
