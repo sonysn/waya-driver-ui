@@ -37,9 +37,6 @@ int? driverID;
 bool onlineStatus = false;
 
 class _HomePageState extends State<HomePage> {
-
-
-
   void findLoc() async {
     Location location = Location();
 
@@ -161,17 +158,17 @@ class _HomePageState extends State<HomePage> {
       // print(data['KEY']);
     }
   }
+
   int refreshCount = 0;
 
   Future<void> refreshHomePage() async {
     // Simulate an asynchronous operation
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
 
     setState(() {
       refreshCount++;
     });
   }
-
 
   Future<void> _fetchSuggestions(String input) async {
     String apiKey = gApiKey!; // Replace with your own API key
@@ -277,7 +274,6 @@ class _HomePageState extends State<HomePage> {
           dataBody: '${message.notification?.body}');
     });
   }
-
 
   @override
   void dispose() {
@@ -743,8 +739,6 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(
                         height: 20,
                       ),
-
-
                       DriverWidget(
                         data: widget.data,
                         refreshCount: refreshCount,
@@ -791,7 +785,6 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-
                     ],
                   ),
                 ),
