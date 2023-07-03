@@ -11,7 +11,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class ConnectToServer {
   final int? id;
 
-
   ConnectToServer({this.id});
 
   // //
@@ -124,18 +123,18 @@ class RideRequestCard extends StatefulWidget {
   final List dropoffLocationPostion;
   final VoidCallback? onRefreshHomePage;
 
-  const RideRequestCard({
-    Key? key,
-    required this.riderId,
-    required this.name,
-    required this.pickupLocation,
-    required this.dropoffLocation,
-    required this.fare,
-    required this.riderPhoneNumber,
-    required this.pickupLocationPosition,
-    required this.dropoffLocationPostion,
-    this.onRefreshHomePage
-  }) : super(key: key);
+  const RideRequestCard(
+      {Key? key,
+      required this.riderId,
+      required this.name,
+      required this.pickupLocation,
+      required this.dropoffLocation,
+      required this.fare,
+      required this.riderPhoneNumber,
+      required this.pickupLocationPosition,
+      required this.dropoffLocationPostion,
+      this.onRefreshHomePage})
+      : super(key: key);
 
   @override
   State<RideRequestCard> createState() => _RideRequestCardState();
@@ -143,6 +142,32 @@ class RideRequestCard extends StatefulWidget {
 
 class _RideRequestCardState extends State<RideRequestCard> {
   late Completer<void> delayedCompleter;
+
+  void buttonFunction() async {
+    //!some of this data comes from the home page
+    final response = await acceptRide(
+        riderId: widget.riderId,
+        riderPhoneNumber: widget.riderPhoneNumber,
+        driverId: driverID,
+        driverPhoto: driverPhoto,
+        driverPhone: driverPhone,
+        vehicleName: vehicleName,
+        vehiclePlateNumber: vehiclePlateNumber,
+        vehicleColour: vehicleColour,
+        destinationLocation: widget.dropoffLocation,
+        pickUpLocation: widget.pickupLocation,
+        pickupLocationPosition: widget.pickupLocationPosition,
+        dropoffLocationPostion: widget.dropoffLocationPostion,
+        fare: widget.fare);
+    //fetchHomepageNotifier.value = true;
+    if (response == 404) {
+      //TODO: DESIGN THIS
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+        'Ride not found',
+      )));
+    }
+  }
 
   @override
   void initState() {
@@ -266,31 +291,13 @@ class _RideRequestCardState extends State<RideRequestCard> {
                     const SizedBox(height: 5),
                     ElevatedButton(
                       onPressed: () async {
-                        //!some of this data comes from the home page
-                        final response = await acceptRide(
-                            riderId: widget.riderId,
-                            riderPhoneNumber: widget.riderPhoneNumber,
-                            driverId: driverID,
-                            driverPhoto: driverPhoto,
-                            driverPhone: driverPhone,
-                            vehicleName: vehicleName,
-                            vehiclePlateNumber: vehiclePlateNumber,
-                            vehicleColour: vehicleColour,
-                            destinationLocation: widget.dropoffLocation,
-                            pickUpLocation: widget.pickupLocation,
-                            pickupLocationPosition:
-                                widget.pickupLocationPosition,
-                            dropoffLocationPostion:
-                                widget.dropoffLocationPostion,
-                            fare: widget.fare);widget.onRefreshHomePage?.call();
-                        if (response == 404) {
-                          //TODO: DESIGN THIS
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                                  content: Text(
-                            'Ride not found',
-                          )));
-                        }
+                        buttonFunction();
+                        // print("ride accepted");
+                        //?This Calls this value notifier of the homepage.dart file
+                        await Future.delayed(const Duration(seconds: 1), () {
+                          fetchHomepageNotifier.value = true;
+                        });
+                        // fetchHomepageNotifier.value = true;
                         Navigator.of(context).pop();
                       },
                       style: ElevatedButton.styleFrom(
