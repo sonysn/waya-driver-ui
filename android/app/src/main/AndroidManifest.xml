@@ -15,7 +15,7 @@
             android:name="com.google.firebase.messaging.default_test"
             android:resource="@drawable/test" />
        <meta-data android:name="com.google.android.geo.API_KEY"
-           android:value="A4"/>
+           android:value="AIzaSyBhDflq5iJrXIcKpeq0IzLQPQpOboX91lY"/>
 <!--        this comes from strings.xml android/app/src/main/res/values directory.-->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"

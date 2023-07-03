@@ -4,6 +4,7 @@ import 'package:location/location.dart';
 import 'package:waya_driver/screens/homepage.dart';
 import 'package:waya_driver/sockets/sockets.dart';
 import 'package:waya_driver/colorscheme.dart';
+
 class MapsPage extends StatefulWidget {
   final int driverID;
   const MapsPage({Key? key, required this.driverID}) : super(key: key);
@@ -82,41 +83,45 @@ class _MapsPageState extends State<MapsPage> {
     return Scaffold(
         body: _currentLocation != null
             ? SafeArea(
-          child: Stack(children: [
-            GoogleMap(
-              markers: <Marker>{
-                Marker(
-                  markerId: const MarkerId("1"),
-                  position: _center,
-                ),
-              },
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: 14.0,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(
-                  bottom: 105, //MediaQuery.of(context).size.height / 5.2,
-                  right: MediaQuery.of(context).size.width / 250),
-              child: Align(
-                alignment: AlignmentDirectional.bottomEnd,
-                child: ElevatedButton(
-                    onPressed: () {
-                      findLoc();
+                child: Stack(children: [
+                  GoogleMap(
+                    markers: <Marker>{
+                      Marker(
+                        markerId: const MarkerId("1"),
+                        position: _center,
+                      ),
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: customPurple,
-                      shape: const CircleBorder(),
-                      padding: const EdgeInsets.all(8),
+                    onMapCreated: _onMapCreated,
+                    initialCameraPosition: CameraPosition(
+                      target: _center,
+                      zoom: 14.0,
                     ),
-                    child:
-                    const Icon(Icons.gps_fixed, color: Colors.orangeAccent)),
-              ),
-            ),
-          ]),
-        )
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(
+                        bottom: 105, //MediaQuery.of(context).size.height / 5.2,
+                        right: MediaQuery.of(context).size.width / 250),
+                    child: Align(
+                      alignment: AlignmentDirectional.bottomEnd,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            findLoc();
+                            mapController.animateCamera(
+                                CameraUpdate.newLatLngZoom(
+                                    LatLng(_center.latitude, _center.longitude),
+                                    14));
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: customPurple,
+                            shape: const CircleBorder(),
+                            padding: const EdgeInsets.all(8),
+                          ),
+                          child: const Icon(Icons.gps_fixed,
+                              color: Colors.orangeAccent)),
+                    ),
+                  ),
+                ]),
+              )
             : const Center(child: Text('Loading...')));
   }
 }

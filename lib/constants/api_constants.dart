@@ -21,4 +21,5 @@ class ApiConstants {
   static String forgotPasswordEndpoint = '/driverForgotPassword';
   static String verifyForgotPasswordChangeEndpoint =
       '/driverVerifyForgotPasswordChange';
+  static String getDriverNotificationsEndpoint = '/driver-notifications';
 }

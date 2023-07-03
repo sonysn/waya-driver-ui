@@ -35,6 +35,7 @@ String? driverPhone;
 String? driverPhoto;
 int? driverID;
 bool onlineStatus = false;
+ValueNotifier<bool> fetchHomepageNotifier = ValueNotifier<bool>(false);
 
 class _HomePageState extends State<HomePage> {
   void findLoc() async {
@@ -138,6 +139,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> getCurrentRides() async {
+    currentRidesArray.clear();
     final response = await driverGetCurrentRides(
         driverID: widget.data.id, authBearer: widget.data.authToken);
     setState(() {
@@ -241,6 +243,16 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _fetchDataValueNotifier() {
+    if (fetchHomepageNotifier.value) {
+      getCurrentRides();
+      setState(() {
+        refreshCount++;
+      });
+      fetchHomepageNotifier.value = false;
+    }
+  }
+
   dynamic currentLocation;
   String? gApiKey;
   DateTime?
@@ -256,6 +268,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     //findLoc();
     //setLatLng();
+    fetchHomepageNotifier.addListener(_fetchDataValueNotifier);
     getDriverDestData();
     locationPingServer();
     getSwitchValue();
@@ -283,6 +296,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
+    fetchHomepageNotifier.removeListener(_fetchDataValueNotifier);
     super.dispose();
   }
 
