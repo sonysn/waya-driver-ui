@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:waya_driver/api/actions.dart';
+import 'package:waya_driver/colorscheme.dart';
 
 class MessagesPage extends StatefulWidget {
   const MessagesPage({Key? key}) : super(key: key);
@@ -8,7 +12,34 @@ class MessagesPage extends StatefulWidget {
 }
 
 class _MessagesPageState extends State<MessagesPage> {
-  final List<String> messages = []; // Replace with your actual list of messages
+  List messages = []; // Replace with your actual list of messages
+  List reversedMessages = [];
+
+  Future _getDriverNotifications() async {
+    final response = await getDriverNotifications();
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      print(data);
+      setState(() {
+        messages.addAll(data);
+        //bring the data in reverse order to show the most recent notifications first
+        reversedMessages = messages.reversed.toList();
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getDriverNotifications();
+  }
+
+  @override
+  void dispose() {
+    messages.clear();
+    reversedMessages.clear();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,17 +48,30 @@ class _MessagesPageState extends State<MessagesPage> {
         title: const Text('Messages'),
         backgroundColor: Colors.black, // S
       ),
-      body: messages.isNotEmpty ? buildMessagesList() : buildNoMessages(),
+      body: RefreshIndicator(
+          color: Colors.orangeAccent,
+          backgroundColor: customPurple,
+          onRefresh: _getDriverNotifications,
+          child: messages.isNotEmpty ? buildMessagesList() : buildNoMessages()),
     );
   }
 
   Widget buildMessagesList() {
-    return ListView.builder(
+    return ListView.separated(
+      shrinkWrap: true,
+      separatorBuilder: (context, index) {
+        return const SizedBox(
+          height: 10,
+        );
+      },
       itemCount: messages.length,
       itemBuilder: (context, index) {
-        final message = messages[index];
+        // final message = messages[index];
         return ListTile(
-          title: Text(message),
+          title: Text(
+            reversedMessages[index]['Title'],
+          ),
+          subtitle: Text(reversedMessages[index]['Message']),
           // Add any additional message details here
         );
       },

@@ -192,3 +192,10 @@ Future getRideHistory(
   //print(data);
   return response;
 }
+
+Future getDriverNotifications() async {
+  final response = await http
+      .get(Uri.parse('$baseUri${ApiConstants.getDriverNotificationsEndpoint}'));
+  print(response.body);
+  return response;
+}
