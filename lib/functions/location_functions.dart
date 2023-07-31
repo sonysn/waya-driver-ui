@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:waya_driver/api/actions.dart';
-import 'package:waya_driver/sockets/sockets.dart';
+import 'package:qunot_driver/api/actions.dart';
+import 'package:qunot_driver/sockets/sockets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 

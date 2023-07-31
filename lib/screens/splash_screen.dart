@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:waya_driver/screens/onboarding.dart';
+import 'package:qunot_driver/screens/onboarding.dart';
 // ignore: depend_on_referenced_packages
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:waya_driver/api/auth.dart';
-import 'package:waya_driver/screens/bottom_nav.dart';
+import 'package:qunot_driver/api/auth.dart';
+import 'package:qunot_driver/screens/bottom_nav.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

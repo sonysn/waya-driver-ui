@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:waya_driver/screens/widgets/earning_card.dart';
+import 'package:qunot_driver/screens/widgets/earning_card.dart';
 
 class EarningHistory extends StatefulWidget {
   final dynamic data;
   final List credits;
 
-  const EarningHistory({Key? key, this.data, required this.credits}) : super(key: key);
+  const EarningHistory({Key? key, this.data, required this.credits})
+      : super(key: key);
 
   @override
   State<EarningHistory> createState() => _EarningHistoryState();
@@ -52,41 +53,41 @@ class _EarningHistoryState extends State<EarningHistory> {
               ),
             ],
           ),
-
           widget.credits.isNotEmpty
               ? Container(
-            padding: const EdgeInsets.only(top: 40),
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ListView.separated(
-                  itemCount: widget.credits.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(height: 10);
-                  },
-                  itemBuilder: (context, index) {
-                    return EarningCard(
-
-                      amountTransferred: reversedTransactions[index]['amountTransferred'],
-                      dateTransferred: reversedTransactions[index]['datePaid'],
-                    );
-                  },
-                ),
-              ],
-            ),
-          )
+                  padding: const EdgeInsets.only(top: 40),
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListView.separated(
+                        itemCount: widget.credits.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(height: 10);
+                        },
+                        itemBuilder: (context, index) {
+                          return EarningCard(
+                            amountTransferred: reversedTransactions[index]
+                                ['amountTransferred'],
+                            dateTransferred: reversedTransactions[index]
+                                ['datePaid'],
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                )
               : Center(
-            child: Container(
-              margin: const EdgeInsets.all(45),
-              child: const Text(
-                'No Earnings Yet',
-                style: TextStyle(fontSize: 15),
-              ),
-            ),
-          ),
+                  child: Container(
+                    margin: const EdgeInsets.all(45),
+                    child: const Text(
+                      'No Earnings Yet',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                ),
           const SizedBox(height: 10),
         ],
       ),

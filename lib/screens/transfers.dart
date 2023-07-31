@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 // import 'package:intl/intl.dart';
-import 'package:waya_driver/api/actions.dart';
-import 'package:waya_driver/colorscheme.dart';
+import 'package:qunot_driver/api/actions.dart';
+import 'package:qunot_driver/colorscheme.dart';
 
 class TransferPage extends StatefulWidget {
   final String phoneNumber;

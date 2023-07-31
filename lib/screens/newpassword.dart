@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:waya_driver/api/auth.dart';
-import 'package:waya_driver/colorscheme.dart';
+import 'package:qunot_driver/api/auth.dart';
+import 'package:qunot_driver/colorscheme.dart';
 
-import 'package:waya_driver/screens/loginpage.dart';
+import 'package:qunot_driver/screens/loginpage.dart';
 
 class NewPasswordPage extends StatefulWidget {
   final String code;

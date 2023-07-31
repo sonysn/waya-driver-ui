@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:waya_driver/colorscheme.dart';
-import 'package:waya_driver/screens/passwordchange.dart';
+import 'package:qunot_driver/colorscheme.dart';
+import 'package:qunot_driver/screens/passwordchange.dart';
 
 class PasswordSettings extends StatefulWidget {
   final int driverID;

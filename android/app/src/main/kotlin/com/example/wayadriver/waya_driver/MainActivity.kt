@@ -1,4 +1,4 @@
-package com.example.wayadriver.waya_driver
+package com.qunot.qunotdriver
 
 import io.flutter.embedding.android.FlutterActivity
 

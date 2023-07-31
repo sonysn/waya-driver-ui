@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:waya_driver/api/auth.dart';
-import 'package:waya_driver/screens/bottom_nav.dart';
-import 'package:waya_driver/colorscheme.dart';
+import 'package:qunot_driver/api/auth.dart';
+import 'package:qunot_driver/screens/bottom_nav.dart';
+import 'package:qunot_driver/colorscheme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:waya_driver/screens/forgotpassword.dart';
+import 'package:qunot_driver/screens/forgotpassword.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

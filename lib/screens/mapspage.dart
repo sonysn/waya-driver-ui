@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:waya_driver/screens/homepage.dart';
-import 'package:waya_driver/sockets/sockets.dart';
-import 'package:waya_driver/colorscheme.dart';
+import 'package:qunot_driver/screens/homepage.dart';
+import 'package:qunot_driver/sockets/sockets.dart';
+import 'package:qunot_driver/colorscheme.dart';
 
 class MapsPage extends StatefulWidget {
   final int driverID;

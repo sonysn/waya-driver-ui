@@ -3,13 +3,13 @@
 import 'package:flutter/material.dart';
 // ignore: unused_import
 import 'package:flutter/services.dart';
-import 'package:waya_driver/screens/homepage.dart';
-import 'package:waya_driver/screens/splash_screen.dart';
-import 'package:waya_driver/functions/notification_service.dart';
+import 'package:qunot_driver/screens/homepage.dart';
+import 'package:qunot_driver/screens/splash_screen.dart';
+import 'package:qunot_driver/functions/notification_service.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:waya_driver/firebase_options.dart';
+import 'package:qunot_driver/firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:waya_driver/sockets/sockets.dart';
+import 'package:qunot_driver/sockets/sockets.dart';
 
 // Workmanager backWorkmanager = Workmanager();
 

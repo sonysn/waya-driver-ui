@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:waya_driver/colorscheme.dart';
-import 'package:waya_driver/screens/newpassword.dart';
+import 'package:qunot_driver/colorscheme.dart';
+import 'package:qunot_driver/screens/newpassword.dart';
 
 class ResetPasswordCodePage extends StatefulWidget {
   final String emailorPhone;

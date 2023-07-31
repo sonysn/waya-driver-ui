@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:waya_driver/colorscheme.dart';
+import 'package:qunot_driver/colorscheme.dart';
 
 class EarningCard extends StatefulWidget {
   final dynamic amountTransferred;

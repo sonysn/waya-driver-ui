@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:waya_driver/screens/passwordsettings.dart';
-import 'package:waya_driver/screens/privacypolicy.dart';
-import 'package:waya_driver/screens/vehicle.dart';
-import 'package:waya_driver/screens/aboutpage.dart';
+import 'package:qunot_driver/screens/passwordsettings.dart';
+import 'package:qunot_driver/screens/privacypolicy.dart';
+import 'package:qunot_driver/screens/vehicle.dart';
+import 'package:qunot_driver/screens/aboutpage.dart';
 // ignore: depend_on_referenced_packages
 import 'package:url_launcher/url_launcher.dart';
 

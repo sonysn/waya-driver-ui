@@ -1,19 +1,19 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:waya_driver/api/actions.dart';
-import 'package:waya_driver/api/payments.dart';
-import 'package:waya_driver/screens/cash_deposit_page.dart';
-import 'package:waya_driver/screens/homepage.dart';
-import 'package:waya_driver/screens/transfers.dart';
-import 'package:waya_driver/sockets/sockets.dart';
-import 'package:waya_driver/colorscheme.dart';
-import 'package:waya_driver/screens/widgets/earning_card.dart';
-import 'package:waya_driver/screens/widgets/transaction_card.dart';
-import 'package:waya_driver/screens/transactionhistory.dart';
-import 'package:waya_driver/screens/widgets/my_card.dart';
-import 'package:waya_driver/screens/earninghistorypage.dart';
-import 'package:waya_driver/screens/withdrawal.dart';
+import 'package:qunot_driver/api/actions.dart';
+import 'package:qunot_driver/api/payments.dart';
+import 'package:qunot_driver/screens/cash_deposit_page.dart';
+import 'package:qunot_driver/screens/homepage.dart';
+import 'package:qunot_driver/screens/transfers.dart';
+import 'package:qunot_driver/sockets/sockets.dart';
+import 'package:qunot_driver/colorscheme.dart';
+import 'package:qunot_driver/screens/widgets/earning_card.dart';
+import 'package:qunot_driver/screens/widgets/transaction_card.dart';
+import 'package:qunot_driver/screens/transactionhistory.dart';
+import 'package:qunot_driver/screens/widgets/my_card.dart';
+import 'package:qunot_driver/screens/earninghistorypage.dart';
+import 'package:qunot_driver/screens/withdrawal.dart';
 
 class WalletPage extends StatefulWidget {
   final dynamic data;

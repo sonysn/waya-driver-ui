@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:waya_driver/colorscheme.dart';
+import 'package:qunot_driver/colorscheme.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:waya_driver/api/actions.dart';
-import 'package:waya_driver/constants/api_constants.dart';
-import 'package:waya_driver/screens/homepage.dart';
+import 'package:qunot_driver/api/actions.dart';
+import 'package:qunot_driver/constants/api_constants.dart';
+import 'package:qunot_driver/screens/homepage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ConnectToServer {

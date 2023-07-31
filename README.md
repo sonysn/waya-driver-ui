@@ -1,6 +1,6 @@
-# waya_driver
+# Qunot driver
 
-Waya Driver Application
+Qunot Driver Application
 
 ## Getting Started
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:waya_driver/colorscheme.dart';
-import 'package:waya_driver/api/actions.dart';
+import 'package:qunot_driver/colorscheme.dart';
+import 'package:qunot_driver/api/actions.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 

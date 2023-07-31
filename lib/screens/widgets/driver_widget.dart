@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:url_launcher/url_launcher.dart';
-import 'package:waya_driver/api/actions.dart';
-import 'package:waya_driver/colorscheme.dart';
+import 'package:qunot_driver/api/actions.dart';
+import 'package:qunot_driver/colorscheme.dart';
 
 class DriverWidget extends StatefulWidget {
   final dynamic data;
   final int refreshCount;
   final VoidCallback? onRefreshHomePage;
 
-  const DriverWidget({Key? key, this.data, required this.refreshCount,  this.onRefreshHomePage,}) : super(key: key);
+  const DriverWidget({
+    Key? key,
+    this.data,
+    required this.refreshCount,
+    this.onRefreshHomePage,
+  }) : super(key: key);
 
   @override
   State<DriverWidget> createState() => DriverWidgetState();
@@ -163,7 +168,8 @@ class DriverWidgetState extends State<DriverWidget> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 // Perform the cancel trip action
-                driverCancelTrip(xindex: indexPos); widget.onRefreshHomePage?.call();
+                driverCancelTrip(xindex: indexPos);
+                widget.onRefreshHomePage?.call();
               },
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),

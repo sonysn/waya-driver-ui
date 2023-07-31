@@ -1,17 +1,17 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:waya_driver/api/actions.dart';
-import 'package:waya_driver/api/auth.dart';
-import 'package:waya_driver/functions/location_functions.dart';
-import 'package:waya_driver/screens/ride_history.dart';
-import 'package:waya_driver/screens/homepage.dart';
-import 'package:waya_driver/screens/legalpage.dart';
-import 'package:waya_driver/screens/settingspage.dart';
-import 'package:waya_driver/screens/messages.dart';
-import 'package:waya_driver/screens/welcomepage.dart';
-import 'package:waya_driver/screens/help.dart';
-import 'package:waya_driver/sockets/sockets.dart';
+import 'package:qunot_driver/api/actions.dart';
+import 'package:qunot_driver/api/auth.dart';
+import 'package:qunot_driver/functions/location_functions.dart';
+import 'package:qunot_driver/screens/ride_history.dart';
+import 'package:qunot_driver/screens/homepage.dart';
+import 'package:qunot_driver/screens/legalpage.dart';
+import 'package:qunot_driver/screens/settingspage.dart';
+import 'package:qunot_driver/screens/messages.dart';
+import 'package:qunot_driver/screens/welcomepage.dart';
+import 'package:qunot_driver/screens/help.dart';
+import 'package:qunot_driver/sockets/sockets.dart';
 // ignore: depend_on_referenced_packages
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:waya_driver/colorscheme.dart';
+import 'package:qunot_driver/colorscheme.dart';
 
 class LegalPage extends StatelessWidget {
   const LegalPage({Key? key}) : super(key: key);

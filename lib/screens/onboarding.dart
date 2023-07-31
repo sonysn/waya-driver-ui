@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:waya_driver/screens/welcomepage.dart';
-import 'package:waya_driver/constants/content_model.dart';
-import 'package:waya_driver/colorscheme.dart';
+import 'package:qunot_driver/screens/welcomepage.dart';
+import 'package:qunot_driver/constants/content_model.dart';
+import 'package:qunot_driver/colorscheme.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({Key? key}) : super(key: key);

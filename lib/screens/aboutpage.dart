@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:waya_driver/colorscheme.dart';
+import 'package:qunot_driver/colorscheme.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({Key? key}) : super(key: key);

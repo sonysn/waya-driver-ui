@@ -1,8 +1,8 @@
 import 'dart:convert';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
-import 'package:waya_driver/constants/api_constants.dart';
-import 'package:waya_driver/models/auth.dart';
+import 'package:qunot_driver/constants/api_constants.dart';
+import 'package:qunot_driver/models/auth.dart';
 
 //todo base uri value here
 // var baseUri = 'http://192.168.100.43:3000';

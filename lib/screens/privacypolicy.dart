@@ -1,4 +1,4 @@
-import 'package:waya_driver/colorscheme.dart';
+import 'package:qunot_driver/colorscheme.dart';
 import 'package:flutter/material.dart';
 
 class DriverPrivacyPolicyPage extends StatelessWidget {

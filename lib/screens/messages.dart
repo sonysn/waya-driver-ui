@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:waya_driver/api/actions.dart';
-import 'package:waya_driver/colorscheme.dart';
+import 'package:qunot_driver/api/actions.dart';
+import 'package:qunot_driver/colorscheme.dart';
 
 class MessagesPage extends StatefulWidget {
   const MessagesPage({Key? key}) : super(key: key);

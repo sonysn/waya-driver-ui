@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:waya_driver/screens/widgets/earning_card.dart';
-import 'package:waya_driver/screens/widgets/transaction_card.dart';
+import 'package:qunot_driver/screens/widgets/earning_card.dart';
+import 'package:qunot_driver/screens/widgets/transaction_card.dart';
 
 class TransactionHistory extends StatefulWidget {
   final List transactions;

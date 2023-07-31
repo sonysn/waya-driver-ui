@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:waya_driver/api/actions.dart';
-import 'package:waya_driver/colorscheme.dart';
-import 'package:waya_driver/models/ride_history.dart';
+import 'package:qunot_driver/api/actions.dart';
+import 'package:qunot_driver/colorscheme.dart';
+import 'package:qunot_driver/models/ride_history.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 
